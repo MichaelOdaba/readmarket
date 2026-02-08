@@ -10,7 +10,7 @@ An Ebook marketplace
 
 ## Overview
 
-This app is a pdf marketplace place where users can buy and sell Ebooks, i built this as a solution to sellers manually selling hardcopies of past questions and books in my school, so i am building this platform for users to buy and sell online.
+This app is a pdf marketplace place where users can buy and sell Ebooks, i built this as a solution to sellers manually selling hardcopies of past questions and books in my school, so i am building this platform for users to buy and sell Ebooks and PDFs online.
 
 ## Features
 
@@ -66,7 +66,10 @@ so today i started building "readmarket" an online ebooks and PDF makertplace, h
 
 - i created the folder structure for the backend of aplication
 - i intialized an express server and successfully connected to a mongoDB database
-- i started creating the required schemas and models
+- i created the required database models
+- i finished the register functionality on the backend, users can now register
+  -i also finished the login functionality on the backend, users can now login
+  -designed the database tables and struture
 
 ## Lessons Learned
 
