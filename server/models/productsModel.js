@@ -18,7 +18,7 @@ const productsSchema = mongoose.Schema(
     sub_category: [
       {
         type: mongoose.Schema.ObjectId,
-        ref: "sub_category",
+        ref: "subCategory",
       },
     ],
     stock: {
@@ -61,8 +61,10 @@ productsSchema.index(
     description: "text",
   },
   {
-    name: 10,
-    description: 5,
+    weights: {
+      name: 10,
+      description: 5,
+    },
   }
 );
 

@@ -1,5 +1,6 @@
 import bcryptjs from "bcryptjs";
 import userModel from "../models/userModel.js";
+import mongoose from "mongoose";
 import generateAccessToken from "../utils/generateAccessToken.js";
 import generateRefreshToken from "../utils/generateRefreshToken.js";
 export async function registerUserController(req, res) {
@@ -143,6 +144,7 @@ export async function logoutUserController(req, res) {
 }
 export async function editUserDetailsController(req, res) {
   try {
+    const userId = req.id;
     const { firstname, lastname, email, mobile } = req.body;
 
     if (!firstname && !lastname && !email && !mobile) {
