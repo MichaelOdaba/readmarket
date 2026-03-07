@@ -153,6 +153,8 @@ export async function editUserDetailsController(req, res) {
         success: false,
       });
     }
+
+    
   } catch (error) {
     return res.status(500).json({
       message: "an error occured while editing user details",

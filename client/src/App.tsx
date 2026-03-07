@@ -1,11 +1,14 @@
-import "./App.css";
+import { Outlet } from "react-router-dom";
+import type React from "react";
 
-function App() {
-  let name: string = 5;
-
-  console.log(name);
-
-  return <></>;
+function App(): React.ReactNode {
+  return (
+    <>
+      <main>
+        <Outlet />
+      </main>
+    </>
+  );
 }
 
 export default App;
