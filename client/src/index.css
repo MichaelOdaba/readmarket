@@ -1,4 +1,331 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
 
+/* ========================================
+   Brand Color System - Read Market
+   ======================================== */
+:root {
+  /* Primary Colors */
+  --color-primary: #1f6f78;
+  --color-primary-hover: #2fa4a9;
+
+  /* Secondary & Accent */
+  --color-secondary: #2fa4a9;
+  --color-accent: #f4a641;
+
+  /* Neutral Colors */
+  --color-bg: #f7f9fa;
+  --color-surface: #ffffff;
+  --color-border: #e3e8ea;
+
+  /* Text Colors */
+  --color-text: #1a2b32;
+  --color-text-secondary: #6b7c85;
+
+  /* Danger */
+  --color-danger: #d9534f;
+
+  /* Spacing */
+  --space-xs: 0.25rem;
+  --space-sm: 0.5rem;
+  --space-md: 1rem;
+  --space-lg: 1.5rem;
+  --space-xl: 2rem;
+
+  /* Border Radius */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+
+  /* Shadows */
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* ========================================
+   Base Styles
+   ======================================== */
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  line-height: 1.6;
+}
+
+/* ========================================
+   Reusable Component Styles
+   ======================================== */
+@layer components {
+  /* Buttons */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-sm);
+    padding: var(--space-sm) var(--space-md);
+    border: none;
+    border-radius: var(--radius-md);
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 150ms ease;
+  }
+
+  .btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+
+  /* Primary Button */
+  .btn-primary {
+    background-color: var(--color-primary);
+    color: white;
+    box-shadow: var(--shadow-sm);
+  }
+
+  .btn-primary:hover:not(:disabled) {
+    background-color: var(--color-primary-hover);
+    box-shadow: var(--shadow-md);
+  }
+
+  /* Secondary Button */
+  .btn-secondary {
+    background-color: transparent;
+    color: var(--color-primary);
+    border: 2px solid var(--color-primary);
+  }
+
+  .btn-secondary:hover:not(:disabled) {
+    background-color: rgba(31, 111, 120, 0.08);
+  }
+
+  /* Accent Button (Purchase/Conversion) */
+  .btn-accent {
+    background-color: var(--color-accent);
+    color: white;
+    box-shadow: var(--shadow-sm);
+  }
+
+  .btn-accent:hover:not(:disabled) {
+    filter: brightness(0.95);
+    box-shadow: var(--shadow-md);
+  }
+
+  /* Danger Button */
+  .btn-danger {
+    background-color: var(--color-danger);
+    color: white;
+    box-shadow: var(--shadow-sm);
+  }
+
+  .btn-danger:hover:not(:disabled) {
+    filter: brightness(0.9);
+  }
+
+  /* Ghost Button */
+  .btn-ghost {
+    background-color: transparent;
+    color: var(--color-text);
+  }
+
+  .btn-ghost:hover:not(:disabled) {
+    background-color: var(--color-bg);
+  }
+
+  /* Cards */
+  .card {
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-sm);
+    overflow: hidden;
+    transition: box-shadow 150ms ease;
+  }
+
+  .card:hover {
+    box-shadow: var(--shadow-md);
+  }
+
+  .card-header {
+    padding: var(--space-lg);
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .card-body {
+    padding: var(--space-lg);
+  }
+
+  .card-footer {
+    padding: var(--space-lg);
+    border-top: 1px solid var(--color-border);
+  }
+
+  /* Layout Helpers */
+  .container {
+    width: 100%;
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 0 var(--space-md);
+  }
+
+  .stack {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+  }
+
+  .row {
+    display: flex;
+    gap: var(--space-md);
+    align-items: center;
+  }
+
+  .grid {
+    display: grid;
+    gap: var(--space-lg);
+  }
+
+  /* Form Controls */
+  .input,
+  .textarea,
+  .select {
+    width: 100%;
+    padding: var(--space-sm) var(--space-md);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    background-color: var(--color-surface);
+    color: var(--color-text);
+    font-size: 1rem;
+    transition: all 150ms ease;
+  }
+
+  .input:focus,
+  .textarea:focus,
+  .select:focus {
+    outline: none;
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px rgba(31, 111, 120, 0.1);
+  }
+
+  .textarea {
+    resize: vertical;
+    min-height: 120px;
+  }
+
+  /* Labels */
+  .label {
+    display: block;
+    margin-bottom: var(--space-sm);
+    font-weight: 500;
+    color: var(--color-text);
+  }
+
+  /* Text Utilities */
+  .text-muted {
+    color: var(--color-text-secondary);
+  }
+
+  .text-primary {
+    color: var(--color-primary);
+  }
+
+  .text-accent {
+    color: var(--color-accent);
+  }
+
+  .text-danger {
+    color: var(--color-danger);
+  }
+
+  .text-small {
+    font-size: 0.875rem;
+  }
+
+  .text-large {
+    font-size: 1.125rem;
+  }
+
+  /* Badge */
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    padding: var(--space-xs) var(--space-sm);
+    border-radius: var(--radius-sm);
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+  }
+
+  .badge-primary {
+    background-color: rgba(31, 111, 120, 0.15);
+    color: var(--color-primary);
+  }
+
+  .badge-accent {
+    background-color: rgba(244, 166, 65, 0.15);
+    color: var(--color-accent);
+  }
+
+  .badge-danger {
+    background-color: rgba(217, 83, 79, 0.15);
+    color: var(--color-danger);
+  }
+
+  /* Divider */
+  .divider {
+    height: 1px;
+    background-color: var(--color-border);
+    margin: var(--space-lg) 0;
+  }
+
+  /* Navigation Active State */
+  .nav-active {
+    color: var(--color-primary);
+    border-bottom: 3px solid var(--color-primary);
+  }
+}
+
+/* ========================================
+   Utility Classes
+   ======================================== */
+@layer utilities {
+  .shadow-sm {
+    box-shadow: var(--shadow-sm);
+  }
+
+  .shadow-md {
+    box-shadow: var(--shadow-md);
+  }
+
+  .border-primary {
+    border-color: var(--color-primary);
+  }
+
+  .border-secondary {
+    border-color: var(--color-secondary);
+  }
+
+  .bg-primary {
+    background-color: var(--color-primary);
+  }
+
+  .bg-secondary {
+    background-color: var(--color-secondary);
+  }
+
+  .bg-accent {
+    background-color: var(--color-accent);
+  }
+
+  .bg-surface {
+    background-color: var(--color-surface);
+  }
+
+  .bg-neutral {
+    background-color: var(--color-bg);
+  }
+}
