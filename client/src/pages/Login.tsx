@@ -1,18 +1,16 @@
 import React, { useState } from "react";
 import banner from "../assets/WhatsApp Image 2026-02-28 at 8.56.50 PM (1).jpeg";
-import type { RegisterFormData } from "../types/profile";
+import type { LoginFormData } from "../types/profile";
 import { useNavigate } from "react-router-dom";
 
-const Register: React.FC = () => {
-  const navigate = useNavigate();
-  const [userData, setUserData] = useState<RegisterFormData>({
-    firstName: "",
-    lastName: "",
+const Login: React.FC = () => {
+  const [userData, setUserData] = useState<LoginFormData>({
     email: "",
     password: "",
     confirmPassword: "",
   });
   const validateForm = Object.values(userData).every((el) => el);
+  const navigate = useNavigate();
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -38,13 +36,8 @@ const Register: React.FC = () => {
             onSubmit={handleSubmit}
           >
             <div>
-              <p className="text-primary text-2xl font-bold">
-                Welcome to <span className="text-[#15324a]">READ</span>
-                <span className="text-accent"> MARKET</span>
-              </p>
-              <p className="text-muted">
-                Please enter your details to register
-              </p>
+              <p className="text-primary text-2xl font-bold">Welcome Back</p>
+              <p className="text-muted">Please enter your details to sign in</p>
             </div>
 
             <div className="flex flex-col items-start w-full px-2 text-left gap-1">
@@ -59,32 +52,7 @@ const Register: React.FC = () => {
                 onChange={handleInputChange}
               />
             </div>
-            <div className="flex flex-col items-start w-full px-2 text-left gap-1">
-              <label htmlFor="firstName" className="w-full">
-                First Name:
-              </label>
-              <input
-                type="text"
-                name="firstName"
-                className="input w-full"
-                value={userData.firstName}
-                onChange={handleInputChange}
-                placeholder="John"
-              />
-            </div>
-            <div className="flex flex-col items-start w-full px-2 text-left gap-1">
-              <label htmlFor="lastName" className="w-full">
-                Last Name:
-              </label>
-              <input
-                type="text"
-                name="lastName"
-                className="input w-full"
-                value={userData.lastName}
-                onChange={handleInputChange}
-                placeholder="Doe"
-              />
-            </div>
+
             <div className="flex flex-col items-start w-full px-2 text-left gap-1">
               <label htmlFor="password" className="w-full">
                 Password:
@@ -118,14 +86,14 @@ const Register: React.FC = () => {
               Register
             </button>
             <p>
-              Already have an account?{" "}
+              Don't have an account?{" "}
               <button
                 className="text-secondary cursor-pointer"
                 onClick={() => {
-                  navigate("/login");
+                  navigate("/register");
                 }}
               >
-                Login
+                Register
               </button>
             </p>
           </form>
@@ -135,4 +103,4 @@ const Register: React.FC = () => {
   );
 };
 
-export default Register;
+export default Login;

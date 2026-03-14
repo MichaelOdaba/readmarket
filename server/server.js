@@ -9,7 +9,12 @@ const PORT = process.env.PORT || 4000;
 
 // Middleware
 
-app.use(cors());
+app.use(
+  cors({
+    credentials: true,
+    origin: process.env.FRONTEND_URL,
+  })
+);
 app.use(express.json());
 app.use(cookieParser());
 
@@ -18,7 +23,7 @@ app.get("/", (req, res) => {
 });
 app.use("/api/user/", userRouter);
 connectDB()
-  .then(console.log("DB connected successfully on " + process.env.MONGODBURL))
+  .then(console.log("DB connected successfully on " + process.env.MONGODB_URL))
   .then(
     app.listen(PORT, () => {
       console.log(`Server is running on port ${PORT}`);

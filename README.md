@@ -10,7 +10,7 @@ An Ebook marketplace
 
 ## Overview
 
-This app is a pdf marketplace place where users can buy and sell Ebooks, i built this as a solution to sellers manually selling hardcopies of past questions and books in my school, so i am building this platform for users to buy and sell Ebooks and PDFs online.
+This app is a pdf marketplace place where users can buy and sell Ebooks, i built this as a solution to sellers manually selling hard copies of past questions and books in my school, so i am building this platform for users to buy and sell Ebooks and PDFs online.
 
 ## Features
 

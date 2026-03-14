@@ -5,15 +5,15 @@
    ======================================== */
 :root {
   /* Primary Colors */
-  --color-primary: #1f6f78;
-  --color-primary-hover: #2fa4a9;
+  --color-primary: #103a3f;
+  --color-primary-hover: #164c52;
 
   /* Secondary & Accent */
-  --color-secondary: #2fa4a9;
+  --color-secondary: #2ec0c5;
   --color-accent: #f4a641;
 
   /* Neutral Colors */
-  --color-bg: #f7f9fa;
+  --color-bg: #eff8f8;
   --color-surface: #ffffff;
   --color-border: #e3e8ea;
 
@@ -39,6 +39,10 @@
   /* Shadows */
   --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08);
   --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.1);
+
+  /*Sonner Toast colors" */
+
+  --sonner-toast-success-bg: var(--color-primary);
 }
 
 /* ========================================
@@ -84,6 +88,15 @@ body {
     background-color: var(--color-primary);
     color: white;
     box-shadow: var(--shadow-sm);
+    @apply rounded-md p-2;
+    cursor: pointer;
+  }
+  .btn-primary-disabled {
+    background-color: var(--color-text-secondary);
+    color: white;
+    box-shadow: var(--shadow-sm);
+    @apply rounded-md p-2;
+    cursor: pointer;
   }
 
   .btn-primary:hover:not(:disabled) {
@@ -96,6 +109,7 @@ body {
     background-color: transparent;
     color: var(--color-primary);
     border: 2px solid var(--color-primary);
+    @apply p-2 rounded-md;
   }
 
   .btn-secondary:hover:not(:disabled) {
@@ -107,6 +121,7 @@ body {
     background-color: var(--color-accent);
     color: white;
     box-shadow: var(--shadow-sm);
+    @apply p-2 rounded-md;
   }
 
   .btn-accent:hover:not(:disabled) {
@@ -119,6 +134,7 @@ body {
     background-color: var(--color-danger);
     color: white;
     box-shadow: var(--shadow-sm);
+    @apply p-2 rounded-md;
   }
 
   .btn-danger:hover:not(:disabled) {
@@ -172,6 +188,13 @@ body {
     padding: 0 var(--space-md);
   }
 
+  .section {
+    width: 100%;
+    padding: 2;
+    margin: auto;
+    height: auto;
+  }
+
   .stack {
     display: flex;
     flex-direction: column;
@@ -193,11 +216,11 @@ body {
   .input,
   .textarea,
   .select {
-    width: 100%;
+    width: auto;
     padding: var(--space-sm) var(--space-md);
     border: 1px solid var(--color-border);
     border-radius: var(--radius-md);
-    background-color: var(--color-surface);
+    background-color: rgb(244, 242, 242);
     color: var(--color-text);
     font-size: 1rem;
     transition: all 150ms ease;
@@ -231,6 +254,9 @@ body {
 
   .text-primary {
     color: var(--color-primary);
+  }
+  .text-secondary {
+    color: var(--color-secondary);
   }
 
   .text-accent {
@@ -286,6 +312,9 @@ body {
   .nav-active {
     color: var(--color-primary);
     border-bottom: 3px solid var(--color-primary);
+  }
+  .border-primary {
+    color: var(--color-primary);
   }
 }
 

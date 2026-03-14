@@ -1,12 +1,20 @@
 import { Outlet } from "react-router-dom";
-import type React from "react";
-
-function App(): React.ReactNode {
+import { Toaster } from "sonner";
+import Header from "./components/Header";
+import Footer from "./components/Footer";
+function App() {
   return (
     <>
-      <main>
-        <Outlet />
-      </main>
+      {" "}
+      <div className="flex flex-col">
+        <Toaster />
+
+        <Header />
+        <main className="h-auto w-full min-h-screen md:mt-16 ">
+          <Outlet />
+        </main>
+        <Footer />
+      </div>
     </>
   );
 }
