@@ -14,7 +14,7 @@ const Header = () => {
   const navigate = useNavigate();
   const [isMobile] = useMobile();
   const location = useLocation();
-  const [isLoggedIn, setIsLoggedIn] = useState(true);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [notificationAvailable, setnotificationAvailable] = useState(false);
 
   return (

@@ -5,8 +5,8 @@ import generateAccessToken from "../utils/generateAccessToken.js";
 import generateRefreshToken from "../utils/generateRefreshToken.js";
 export async function registerUserController(req, res) {
   try {
-    const { firstname, lastname, email, password, confirmPassword } = req.body;
-    if (!firstname || !lastname || !email || !password || !confirmPassword) {
+    const { firstName, lastName, email, password, confirmPassword } = req.body;
+    if (!firstName || !lastName || !email || !password || !confirmPassword) {
       return res.status(400).json({
         message: "pls fill all the required fields",
         success: false,
@@ -31,21 +31,21 @@ export async function registerUserController(req, res) {
 
     const hashedPassword = await bcryptjs.hash(password, 10);
     const registeredUser = await userModel.create({
-      firstname,
-      lastname,
+      firstName,
+      lastName,
       email,
       password: hashedPassword,
     });
 
     console.log(registeredUser);
     return res.status(201).json({
-      message: `new user ${registeredUser.firstname} created successfully`,
+      message: `new user ${registeredUser.firstName} created successfully`,
       success: true,
       data: registeredUser,
     });
   } catch (error) {
     return res.status(500).json({
-      message: "an error occured while registering the user",
+      message: "an error occurred while registering the user",
       success: false,
       error: error.message || error,
     });
@@ -102,7 +102,7 @@ export async function loginUserController(req, res) {
     });
 
     return res.status(200).json({
-      message: `${user.firstname} login successful`,
+      message: `${user.firstName} login successful`,
       success: true,
       data: user,
     });
@@ -153,8 +153,6 @@ export async function editUserDetailsController(req, res) {
         success: false,
       });
     }
-
-    
   } catch (error) {
     return res.status(500).json({
       message: "an error occured while editing user details",

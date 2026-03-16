@@ -9,5 +9,4 @@ export interface RegisterFormData {
 export interface LoginFormData {
   email: string;
   password: string;
-  confirmPassword: string;
 }

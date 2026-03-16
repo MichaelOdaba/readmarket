@@ -2,12 +2,14 @@ import React, { useState } from "react";
 import banner from "../assets/WhatsApp Image 2026-02-28 at 8.56.50 PM (1).jpeg";
 import type { LoginFormData } from "../types/profile";
 import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
+import customAxios from "../utils/customAxios";
+import summaryApi from "../services/SummaryAPI";
 
 const Login: React.FC = () => {
   const [userData, setUserData] = useState<LoginFormData>({
     email: "",
     password: "",
-    confirmPassword: "",
   });
   const validateForm = Object.values(userData).every((el) => el);
   const navigate = useNavigate();
@@ -18,7 +20,21 @@ const Login: React.FC = () => {
       return { ...prev, [name]: value };
     });
   };
-  const handleSubmit = async () => {};
+  const handleSubmit = async (e: any) => {
+    e.preventDefault();
+    try {
+      const response = await customAxios({
+        ...summaryApi.login,
+        data: userData,
+      });
+
+      console.log(response);
+      toast.success(response.data.message);
+    } catch (error: any) {
+      toast.error(error?.response?.data?.message);
+      console.log(error);
+    }
+  };
 
   return (
     <section className={"container section"}>
@@ -65,25 +81,14 @@ const Login: React.FC = () => {
                 value={userData.password}
               />
             </div>
-            <div className="flex flex-col items-start w-full px-2 text-left gap-1">
-              <label htmlFor="confirmPassword" className="w-full">
-                Confirm Password:
-              </label>
-              <input
-                type="password"
-                name="confirmPassword"
-                onChange={handleInputChange}
-                value={userData.confirmPassword}
-                className="input w-full"
-              />
-            </div>
+
             <button
               className={
                 validateForm ? "btn-primary p-2 " : "btn-primary-disabled p-2"
               }
               disabled={!validateForm}
             >
-              Register
+              Sign in
             </button>
             <p>
               Don't have an account?{" "}

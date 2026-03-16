@@ -2,6 +2,9 @@ import React, { useState } from "react";
 import banner from "../assets/WhatsApp Image 2026-02-28 at 8.56.50 PM (1).jpeg";
 import type { RegisterFormData } from "../types/profile";
 import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
+import customAxios from "../utils/customAxios";
+import summaryApi from "../services/SummaryAPI";
 
 const Register: React.FC = () => {
   const navigate = useNavigate();
@@ -20,7 +23,22 @@ const Register: React.FC = () => {
       return { ...prev, [name]: value };
     });
   };
-  const handleSubmit = async () => {};
+  const handleSubmit = async (e: any) => {
+    e.preventDefault();
+    console.log(userData);
+    try {
+      const response = await customAxios({
+        ...summaryApi.register,
+        data: userData,
+      });
+
+      toast.success(response.data.message);
+      navigate("/login");
+    } catch (error: any) {
+      console.log(error.response);
+      toast.error(error.response.data.message);
+    }
+  };
 
   return (
     <section className={"container section"}>
