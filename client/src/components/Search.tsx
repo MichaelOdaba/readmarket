@@ -8,7 +8,7 @@ const Search: React.FC = () => {
 
   return (
     <div
-      className="w-[50%] flex justify-center"
+      className="md:w-[50%] w-full mt-7 md:m-0 flex justify-center"
       onClick={() => {
         setIsSearch(true);
       }}
@@ -21,7 +21,7 @@ const Search: React.FC = () => {
               // Same substring at the start will only be typed out once, initially
               'Search "Game Of Thrones"',
               1000, // wait 1s before replacing "Mice" with "Hamsters"
-              'Search "Data Structures and Algorithms"',
+              'Search "The Pragmatic Programmer"',
               1000,
               'Search "Woman Down"',
               1000,

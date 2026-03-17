@@ -1,10 +1,19 @@
 import React, { useState } from "react";
-import banner from "../assets/WhatsApp Image 2026-02-28 at 8.56.50 PM (1).jpeg";
+import banner from "../assets/banner2.jpeg";
 import type { RegisterFormData } from "../types/profile";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import customAxios from "../utils/customAxios";
 import summaryApi from "../services/SummaryAPI";
+import {
+  Eye,
+  EyeClosed,
+  Lock,
+  LockKeyholeIcon,
+  Mail,
+  User,
+  UserCheck,
+} from "lucide-react";
 
 const Register: React.FC = () => {
   const navigate = useNavigate();
@@ -16,6 +25,8 @@ const Register: React.FC = () => {
     confirmPassword: "",
   });
   const validateForm = Object.values(userData).every((el) => el);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -66,66 +77,98 @@ const Register: React.FC = () => {
             </div>
 
             <div className="flex flex-col items-start w-full px-2 text-left gap-1">
-              <label htmlFor="email" className="w-full" autoFocus>
+              <label htmlFor="email" className="w-full">
                 Email Address:
               </label>
-              <input
-                type="email"
-                name="email"
-                className="input w-full"
-                placeholder={"You@Example.com"}
-                onChange={handleInputChange}
-              />
+              <div className="flex w-full items-center gap-2 input focus-within:border-[#103a3f] ">
+                <div className="text-neutral-600">
+                  <Mail size={20} />
+                </div>
+                <input
+                  type="email"
+                  name="email"
+                  className="outline-none w-full"
+                  placeholder={"You@Example.com"}
+                  onChange={handleInputChange}
+                  autoFocus
+                />
+              </div>
             </div>
             <div className="flex flex-col items-start w-full px-2 text-left gap-1">
               <label htmlFor="firstName" className="w-full">
                 First Name:
               </label>
-              <input
-                type="text"
-                name="firstName"
-                className="input w-full"
-                value={userData.firstName}
-                onChange={handleInputChange}
-                placeholder="John"
-              />
+              <div className="flex w-full items-center gap-2 input focus-within:border-[#103a3f] ">
+                <div className="text-neutral-600">
+                  <User size={20} />
+                </div>
+                <input
+                  type="text"
+                  name="firstName"
+                  className="outline-none w-full"
+                  value={userData.firstName}
+                  onChange={handleInputChange}
+                  placeholder="John"
+                />
+              </div>
             </div>
             <div className="flex flex-col items-start w-full px-2 text-left gap-1">
               <label htmlFor="lastName" className="w-full">
                 Last Name:
               </label>
-              <input
-                type="text"
-                name="lastName"
-                className="input w-full"
-                value={userData.lastName}
-                onChange={handleInputChange}
-                placeholder="Doe"
-              />
+              <div className="flex w-full items-center gap-2 input focus-within:border-[#103a3f] ">
+                <div className="text-neutral-600">
+                  <UserCheck size={20} />
+                </div>
+                <input
+                  type="text"
+                  name="lastName"
+                  className="outline-none w-full"
+                  value={userData.lastName}
+                  onChange={handleInputChange}
+                  placeholder="Doe"
+                />
+              </div>
             </div>
             <div className="flex flex-col items-start w-full px-2 text-left gap-1">
               <label htmlFor="password" className="w-full">
                 Password:
               </label>
-              <input
-                type="password"
-                name="password"
-                className="input w-full"
-                onChange={handleInputChange}
-                value={userData.password}
-              />
+              <div className="flex w-full items-center gap-2 input focus-within:border-[#103a3f] ">
+                <div className="text-neutral-600">
+                  <Lock size={20} />
+                </div>
+                <input
+                  type={showPassword ? "text" : "password"}
+                  name="password"
+                  className="outline-none w-full"
+                  onChange={handleInputChange}
+                  value={userData.password}
+                />
+                <div onClick={() => setShowPassword((prev) => !prev)}>
+                  {showPassword ? <Eye /> : <EyeClosed />}
+                </div>
+              </div>
             </div>
             <div className="flex flex-col items-start w-full px-2 text-left gap-1">
               <label htmlFor="confirmPassword" className="w-full">
-                Confirm Password:
+                Password:
               </label>
-              <input
-                type="password"
-                name="confirmPassword"
-                onChange={handleInputChange}
-                value={userData.confirmPassword}
-                className="input w-full"
-              />
+              <div className="flex w-full items-center gap-2 input focus-within:border-[#103a3f] ">
+                <div className="text-neutral-600">
+                  <LockKeyholeIcon size={20} />
+                </div>
+                <input
+                  type={showConfirmPassword ? "text" : "password"}
+                  name="confirmPassword"
+                  className="outline-none w-full"
+                  onChange={handleInputChange}
+                  value={userData.confirmPassword}
+                />
+                <div onClick={() => setShowConfirmPassword((prev) => !prev)}>
+                  {showConfirmPassword ? <Eye /> : <EyeClosed />}
+                </div>
+              </div>
             </div>
             <button
               className={
@@ -137,14 +180,9 @@ const Register: React.FC = () => {
             </button>
             <p>
               Already have an account?{" "}
-              <button
-                className="text-secondary cursor-pointer"
-                onClick={() => {
-                  navigate("/login");
-                }}
-              >
+              <Link className="text-secondary cursor-pointer" to={"/login"}>
                 Login
-              </button>
+              </Link>
             </p>
           </form>
         </div>

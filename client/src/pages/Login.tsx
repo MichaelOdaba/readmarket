@@ -1,10 +1,11 @@
 import React, { useState } from "react";
-import banner from "../assets/WhatsApp Image 2026-02-28 at 8.56.50 PM (1).jpeg";
+import banner from "../assets/banner2.jpeg";
 import type { LoginFormData } from "../types/profile";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import customAxios from "../utils/customAxios";
 import summaryApi from "../services/SummaryAPI";
+import { Eye, EyeClosed, LockIcon, Mail } from "lucide-react";
 
 const Login: React.FC = () => {
   const [userData, setUserData] = useState<LoginFormData>({
@@ -12,6 +13,7 @@ const Login: React.FC = () => {
     password: "",
   });
   const validateForm = Object.values(userData).every((el) => el);
+  const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -60,26 +62,44 @@ const Login: React.FC = () => {
               <label htmlFor="email" className="w-full" autoFocus>
                 Email Address:
               </label>
-              <input
-                type="email"
-                name="email"
-                className="input w-full"
-                placeholder={"You@Example.com"}
-                onChange={handleInputChange}
-              />
+              <div className="flex w-full items-center gap-2 input focus-within:border-[#103a3f] ">
+                <div className="text-neutral-600">
+                  <Mail size={20} />
+                </div>
+                <input
+                  type="email"
+                  name="email"
+                  className="outline-none w-full"
+                  placeholder={"You@Example.com"}
+                  onChange={handleInputChange}
+                  autoFocus
+                />
+              </div>
             </div>
 
             <div className="flex flex-col items-start w-full px-2 text-left gap-1">
               <label htmlFor="password" className="w-full">
                 Password:
               </label>
-              <input
-                type="password"
-                name="password"
-                className="input w-full"
-                onChange={handleInputChange}
-                value={userData.password}
-              />
+              <div className="flex w-full items-center gap-2 input focus-within:border-[#103a3f]">
+                <div className="text-neutral-600">
+                  <LockIcon size={20} />
+                </div>
+
+                <input
+                  type={showPassword ? "text" : "password"}
+                  name="password"
+                  className="w-full outline-none"
+                  onChange={handleInputChange}
+                  value={userData.password}
+                />
+                <div
+                  className="text-neutral-600"
+                  onClick={() => setShowPassword((prev) => !prev)}
+                >
+                  {showPassword ? <Eye /> : <EyeClosed />}
+                </div>
+              </div>
             </div>
 
             <button
@@ -92,14 +112,9 @@ const Login: React.FC = () => {
             </button>
             <p>
               Don't have an account?{" "}
-              <button
-                className="text-secondary cursor-pointer"
-                onClick={() => {
-                  navigate("/register");
-                }}
-              >
+              <Link className="text-secondary cursor-pointer" to={"/register"}>
                 Register
-              </button>
+              </Link>
             </p>
           </form>
         </div>
