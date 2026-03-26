@@ -5,4 +5,13 @@ const customAxios = axios.create({
   withCredentials: true,
 });
 
+// attach token to every request
+customAxios.interceptors.request.use((config) => {
+  const token = localStorage.getItem("accessToken");
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
+});
+
 export default customAxios;

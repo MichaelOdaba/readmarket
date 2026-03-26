@@ -7,9 +7,9 @@ import customAxios from "../utils/customAxios";
 import summaryApi from "../services/SummaryAPI";
 import { Eye, EyeClosed, LockIcon, Mail } from "lucide-react";
 
-import getUser from "../utils/getUser";
 import { useDispatch } from "react-redux";
 import { setUser } from "../store/slice/userSlice";
+import getUser from "../utils/getUser";
 const Login: React.FC = () => {
   const [userData, setUserData] = useState<LoginFormData>({
     email: "",
@@ -39,7 +39,7 @@ const Login: React.FC = () => {
       toast.success(response.data.message);
       localStorage.setItem("accessToken", response.data.accessToken);
       localStorage.setItem("refreshToken", response.data.refreshToken);
-      const fetchedUser = await getUser();
+      const fetchedUser = getUser();
 
       console.log(fetchedUser);
       dispatch(setUser(fetchedUser));
