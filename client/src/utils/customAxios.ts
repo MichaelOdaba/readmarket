@@ -1,8 +1,7 @@
 import axios from "axios";
-import { baseURL } from "../services/SummaryAPI";
 
 const customAxios = axios.create({
-  baseURL: baseURL,
+  baseURL: import.meta.env.VITE_API_BASE_URL || "http://localhost:8009/",
   withCredentials: true,
 });
 

@@ -1,4 +1,5 @@
-export const baseURL: string = "http://localhost:8009/";
+export const baseURL: string =
+  import.meta.env.VITE_API_BASE_URL || "http://localhost:8009/";
 const summaryApi = {
   register: {
     url: "api/user/register",
