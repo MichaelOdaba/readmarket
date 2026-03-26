@@ -1,17 +1,18 @@
-import summaryApi from "../services/SummaryAPI";
-import customAxios from "./customAxios";
+import axios from "axios";
+import { baseURL } from "../services/SummaryAPI";
 
-const getUser = async () => {
-  try {
-    const response = await customAxios({
-      ...summaryApi.getUser,
-    });
+const customAxios = axios.create({
+  baseURL: baseURL,
+  withCredentials: true,
+});
 
-    return response.data.data;
-  } catch (error) {
-    console.error("Error fetching user details:", error);
-
-    throw error;
+// attach token to every request
+customAxios.interceptors.request.use((config) => {
+  const token = localStorage.getItem("accessToken");
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
   }
-};
-export default getUser;
+  return config;
+});
+
+export default customAxios;
