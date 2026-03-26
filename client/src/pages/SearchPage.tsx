@@ -1,0 +1,5 @@
+const SearchPage = () => {
+  return <div className="w-full container">Search</div>;
+};
+
+export default SearchPage;
