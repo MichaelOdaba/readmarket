@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, type SubmitEvent } from "react";
 import banner from "../assets/banner2.jpeg";
 import type { RegisterFormData } from "../types/profile";
 import { Link, useNavigate } from "react-router-dom";
@@ -34,7 +34,7 @@ const Register: React.FC = () => {
       return { ...prev, [name]: value };
     });
   };
-  const handleSubmit = async (e: any) => {
+  const handleSubmit = async (e: SubmitEvent) => {
     e.preventDefault();
     console.log(userData);
     try {

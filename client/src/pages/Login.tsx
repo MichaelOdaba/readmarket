@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, type SubmitEvent } from "react";
 import banner from "../assets/banner2.jpeg";
 import type { LoginFormData } from "../types/profile";
 import { Link, useNavigate } from "react-router-dom";
@@ -7,6 +7,9 @@ import customAxios from "../utils/customAxios";
 import summaryApi from "../services/SummaryAPI";
 import { Eye, EyeClosed, LockIcon, Mail } from "lucide-react";
 
+import getUser from "../utils/getUser";
+import { useDispatch } from "react-redux";
+import { setUser } from "../store/slice/userSlice";
 const Login: React.FC = () => {
   const [userData, setUserData] = useState<LoginFormData>({
     email: "",
@@ -16,13 +19,15 @@ const Login: React.FC = () => {
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
 
+  const dispatch = useDispatch();
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setUserData((prev) => {
       return { ...prev, [name]: value };
     });
   };
-  const handleSubmit = async (e: any) => {
+  const handleSubmit = async (e: SubmitEvent) => {
     e.preventDefault();
     try {
       const response = await customAxios({
@@ -32,8 +37,20 @@ const Login: React.FC = () => {
 
       console.log(response);
       toast.success(response.data.message);
+      localStorage.setItem("accessToken", response.data.accessToken);
+      localStorage.setItem("refreshToken", response.data.refreshToken);
+      const fetchedUser = await getUser();
+
+      console.log(fetchedUser);
+      dispatch(setUser(fetchedUser));
+
+      setUserData({
+        email: "",
+        password: "",
+      });
+      navigate("/dashboard");
     } catch (error: any) {
-      toast.error(error?.response?.data?.message);
+      toast.error(error?.response?.data?.message || error.message);
       console.log(error);
     }
   };

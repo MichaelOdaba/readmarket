@@ -2,6 +2,7 @@ import {
   Bell,
   BellDot,
   BookOpen,
+  Menu,
   ShoppingCart,
   User2,
   UserCircle2Icon,
@@ -9,14 +10,24 @@ import {
 import Search from "./Search";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useMobile } from "../hooks/useMobile";
+import { useSelector } from "react-redux";
 import { useState } from "react";
-import SearchPage from "../pages/SearchPage";
+import UserMenu from "./UserMenu";
+import UserMenuMobile from "./UserMenuMobile";
+
 const Header = () => {
   const navigate = useNavigate();
   const [isMobile] = useMobile();
   const location = useLocation();
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [notificationAvailable, setnotificationAvailable] = useState(false);
+  const user = useSelector((state: any) => state?.user);
+  const [openUserMenu, setOpenUserMenu] = useState(false);
+  const [openMobileMenu, setOpenMobileMenu] = useState(false);
+  const closeUserMenu = () => {
+    setOpenUserMenu(false);
+  };
+  const closeMobileMenu = () => {
+    setOpenMobileMenu(false);
+  };
 
   return (
     <header>
@@ -34,11 +45,20 @@ const Header = () => {
             <div
               className="text-primary"
               onClick={() => {
-                navigate("/login");
+                if (user._id) {
+                  setOpenMobileMenu(true);
+                } else {
+                  navigate("/login");
+                }
               }}
             >
-              <UserCircle2Icon size={35} />
+              {user._id ? (
+                <Menu size={35} className="text-primary" />
+              ) : (
+                <UserCircle2Icon size={35} />
+              )}
             </div>
+            {openMobileMenu && <UserMenuMobile close={closeMobileMenu} />}
           </div>
         ) : (
           <>
@@ -55,46 +75,64 @@ const Header = () => {
             </div>
             <Search />
             <div>
-              {isLoggedIn ? (
-                <div className="flex items-center justify-center text-primary gap-6 px-2">
-                  <button
-                    className={
-                      location.pathname === "/"
-                        ? "border-b-2 border-primary py-1"
-                        : ""
-                    }
-                    onClick={() => {
-                      navigate("/");
-                    }}
-                  >
-                    Home
-                  </button>
-                  <button
-                    className={
-                      location.pathname === "/dashboard/library"
-                        ? "border-b-2 border-primary py-1"
-                        : ""
-                    }
-                    onClick={() => {
-                      navigate("/dashboard/library");
-                    }}
-                  >
-                    Library
-                  </button>
-                  <button
-                    className={
-                      location.pathname === "/dashboard/upload"
-                        ? "border-b-2 border-primary py-1"
-                        : ""
-                    }
-                    onClick={() => {
-                      navigate("/dashboard/upload");
-                    }}
-                  >
-                    Upload
-                  </button>
-                  {notificationAvailable ? <BellDot /> : <Bell />}
-                  <User2 />
+              {user._id ? (
+                <div>
+                  <div className="flex items-center justify-center text-primary gap-4 px-2">
+                    <button
+                      className={
+                        location.pathname === "/"
+                          ? "border-b-2 border-primary py-1"
+                          : "hover:bg-neutral-300 p-2 rounded-md"
+                      }
+                      onClick={() => {
+                        navigate("/");
+                      }}
+                    >
+                      Home
+                    </button>
+                    <button
+                      className={
+                        location.pathname === "/dashboard/library"
+                          ? "border-b-2 border-primary py-1"
+                          : "hover:bg-neutral-300 p-2 rounded-md"
+                      }
+                      onClick={() => {
+                        navigate("/dashboard/library");
+                      }}
+                    >
+                      Library
+                    </button>
+                    <button
+                      className={
+                        location.pathname === "/dashboard/upload"
+                          ? "border-b-2 border-primary py-1"
+                          : "hover:bg-neutral-300 p-2 rounded-md"
+                      }
+                      onClick={() => {
+                        navigate("/dashboard/upload");
+                      }}
+                    >
+                      Upload
+                    </button>
+                    <div className="hover:bg-neutral-300 p-2 rounded-md">
+                      {user._id ? <BellDot /> : <Bell />}
+                    </div>
+                    <div
+                      onClick={() => setOpenUserMenu((prev) => !prev)}
+                      className="hover:bg-neutral-300 p-2 rounded-md"
+                    >
+                      {" "}
+                      <User2 />
+                    </div>{" "}
+                    {openUserMenu && (
+                      <div className="absolute top-17 right-8">
+                        <div className="bg-white rounded p-4 min-w-52 lg:shadow-lg ">
+                          {" "}
+                          <UserMenu close={closeUserMenu} />
+                        </div>
+                      </div>
+                    )}
+                  </div>
                 </div>
               ) : (
                 <div className="flex px-2 gap-4">
@@ -116,7 +154,16 @@ const Header = () => {
           </>
         )}
       </div>
-      {isMobile && location.pathname === "/" && <SearchPage />}
+      {isMobile && (
+        <div
+          className="w-full px-4"
+          onClick={() => {
+            navigate("/search");
+          }}
+        >
+          <Search />
+        </div>
+      )}
     </header>
   );
 };

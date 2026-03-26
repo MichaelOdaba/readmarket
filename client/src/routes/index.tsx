@@ -8,6 +8,7 @@ import Home from "../pages/Home";
 import DashBoard from "../pages/DashBoard";
 import Library from "../pages/Library";
 import Upload from "../pages/Upload";
+import Profile from "../pages/Profile";
 
 const router = createBrowserRouter([
   {
@@ -37,7 +38,7 @@ const router = createBrowserRouter([
         element: <Todo />,
       },
       {
-        path: "dashboard",
+        path: "/dashboard",
         element: <DashBoard />,
         children: [
           {
@@ -47,6 +48,10 @@ const router = createBrowserRouter([
           {
             path: "/dashboard/upload",
             element: <Upload />,
+          },
+          {
+            path: "/dashboard/profile",
+            element: <Profile />,
           },
         ],
       },
