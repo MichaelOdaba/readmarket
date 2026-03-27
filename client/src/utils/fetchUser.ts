@@ -1,7 +1,7 @@
 import summaryApi from "../services/SummaryAPI";
 import customAxios from "./customAxios";
 
-const getUser = async () => {
+const fetchUserDetails = async () => {
   try {
     const response = await customAxios({
       ...summaryApi.getUser,
@@ -14,4 +14,4 @@ const getUser = async () => {
     throw error;
   }
 };
-export default getUser;
+export default fetchUserDetails;
