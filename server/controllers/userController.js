@@ -99,6 +99,7 @@ export async function loginUserController(req, res) {
 
     const updateUserModel = await userModel.findByIdAndUpdate(user._id, {
       last_login_date: new Date(),
+      refresh_token: refreshToken,
     });
 
     return res.status(200).json({
@@ -136,7 +137,7 @@ export async function logoutUserController(req, res) {
     });
   } catch (error) {
     return res.status(500).json({
-      message: "an error occured while logging out",
+      message: "an error occurred while logging out",
       success: false,
       error: error.message,
     });
@@ -145,9 +146,9 @@ export async function logoutUserController(req, res) {
 export async function editUserDetailsController(req, res) {
   try {
     const userId = req.id;
-    const { firstname, lastname, email, mobile } = req.body;
+    const { firstName, lastName, email, mobile } = req.body;
 
-    if (!firstname && !lastname && !email && !mobile) {
+    if (!firstName && !lastName && !email && !mobile) {
       return res.status(403).json({
         message: "you did not provide any fields to update",
         success: false,
@@ -155,7 +156,70 @@ export async function editUserDetailsController(req, res) {
     }
   } catch (error) {
     return res.status(500).json({
-      message: "an error occured while editing user details",
+      message: "an error occurred while editing user details",
+      success: false,
+      error: error.message,
+    });
+  }
+}
+export async function changePasswordController(req, res) {}
+export async function forgotPasswordController(req, res) {}
+export async function resetPasswordController(req, res) {}
+export async function refreshTokenController(req, res) {
+  try {
+    const refreshToken =
+      req.cookies.refresh_token || req.headers.authorization?.split(" ")[1];
+    if (!refreshToken) {
+      return res.status(401).json({
+        message: "you are not authenticated",
+        success: false,
+      });
+    }
+    const verifyRefreshToken = await jwt.verify(
+      refreshToken,
+      process.env.ACCESS_TOKEN_SECRET
+    );
+    if (!verifyRefreshToken) {
+      return res.status(403).json({
+        message: "refresh token is not valid",
+        success: false,
+      });
+    }
+    const userId = verifyRefreshToken?.id;
+    const newAccessToken = await generateAccessToken(userId);
+    const cookieOptions = {
+      httpOnly: true,
+      secure: true,
+      sameSite: "None",
+    };
+    res.cookie("access_token", newAccessToken, cookieOptions);
+    return res.status(200).json({
+      message: "access token refreshed successfully",
+      success: true,
+      data: {
+        accessToken: newAccessToken,
+      },
+    });
+  } catch (error) {
+    return res.status(500).json({
+      message: "an error occurred while refreshing access token",
+      success: false,
+      error: error.message,
+    });
+  }
+}
+export async function getUserDetailsController(req, res) {
+  try {
+    const userId = req.userId;
+    const userDetails = await userModel.findById(userId);
+    return res.status(200).json({
+      message: "user details fetched successfully",
+      success: true,
+      data: userDetails,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      message: "an error occurred while fetching user details",
       success: false,
       error: error.message,
     });
