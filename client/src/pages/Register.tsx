@@ -27,6 +27,7 @@ const Register: React.FC = () => {
   const validateForm = Object.values(userData).every((el) => el);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [isRegistering, setIsRegistering] = useState(false);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -36,7 +37,8 @@ const Register: React.FC = () => {
   };
   const handleSubmit = async (e: SubmitEvent) => {
     e.preventDefault();
-    console.log(userData);
+
+    setIsRegistering(true);
     try {
       const response = await customAxios({
         ...summaryApi.register,
@@ -176,7 +178,7 @@ const Register: React.FC = () => {
               }
               disabled={!validateForm}
             >
-              Register
+              {isRegistering ? "registering..." : "register"}
             </button>
             <p>
               Already have an account?{" "}

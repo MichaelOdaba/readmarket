@@ -17,6 +17,7 @@ const Login: React.FC = () => {
   });
   const validateForm = Object.values(userData).every((el) => el);
   const [showPassword, setShowPassword] = useState(false);
+  const [islogin, setislogin] = useState(false);
   const navigate = useNavigate();
 
   const dispatch = useDispatch();
@@ -29,6 +30,7 @@ const Login: React.FC = () => {
   };
   const handleSubmit = async (e: SubmitEvent) => {
     e.preventDefault();
+    setislogin(true);
     try {
       const response = await customAxios({
         ...summaryApi.login,
@@ -37,8 +39,7 @@ const Login: React.FC = () => {
 
       console.log(response);
       toast.success(response.data.message);
-      localStorage.setItem("accessToken", response.data.accessToken);
-      localStorage.setItem("refreshToken", response.data.refreshToken);
+
       const fetchedUser = await fetchUserDetails();
 
       console.log(fetchedUser);
@@ -125,7 +126,7 @@ const Login: React.FC = () => {
               }
               disabled={!validateForm}
             >
-              Sign in
+              {islogin ? "signing in..." : "Sign in"}
             </button>
             <p>
               Don't have an account?{" "}
