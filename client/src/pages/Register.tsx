@@ -13,6 +13,7 @@ import {
   Mail,
   User,
   UserCheck,
+  Loader,
 } from "lucide-react";
 
 const Register: React.FC = () => {
@@ -174,11 +175,20 @@ const Register: React.FC = () => {
             </div>
             <button
               className={
-                validateForm ? "btn-primary p-2 " : "btn-primary-disabled p-2"
+                validateForm && !isRegistering
+                  ? "btn-primary p-2 "
+                  : "btn-primary-disabled p-2"
               }
-              disabled={!validateForm}
+              disabled={!validateForm || isRegistering}
             >
-              {isRegistering ? "registering..." : "register"}
+              {isRegistering ? (
+                <div className="flex items-center justify-center gap-2">
+                  <Loader size={18} className="animate-spin" />
+                  <span>Registering...</span>
+                </div>
+              ) : (
+                "Register"
+              )}
             </button>
             <p>
               Already have an account?{" "}

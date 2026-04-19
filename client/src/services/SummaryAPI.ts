@@ -17,5 +17,17 @@ const summaryApi = {
     url: "/api/user/get-user",
     method: "get",
   },
+  editUser: {
+    url: "/api/user/edit",
+    method: "put",
+  },
+  getNotifications: {
+    url: "/api/notification/",
+    method: "get",
+  },
+  markNotificationAsRead: {
+    url: "/api/notification/mark-as-read",
+    method: "put",
+  },
 };
 export default summaryApi;

@@ -1,6 +1,5 @@
 import {
   Bell,
-  BellDot,
   BookOpen,
   Menu,
   ShoppingCart,
@@ -11,9 +10,12 @@ import Search from "./Search";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useMobile } from "../hooks/useMobile";
 import { useSelector } from "react-redux";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import UserMenu from "./UserMenu";
 import UserMenuMobile from "./UserMenuMobile";
+import NotificationsDropdown from "./NotificationsDropdown";
+import customAxios from "../utils/customAxios";
+import summaryApi from "../services/SummaryAPI";
 
 const Header = () => {
   const navigate = useNavigate();
@@ -22,12 +24,38 @@ const Header = () => {
   const user = useSelector((state: any) => state?.user);
   const [openUserMenu, setOpenUserMenu] = useState(false);
   const [openMobileMenu, setOpenMobileMenu] = useState(false);
+  const [openNotifications, setOpenNotifications] = useState(false);
+  const [unreadCount, setUnreadCount] = useState(0);
+
   const closeUserMenu = () => {
     setOpenUserMenu(false);
   };
   const closeMobileMenu = () => {
     setOpenMobileMenu(false);
   };
+
+  // Fetch unread notifications count periodically
+  useEffect(() => {
+    if (user._id) {
+      const fetchUnreadCount = async () => {
+        try {
+          const response = await customAxios({
+            ...summaryApi.getNotifications,
+          });
+          if (response.data.success) {
+            setUnreadCount(response.data.data.unreadCount);
+          }
+        } catch (error) {
+          // Silently fail - notifications are not critical
+        }
+      };
+
+      fetchUnreadCount();
+      // Refresh every 30 seconds
+      const interval = setInterval(fetchUnreadCount, 30000);
+      return () => clearInterval(interval);
+    }
+  }, [user._id]);
 
   return (
     <header>
@@ -114,14 +142,27 @@ const Header = () => {
                     >
                       Upload
                     </button>
-                    <div className="hover:bg-neutral-300 p-2 rounded-md">
-                      {user._id ? <BellDot /> : <Bell />}
+                    <div className="relative hover:bg-neutral-300 p-2 rounded-md cursor-pointer">
+                      <button
+                        onClick={() => setOpenNotifications((prev) => !prev)}
+                        className="relative flex items-center text-primary"
+                      >
+                        <Bell />
+                        {unreadCount > 0 && !openNotifications && (
+                          <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center font-bold">
+                            {unreadCount > 99 ? "99+" : unreadCount}
+                          </span>
+                        )}
+                      </button>
+                      <NotificationsDropdown
+                        isOpen={openNotifications}
+                        onClose={() => setOpenNotifications(false)}
+                      />
                     </div>
                     <div
                       onClick={() => setOpenUserMenu((prev) => !prev)}
-                      className="hover:bg-neutral-300 p-2 rounded-md"
+                      className="hover:bg-neutral-300 p-2 rounded-md cursor-pointer"
                     >
-                      {" "}
                       <User2 />
                     </div>{" "}
                     {openUserMenu && (

@@ -29,8 +29,6 @@ const Search: React.FC = () => {
               1000,
               'Search "Dear Debbie"',
               1000,
-              'Search "A Brief History Of the Universe"',
-              1000,
               'Search "Anatomy Of The Heart"',
               1000,
               'Search "Crime and Punishment"',

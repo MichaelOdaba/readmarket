@@ -5,7 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import customAxios from "../utils/customAxios";
 import summaryApi from "../services/SummaryAPI";
-import { Eye, EyeClosed, LockIcon, Mail } from "lucide-react";
+import { Eye, EyeClosed, LockIcon, Mail, Loader } from "lucide-react";
 
 import { useDispatch } from "react-redux";
 import { setUser } from "../store/slice/userSlice";
@@ -122,11 +122,20 @@ const Login: React.FC = () => {
 
             <button
               className={
-                validateForm ? "btn-primary p-2 " : "btn-primary-disabled p-2"
+                validateForm && !islogin
+                  ? "btn-primary p-2 "
+                  : "btn-primary-disabled p-2"
               }
-              disabled={!validateForm}
+              disabled={!validateForm || islogin}
             >
-              {islogin ? "signing in..." : "Sign in"}
+              {islogin ? (
+                <div className="flex items-center justify-center gap-2">
+                  <Loader size={18} className="animate-spin" />
+                  <span>Signing in...</span>
+                </div>
+              ) : (
+                "Sign in"
+              )}
             </button>
             <p>
               Don't have an account?{" "}

@@ -3,6 +3,7 @@ import userModel from "../models/userModel.js";
 import mongoose from "mongoose";
 import generateAccessToken from "../utils/generateAccessToken.js";
 import generateRefreshToken from "../utils/generateRefreshToken.js";
+import { createNotificationController } from "./notificationController.js";
 export async function registerUserController(req, res) {
   try {
     const { firstName, lastName, email, password, confirmPassword } = req.body;
@@ -36,6 +37,14 @@ export async function registerUserController(req, res) {
       email,
       password: hashedPassword,
     });
+
+    // Create welcome notification
+    await createNotificationController(
+      registeredUser._id,
+      "REGISTER",
+      "Welcome to ReadMarket!",
+      `Welcome ${registeredUser.firstName}! Your account has been created successfully.`
+    );
 
     console.log(registeredUser);
     return res.status(201).json({
@@ -102,6 +111,14 @@ export async function loginUserController(req, res) {
       refresh_token: refreshToken,
     });
 
+    // Create login notification
+    await createNotificationController(
+      user._id,
+      "LOGIN",
+      "Login Successful",
+      `Welcome back ${user.firstName}!`
+    );
+
     return res.status(200).json({
       message: `${user.firstName} login successful`,
       success: true,
@@ -145,16 +162,63 @@ export async function logoutUserController(req, res) {
 }
 export async function editUserDetailsController(req, res) {
   try {
-    const userId = req.id;
-    const { firstName, lastName, email, mobile } = req.body;
+    const userId = req.userId;
+    const { firstName, lastName, email, mobile, avatar } = req.body;
 
-    if (!firstName && !lastName && !email && !mobile) {
-      return res.status(403).json({
+    console.log("EditUser - userId:", userId);
+    console.log("EditUser - Request body:", {
+      firstName,
+      lastName,
+      email,
+      mobile,
+      avatar,
+    });
+
+    if (!firstName && !lastName && !email && !mobile && !avatar) {
+      return res.status(400).json({
         message: "you did not provide any fields to update",
         success: false,
       });
     }
+
+    const updateData = {};
+    if (firstName) updateData.firstName = firstName;
+    if (lastName) updateData.lastName = lastName;
+    if (email) updateData.email = email;
+    if (mobile) updateData.mobile = mobile;
+    if (avatar) updateData.avatar = avatar;
+
+    console.log("EditUser - updateData:", updateData);
+
+    const updatedUser = await userModel.findByIdAndUpdate(userId, updateData, {
+      new: true,
+      runValidators: true,
+    });
+
+    console.log("EditUser - Updated user:", updatedUser);
+
+    if (!updatedUser) {
+      return res.status(404).json({
+        message: "user not found",
+        success: false,
+      });
+    }
+
+    // Create profile update notification
+    await createNotificationController(
+      userId,
+      "PROFILE_UPDATE",
+      "Profile Updated",
+      "Your profile has been updated successfully."
+    );
+
+    return res.status(200).json({
+      message: "user details updated successfully",
+      success: true,
+      data: updatedUser,
+    });
   } catch (error) {
+    console.error("EditUser - Error:", error);
     return res.status(500).json({
       message: "an error occurred while editing user details",
       success: false,

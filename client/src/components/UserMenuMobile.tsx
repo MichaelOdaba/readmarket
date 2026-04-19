@@ -11,6 +11,8 @@ const UserMenuMobile = ({ close }: { close: () => void }) => {
   const user = useSelector((state: { user: UserState }) => state?.user);
   const navigate = useNavigate();
   const menuRef = useRef<HTMLDivElement | null>(null);
+  console.log(user);
+
   useEffect(() => {
     const handleClickOutside = (event: any) => {
       if (menuRef.current && !menuRef.current.contains(event.target)) {
@@ -46,7 +48,15 @@ const UserMenuMobile = ({ close }: { close: () => void }) => {
     <div className="fixed top-0 bottom-0 left-0 right-0 p-4 bg-black opacity-70 flex flex-col items-center justify-between py-7">
       <div className="py-2 flex items-center flex-col justify-center gap-1">
         <div className="bg-neutral-300 p-7 rounded-full">
-          <User size={30} />
+          {user.avatarUrl ? (
+            <img
+              src={user.avatarUrl}
+              alt="Profile"
+              className="w-full h-full object-cover"
+            />
+          ) : (
+            <User size={30} />
+          )}
         </div>
 
         <p className="font-bold text-white text-xl">
