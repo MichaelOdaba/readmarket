@@ -1,5 +1,6 @@
 export const baseURL: string =
   import.meta.env.VITE_API_BASE_URL || "http://localhost:8009/";
+
 const summaryApi = {
   register: {
     url: "/api/user/register",
@@ -29,5 +30,42 @@ const summaryApi = {
     url: "/api/notification/mark-as-read",
     method: "put",
   },
+
+  // Collection APIs
+  getCollections: {
+    url: "/api/collection",
+    method: "get",
+  },
+  getCollectionById: (id: string) => ({
+    url: `/api/collection/${id}`,
+    method: "get",
+  }),
+  getCollectionProducts: (
+    id: string,
+    page: number = 1,
+    limit: number = 12
+  ) => ({
+    url: `/api/collection/${id}/products?page=${page}&limit=${limit}`,
+    method: "get",
+  }),
+  addCollection: {
+    url: "/api/collection/add",
+    method: "post",
+  },
+  updateCollection: (id: string) => ({
+    url: `/api/collection/${id}`,
+    method: "put",
+  }),
+  deleteCollection: (id: string) => ({
+    url: `/api/collection/${id}`,
+    method: "delete",
+  }),
+
+  // Product APIs
+  getLatestProducts: (limit: number = 8) => ({
+    url: `/api/products?limit=${limit}&sort=-createdAt`,
+    method: "get",
+  }),
 };
+
 export default summaryApi;

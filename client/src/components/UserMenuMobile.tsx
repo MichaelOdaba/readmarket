@@ -286,29 +286,25 @@ const UserMenuMobile = ({ close }: { close: () => void }) => {
             <BookMarked size={22} className="text-secondary" />
             My Library
           </Link>
+
+          {user.role === "ADMIN" && (
+            <Link
+              to="/dashboard/collection/add"
+              onClick={() => close()}
+              className="flex items-center gap-3 p-4 hover:bg-accent/10 transition-colors text-accent font-semibold"
+            >
+              <Plus size={22} className="text-accent" />
+              Add Collection
+            </Link>
+          )}
+
           <Link
-            to="/dashboard/collections"
-            onClick={() => close()}
-            className="flex items-center gap-3 p-4 hover:bg-secondary/10 transition-colors text-primary font-semibold"
-          >
-            <BookMarked size={22} className="text-secondary" />
-            Collections
-          </Link>
-          <Link
-            to="/dashboard/add-collection"
-            onClick={() => close()}
-            className="flex items-center gap-3 p-4 hover:bg-secondary/10 transition-colors text-primary font-semibold"
-          >
-            <Plus size={22} className="text-secondary" />
-            Add Collection
-          </Link>
-          <Link
-            to="/dashboard/address"
+            to="/dashboard/profile"
             onClick={() => close()}
             className="flex items-center gap-3 p-4 hover:bg-secondary/10 transition-colors text-primary font-semibold"
           >
             <MapPin size={22} className="text-secondary" />
-            Save Address
+            Manage Address
           </Link>
         </div>
 

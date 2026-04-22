@@ -9,16 +9,16 @@ const productsSchema = mongoose.Schema(
       type: Array,
       default: [],
     },
-    category: [
+    collection: [
       {
         type: mongoose.Schema.ObjectId,
-        ref: "category",
+        ref: "collection",
       },
     ],
-    sub_category: [
+    sub_collection: [
       {
         type: mongoose.Schema.ObjectId,
-        ref: "subCategory",
+        ref: "subCollection",
       },
     ],
     stock: {

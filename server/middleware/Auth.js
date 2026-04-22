@@ -19,18 +19,18 @@ const auth = async (req, res, next) => {
       });
     }
 
-    console.log("Auth token:", token);
+    const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
 
-    const verifyToken = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
-
-    if (!verifyToken) {
+    if (!decoded) {
       return res.status(403).json({
         message: "invalid access token",
         success: false,
       });
     }
 
-    req.userId = verifyToken.id;
+    req.userId = decoded.id;
+    req.userRole = decoded.role;
+
     next();
   } catch (error) {
     console.log("Auth error:", error.message);

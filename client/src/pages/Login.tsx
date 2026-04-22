@@ -51,6 +51,7 @@ const Login: React.FC = () => {
       });
       navigate("/dashboard");
     } catch (error: any) {
+      setislogin(false);
       toast.error(error?.response?.data?.message || error.message);
       console.log(error);
     }

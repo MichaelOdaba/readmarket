@@ -95,8 +95,8 @@ export async function loginUserController(req, res) {
       });
     }
 
-    const accessToken = await generateAccessToken(user._id);
-    const refreshToken = await generateRefreshToken(user._id);
+    const accessToken = await generateAccessToken(user._id, user.role);
+    const refreshToken = await generateRefreshToken(user._id, user.role);
     const cookieOptions = {
       httpOnly: true,
       secure: true,
@@ -118,6 +118,7 @@ export async function loginUserController(req, res) {
       "Login Successful",
       `Welcome back ${user.firstName}!`
     );
+    console.log(user.role);
 
     return res.status(200).json({
       message: `${user.firstName} login successful`,
@@ -241,7 +242,7 @@ export async function refreshTokenController(req, res) {
     }
     const verifyRefreshToken = await jwt.verify(
       refreshToken,
-      process.env.ACCESS_TOKEN_SECRET
+      process.env.REFRESH_TOKEN_SECRET
     );
     if (!verifyRefreshToken) {
       return res.status(403).json({
@@ -250,7 +251,8 @@ export async function refreshTokenController(req, res) {
       });
     }
     const userId = verifyRefreshToken?.id;
-    const newAccessToken = await generateAccessToken(userId);
+    const userRole = verifyRefreshToken?.role;
+    const newAccessToken = await generateAccessToken(userId, userRole);
     const cookieOptions = {
       httpOnly: true,
       secure: true,

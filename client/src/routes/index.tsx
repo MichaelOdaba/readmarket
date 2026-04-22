@@ -9,6 +9,8 @@ import DashBoard from "../pages/DashBoard";
 import Library from "../pages/Library";
 import Upload from "../pages/Upload";
 import Profile from "../pages/Profile";
+import CollectionPage from "../pages/CollectionPage";
+import AddCollectionPage from "../pages/AddCollectionPage";
 
 const router = createBrowserRouter([
   {
@@ -32,7 +34,10 @@ const router = createBrowserRouter([
         path: "/search",
         element: <SearchPage />,
       },
-
+      {
+        path: "/collection/:id",
+        element: <CollectionPage />,
+      },
       {
         path: "/todo",
         element: <Todo />,
@@ -52,6 +57,10 @@ const router = createBrowserRouter([
           {
             path: "/dashboard/profile",
             element: <Profile />,
+          },
+          {
+            path: "/dashboard/collection/add",
+            element: <AddCollectionPage />,
           },
         ],
       },

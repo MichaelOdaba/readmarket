@@ -1,5 +1,15 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Bell, X, Loader } from "lucide-react";
+import {
+  Bell,
+  X,
+  Loader,
+  LockKeyholeOpen,
+  PartyPopper,
+  User2,
+  Upload,
+  LucideShoppingCart,
+  AlertCircle,
+} from "lucide-react";
 import customAxios from "../utils/customAxios";
 import summaryApi from "../services/SummaryAPI";
 import { toast } from "sonner";
@@ -93,17 +103,17 @@ const NotificationsDropdown: React.FC<NotificationsDropdownProps> = ({
   const getNotificationIcon = (type: string) => {
     switch (type) {
       case "LOGIN":
-        return "🔐";
+        return <LockKeyholeOpen />;
       case "REGISTER":
-        return "🎉";
+        return <PartyPopper />;
       case "PROFILE_UPDATE":
-        return "👤";
+        return <User2 />;
       case "UPLOAD":
-        return "📤";
+        return <Upload />;
       case "PURCHASE":
-        return "🛍️";
+        return <LucideShoppingCart />;
       default:
-        return "ℹ️";
+        return <AlertCircle />;
     }
   };
 

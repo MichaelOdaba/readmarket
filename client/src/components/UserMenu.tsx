@@ -77,34 +77,37 @@ const UserMenu = ({ close }: { close: () => void }) => {
       <hr />
 
       <Link
-        to={""}
+        to={"/dashboard/upload"}
         className="text-sm font-bold rounded-sm p-2 hover:bg-neutral-300 flex items gap-2"
       >
         <Upload size={20} /> Upload Resource
       </Link>
       <Link
-        to={""}
+        to={"/dashboard/library"}
         className="text-sm font-bold rounded-sm p-2 hover:bg-neutral-300 flex items gap-2"
       >
         <Library size={20} /> My Library
       </Link>
+
+      {user.role === "ADMIN" && (
+        <>
+          <hr />
+          <Link
+            to={"/dashboard/collection/add"}
+            className="text-sm font-bold rounded-sm p-2 hover:bg-neutral-300 flex items gap-2 text-accent"
+          >
+            <LayersPlus size={20} /> Add Collection
+          </Link>
+        </>
+      )}
+
+      <hr />
+
       <Link
-        to={""}
+        to={"/dashboard/profile"}
         className="text-sm font-bold rounded-sm p-2 hover:bg-neutral-300 flex items gap-2"
       >
-        <Layers size={20} /> Collections
-      </Link>
-      <Link
-        to={""}
-        className="text-sm font-bold rounded-sm p-2 hover:bg-neutral-300 flex items gap-2"
-      >
-        <LayersPlus size={20} /> Add Collection
-      </Link>
-      <Link
-        to={""}
-        className="text-sm font-bold rounded-sm p-2 hover:bg-neutral-300 flex items gap-2"
-      >
-        <Save size={20} /> Save Address
+        <Save size={20} /> Manage Address
       </Link>
       <button
         onClick={() => handleLogout()}

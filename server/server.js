@@ -1,10 +1,11 @@
 import express from "express";
-
+import collectionRouter from "./routes/collectionRoutes.js";
 import cors from "cors";
 import { connectDB } from "./config/db.js";
 import userRouter from "./routes/userRoutes.js";
 import notificationRouter from "./routes/notificationRoutes.js";
 import cookieParser from "cookie-parser";
+import createAdminUserIfNotExists from "./utils/initAdmin.js";
 const app = express();
 const PORT = process.env.PORT || 4000;
 
@@ -24,10 +25,12 @@ app.get("/", (req, res) => {
 });
 app.use("/api/user/", userRouter);
 app.use("/api/notification/", notificationRouter);
+app.use("/api/collection/", collectionRouter);
 connectDB()
   .then(console.log("DB connected successfully on " + process.env.MONGODB_URL))
   .then(
-    app.listen(PORT, () => {
+    app.listen(PORT, async () => {
+      await createAdminUserIfNotExists();
       console.log(`Server is running on port ${PORT}`);
     })
   );
