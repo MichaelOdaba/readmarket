@@ -7,10 +7,11 @@ import SearchPage from "../pages/SearchPage";
 import Home from "../pages/Home";
 import DashBoard from "../pages/DashBoard";
 import Library from "../pages/Library";
-import Upload from "../pages/Upload";
+import UploadPage from "../pages/UploadPage";
 import Profile from "../pages/Profile";
 import CollectionPage from "../pages/CollectionPage";
 import AddCollectionPage from "../pages/AddCollectionPage";
+import ProductDetail from "../pages/ProductDetail";
 
 const router = createBrowserRouter([
   {
@@ -35,11 +36,15 @@ const router = createBrowserRouter([
         element: <SearchPage />,
       },
       {
-        path: "/collection/:id",
+        path: "collection/:id",
         element: <CollectionPage />,
       },
       {
-        path: "/todo",
+        path: "product/:id",
+        element: <ProductDetail />,
+      },
+      {
+        path: "todo",
         element: <Todo />,
       },
       {
@@ -52,7 +57,7 @@ const router = createBrowserRouter([
           },
           {
             path: "/dashboard/upload",
-            element: <Upload />,
+            element: <UploadPage />,
           },
           {
             path: "/dashboard/profile",

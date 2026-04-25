@@ -62,10 +62,24 @@ const summaryApi = {
   }),
 
   // Product APIs
-  getLatestProducts: (limit: number = 8) => ({
-    url: `/api/products?limit=${limit}&sort=-createdAt`,
+  getAllProducts: {
+    url: "/api/products",
+    method: "get",
+  },
+  getProductById: (id: string) => ({
+    url: `/api/products/${id}`,
     method: "get",
   }),
+  uploadProduct: {
+    url: "/api/products/upload",
+    method: "post",
+  },
+  endpoints: {
+    downloadProduct: (id: string) => ({
+      url: `/api/products/${id}/download`,
+      method: "get",
+    }),
+  },
 };
 
 export default summaryApi;

@@ -1,103 +1,465 @@
-# readmarket
-
-An Ebook marketplace
-
 # ReadMarket
 
-> A fullstack MERN marketplace for buying and selling ebooks
+> A fullstack MERN marketplace for buying and selling ebooks and digital resources
 
-[Live Demo](your-deployed-link) | [API Documentation](if-applicable)
-
-## Overview
-
-This app is a pdf marketplace place where users can buy and sell Ebooks, i built this as a solution to sellers manually selling hard copies of past questions and books in my school, so i am building this platform for users to buy and sell Ebooks and PDFs online.
-
-## Features
-
-- User authentication (JWT)
-- Seller dashboard for PDF uploads
-- Browse and purchase ebooks
-- Secure file storage with Cloudinary
-
-## Tech Stack
-
-**Frontend:** React, [other libraries]
-**Backend:** Node.js, Express, MongoDB
-**Other:** Cloudinary, JWT, etc.
-
-## Screenshots
-
-## 🎨 UI Color System — Read Market
-
-The **Read Market** interface is built from the brand identity defined in the logo, ensuring visual consistency across all product surfaces.
-The color system focuses on **trust, readability, and conversion**, aligning with a modern digital bookstore experience.
+**Live Demo:** [Coming Soon]  
+**API Documentation:** [docs/API.md](./docs/API.md)  
+**Issues:** [Report a Bug](https://github.com/yourusername/readmarket/issues)
 
 ---
 
-### ✅ Brand Color Palette
+## 📖 Table of Contents
 
-| Role           | Color          | Hex       | Usage                                          |
-| -------------- | -------------- | --------- | ---------------------------------------------- |
-| Primary        | Trust Teal     | `#1F6F78` | Primary actions, active states, navigation     |
-| Secondary      | Bright Teal    | `#2FA4A9` | Hover states, highlights, interactive elements |
-| Accent         | Knowledge Gold | `#F4A641` | Purchase actions, badges, promotions           |
-| Background     | Light Neutral  | `#F7F9FA` | Application background                         |
-| Surface        | White          | `#FFFFFF` | Cards, modals, containers                      |
-| Border         | Soft Gray      | `#E3E8EA` | Dividers and outlines                          |
-| Primary Text   | Dark Slate     | `#1A2B32` | Main readable text                             |
-| Secondary Text | Muted Gray     | `#6B7C85` | Supporting information                         |
-
----
-
-### 🧱 Button Design System
-
-#### Primary Button
-
-Used for main actions across the platform.
-
-* Background: `#1F6F78`
-* Text: White
-* Hover: `#2FA4A9`
-* Usage: Login, Continue, Submit, Save
+- [Overview](#-overview)
+- [Features](#-features)
+- [Project Structure](#-project-structure)
+- [Tech Stack](#-tech-stack)
+- [Prerequisites](#-prerequisites)
+- [Installation](#-installation)
+- [Configuration](#-configuration)
+- [Getting Started](#-getting-started)
+- [API Endpoints](#-api-endpoints)
+- [Design System](#-design-system)
+- [Project Convention](#-project-convention)
+- [Contributing](#-contributing)
+- [License](#-license)
 
 ---
 
-#### Secondary Button
+## 🎯 Overview
 
-Used for optional or supporting actions.
+**ReadMarket** is a modern, fullstack ebook marketplace platform designed to solve the problem of manual PDF distribution in educational settings. Built with MERN stack (MongoDB, Express, React, Node.js), it enables users to:
 
-* Background: Transparent
-* Border/Text: `#1F6F78`
-* Hover: Light teal tint
+- **Buy** digital resources (ebooks, PDFs, study materials)
+- **Sell** their own content to a growing community
+- **Manage** inventory and view purchase history
+- **Collaborate** through secure transactions and notifications
 
----
-
-#### Accent Button (Conversion Action)
-
-Reserved for revenue-driving interactions.
-
-* Background: `#F4A641`
-* Text: White
-* Usage: Buy Book, Checkout, Subscribe
+Originally created to help students in school buy and sell past question papers and books digitally, ReadMarket now serves as a complete platform for digital resource commerce.
 
 ---
 
-#### Danger Button
+## ✨ Features
 
-Used only for destructive actions.
+### For Buyers
 
-* Background: `#D9534F`
-* Text: White
-* Usage: Delete, Remove
+- ✅ Browse and search ebooks by title, description, and collection
+- ✅ View detailed product information and seller profiles
+- ✅ Add items to cart and manage wishlist
+- ✅ Secure checkout and payment processing
+- ✅ Download purchased ebooks instantly
+- ✅ Track purchase history and order status
+- ✅ Read and leave seller reviews
+
+### For Sellers
+
+- ✅ Upload and manage digital products with rich descriptions
+- ✅ Organize products into multiple collections
+- ✅ Set pricing with optional discount options
+- ✅ Track sales and earnings analytics
+- ✅ Manage seller profile and address information
+- ✅ Receive notifications for new orders
+- ✅ View buyer feedback and ratings
+
+### For Admins
+
+- ✅ Create and manage product collections
+- ✅ Monitor platform activity and transactions
+- ✅ Manage user roles and permissions
+- ✅ View system analytics and reports
+- ✅ Moderate user content
 
 ---
 
-### 🧭 Navigation Styling
+## 📦 Project Structure
 
-* Navigation background uses white or light neutral surfaces.
-* Active navigation items use **Primary Teal** indicators.
-* Icons transition from muted gray to teal when active.
-* Visual feedback prioritizes clarity over visual noise.
+```
+readmarket/
+├── client/                          # Frontend (React + TypeScript + Vite)
+│   ├── src/
+│   │   ├── components/              # Reusable React components
+│   │   │   ├── Header.tsx
+│   │   │   ├── UserMenu.tsx
+│   │   │   ├── ProductsGrid.jsx
+│   │   │   ├── CollectionGrid.tsx
+│   │   │   └── ...
+│   │   ├── pages/                   # Route pages
+│   │   │   ├── Home.tsx
+│   │   │   ├── Login.tsx
+│   │   │   ├── UploadPage.tsx
+│   │   │   └── ...
+│   │   ├── services/                # API call definitions
+│   │   │   └── SummaryAPI.ts
+│   │   ├── store/                   # Redux store
+│   │   │   ├── index.ts
+│   │   │   └── slice/
+│   │   ├── types/                   # TypeScript type definitions
+│   │   ├── utils/                   # Helper functions
+│   │   │   ├── cloudinaryUpload.ts
+│   │   │   ├── customAxios.ts
+│   │   │   └── fetchUser.ts
+│   │   └── main.tsx
+│   ├── vite.config.ts
+│   ├── tsconfig.json
+│   └── package.json
+│
+├── server/                          # Backend (Node.js + Express)
+│   ├── controllers/                 # Route controllers
+│   │   ├── userController.js
+│   │   ├── productsController.js
+│   │   ├── collectionController.js
+│   │   └── ...
+│   ├── models/                      # MongoDB schemas
+│   │   ├── userModel.js
+│   │   ├── productsModel.js
+│   │   ├── collectionModel.js
+│   │   └── ...
+│   ├── routes/                      # API routes
+│   │   ├── userRoutes.js
+│   │   ├── productsRoutes.js
+│   │   └── ...
+│   ├── middleware/                  # Express middleware
+│   │   ├── Auth.js                  # JWT authentication
+│   │   └── RoleAuth.js              # Role-based access
+│   ├── config/
+│   │   └── db.js                    # MongoDB connection
+│   ├── utils/
+│   │   ├── generateAccessToken.js
+│   │   ├── generateRefreshToken.js
+│   │   └── initAdmin.js
+│   ├── server.js                    # Express app entry point
+│   └── package.json
+│
+├── docs/                            # Documentation
+│   └── API.md                       # API endpoint documentation
+│
+├── README.md                        # This file
+└── LICENSE
+
+```
+
+---
+
+## 🛠 Tech Stack
+
+### Frontend
+
+| Technology        | Purpose                 |
+| ----------------- | ----------------------- |
+| **React 18**      | UI library              |
+| **TypeScript**    | Type safety             |
+| **Vite**          | Build tool & dev server |
+| **Redux Toolkit** | State management        |
+| **Tailwind CSS**  | Styling                 |
+| **Lucide Icons**  | Icon library            |
+| **Sonner**        | Toast notifications     |
+| **Axios**         | HTTP client             |
+
+### Backend
+
+| Technology        | Purpose                      |
+| ----------------- | ---------------------------- |
+| **Node.js**       | JavaScript runtime           |
+| **Express.js**    | Web framework                |
+| **MongoDB**       | Database                     |
+| **Mongoose**      | ODM (Object Document Mapper) |
+| **JWT**           | Authentication tokens        |
+| **Cloudinary**    | Image hosting                |
+| **Cors**          | Cross-origin requests        |
+| **Cookie-parser** | Cookie parsing               |
+
+---
+
+## 📋 Prerequisites
+
+Before installation, ensure you have:
+
+- **Node.js** >= 16.0.0
+- **npm** or **yarn** package manager
+- **MongoDB** Atlas account or local MongoDB instance
+- **Cloudinary** account for image uploads
+- **Git** for version control
+
+---
+
+## 💾 Installation
+
+### 1. Clone the Repository
+
+```bash
+git clone https://github.com/yourusername/readmarket.git
+cd readmarket
+```
+
+### 2. Backend Setup
+
+```bash
+cd server
+
+# Install dependencies
+npm install
+
+# Create .env file
+cp .env.example .env
+
+# Edit .env with your configurations (see Configuration section)
+```
+
+### 3. Frontend Setup
+
+```bash
+cd ../client
+
+# Install dependencies
+npm install
+
+# Create .env file
+cp .env.example .env
+
+# Edit .env with your configurations
+```
+
+---
+
+## ⚙️ Configuration
+
+### Backend Environment Variables (.env)
+
+```env
+# Server
+PORT=8009
+NODE_ENV=development
+
+# Database
+MONGODB_URL=mongodb+srv://username:password@cluster.mongodb.net/readmarket
+
+# JWT
+SECRET_KEY=your_secret_key_here
+REFRESH_SECRET_KEY=your_refresh_secret_key_here
+
+# Frontend URL
+FRONTEND_URL=http://localhost:5173
+
+# Cloudinary (Optional - for image uploads)
+CLOUDINARY_CLOUD_NAME=your_cloud_name
+CLOUDINARY_API_KEY=your_api_key
+CLOUDINARY_API_SECRET=your_api_secret
+
+# Admin Setup
+ADMIN_EMAIL=admin@readmarket.com
+ADMIN_PASSWORD=admin_password
+```
+
+### Frontend Environment Variables (.env)
+
+```env
+# API Configuration
+VITE_API_BASE_URL=http://localhost:8009/
+
+# Cloudinary
+VITE_CLOUDINARY_CLOUD_NAME=your_cloud_name
+VITE_CLOUDINARY_UPLOAD_PRESET=your_upload_preset
+```
+
+---
+
+## 🚀 Getting Started
+
+### Development Mode
+
+**Terminal 1 - Start Backend:**
+
+```bash
+cd server
+npm start
+# Server running on http://localhost:8009
+```
+
+**Terminal 2 - Start Frontend:**
+
+```bash
+cd client
+npm run dev
+# Frontend running on http://localhost:5173
+```
+
+### Production Build
+
+```bash
+# Backend - no build needed, runs directly with Node.js
+
+# Frontend - Create optimized build
+cd client
+npm run build
+npm run preview  # Preview production build locally
+```
+
+---
+
+## 📡 API Endpoints
+
+### Authentication
+
+```
+POST   /api/user/register       - Register new user
+POST   /api/user/login          - Login user
+GET    /api/user/logout         - Logout user
+GET    /api/user/get-user       - Get current user
+PUT    /api/user/edit           - Update user details
+PUT    /api/user/change-password - Change password
+```
+
+### Products
+
+```
+GET    /api/products            - Get all products
+GET    /api/products/:productId - Get single product
+POST   /api/products/upload     - Upload product (authenticated)
+```
+
+### Collections
+
+```
+GET    /api/collection          - Get all collections
+GET    /api/collection/:id      - Get collection by ID
+POST   /api/collection/add      - Create collection (admin only)
+PUT    /api/collection/:id      - Update collection (admin only)
+DELETE /api/collection/:id      - Delete collection (admin only)
+```
+
+### Notifications
+
+```
+GET    /api/notification/       - Get user notifications
+PUT    /api/notification/mark-as-read - Mark notification as read
+```
+
+**Full API Documentation:** See [docs/API.md](./docs/API.md)
+
+---
+
+## 🎨 Design System
+
+ReadMarket follows a cohesive design system to ensure consistency across all interfaces.
+
+### Color Palette
+
+| Role               | Color          | Hex       | Usage                                  |
+| ------------------ | -------------- | --------- | -------------------------------------- |
+| **Primary**        | Trust Teal     | `#1F6F78` | Main actions, navigation, primary text |
+| **Secondary**      | Bright Teal    | `#2FA4A9` | Hover states, highlights               |
+| **Accent**         | Knowledge Gold | `#F4A641` | Purchase actions, badges, CTAs         |
+| **Background**     | Light Neutral  | `#F7F9FA` | Page backgrounds                       |
+| **Surface**        | White          | `#FFFFFF` | Cards, containers                      |
+| **Text Primary**   | Dark Slate     | `#1A2B32` | Main text                              |
+| **Text Secondary** | Muted Gray     | `#6B7C85` | Supporting text                        |
+
+### Button Types
+
+- **Primary** - Main actions (Submit, Continue, Save)
+- **Secondary** - Secondary actions (Cancel, Back)
+- **Accent** - Revenue-driving actions (Buy, Checkout)
+- **Danger** - Destructive actions (Delete, Remove)
+
+---
+
+## 📝 Project Convention
+
+### Code Style
+
+- Use **TypeScript** for type safety (Frontend strongly encouraged)
+- Use **ESLint** for code linting
+- Follow **Prettier** formatting rules
+- Use camelCase for variables/functions, PascalCase for components/classes
+- Document complex functions with JSDoc comments
+
+### Component Structure
+
+```tsx
+// Example component structure
+interface Props {
+  title: string;
+  onAction: () => void;
+}
+
+const MyComponent: React.FC<Props> = ({ title, onAction }) => {
+  // Hooks
+  // State
+  // Effects
+  // Handlers
+  // Render
+  return <div>{/* JSX */}</div>;
+};
+
+export default MyComponent;
+```
+
+### Naming Conventions
+
+- React components: `PascalCase` (e.g., `ProductCard.tsx`)
+- Functions/utilities: `camelCase` (e.g., `uploadToCloudinary.ts`)
+- Constants: `UPPER_SNAKE_CASE` (e.g., `MAX_FILE_SIZE`)
+- React hooks: Start with `use` (e.g., `usePagination`)
+
+---
+
+## 🤝 Contributing
+
+We welcome contributions! Please follow these steps:
+
+1. **Fork** the repository
+2. **Create** a feature branch (`git checkout -b feature/AmazingFeature`)
+3. **Commit** your changes (`git commit -m 'Add AmazingFeature'`)
+4. **Push** to the branch (`git push origin feature/AmazingFeature`)
+5. **Open** a Pull Request
+
+### Development Guidelines
+
+- Write clear commit messages
+- Update documentation for new features
+- Test your changes before submitting PR
+- Follow the project's code style
+- Add comments for complex logic
+
+---
+
+## 📄 License
+
+This project is licensed under the **MIT License** - see [LICENSE](LICENSE) file for details.
+
+---
+
+## 🙋 Support
+
+For questions or issues:
+
+- 📧 Email: support@readmarket.com
+- 🐛 [Report Bug](https://github.com/yourusername/readmarket/issues)
+- 💡 [Request Feature](https://github.com/yourusername/readmarket/issues)
+
+---
+
+## 🗺️ Roadmap
+
+- [ ] Payment integration (Stripe/Razorpay)
+- [ ] User ratings and reviews system
+- [ ] Advanced search and filtering
+- [ ] Mobile native apps (React Native)
+- [ ] Wishlist and recommendations
+- [ ] author Dashboard analytics
+- [ ] DRM for purchased ebooks
+- [ ] API Rate limiting and caching
+
+---
+
+## 👥 Author
+
+**Created by:** [Your Name]  
+**GitHub:** [@yourusername](https://github.com/yourusername)
+
+---
+
+**Thank you for using ReadMarket!** 🎉
 
 ---
 
@@ -105,10 +467,10 @@ Used only for destructive actions.
 
 Book and content cards follow a minimal reading-focused layout:
 
-* Background: White
-* Border: Soft Gray (`#E3E8EA`)
-* Shadow: Subtle elevation
-* Hover: Slight lift with teal highlight
+- Background: White
+- Border: Soft Gray (`#E3E8EA`)
+- Shadow: Subtle elevation
+- Hover: Slight lift with teal highlight
 
 This approach maintains focus on content while preserving visual hierarchy.
 
@@ -118,9 +480,9 @@ This approach maintains focus on content while preserving visual hierarchy.
 
 The interface follows the **60–30–10 rule**:
 
-* **60%** Neutral backgrounds and surfaces
-* **30%** Brand teal colors
-* **10%** Accent color for key actions
+- **60%** Neutral backgrounds and surfaces
+- **30%** Brand teal colors
+- **10%** Accent color for key actions
 
 This ensures balance, readability, and strong action visibility.
 
@@ -130,13 +492,12 @@ This ensures balance, readability, and strong action visibility.
 
 Read Market’s UI emphasizes:
 
-* Clarity over decoration
-* Calm reading environments
-* Consistent interaction feedback
-* Conversion without visual overload
+- Clarity over decoration
+- Calm reading environments
+- Consistent interaction feedback
+- Conversion without visual overload
 
 The goal is to create a trustworthy and distraction-free digital bookstore experience.
-
 
 [Add 2-3 screenshots when you have UI]
 

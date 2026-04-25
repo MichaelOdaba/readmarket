@@ -51,6 +51,7 @@ const Register: React.FC = () => {
     } catch (error: any) {
       console.log(error.response);
       toast.error(error.response.data.message);
+      setIsRegistering(false);
     }
   };
 

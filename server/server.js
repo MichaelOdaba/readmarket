@@ -4,6 +4,7 @@ import cors from "cors";
 import { connectDB } from "./config/db.js";
 import userRouter from "./routes/userRoutes.js";
 import notificationRouter from "./routes/notificationRoutes.js";
+import productsRouter from "./routes/productsRoutes.js";
 import cookieParser from "cookie-parser";
 import createAdminUserIfNotExists from "./utils/initAdmin.js";
 const app = express();
@@ -26,6 +27,7 @@ app.get("/", (req, res) => {
 app.use("/api/user/", userRouter);
 app.use("/api/notification/", notificationRouter);
 app.use("/api/collection/", collectionRouter);
+app.use("/api/products/", productsRouter);
 connectDB()
   .then(console.log("DB connected successfully on " + process.env.MONGODB_URL))
   .then(

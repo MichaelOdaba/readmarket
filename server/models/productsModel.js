@@ -21,14 +21,6 @@ const productsSchema = mongoose.Schema(
         ref: "subCollection",
       },
     ],
-    stock: {
-      type: Number,
-      default: 0,
-    },
-    unit: {
-      type: String,
-      default: 0,
-    },
     price: {
       type: String,
       default: 0,
@@ -48,6 +40,15 @@ const productsSchema = mongoose.Schema(
     publish: {
       type: Boolean,
       default: true,
+    },
+    seller: {
+      type: mongoose.Schema.ObjectId,
+      ref: "user",
+      required: true,
+    },
+    fileUrl: {
+      type: String,
+      default: "",
     },
   },
   {

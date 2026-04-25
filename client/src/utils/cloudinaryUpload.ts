@@ -7,7 +7,10 @@
  * 3. Get these values from: https://console.cloudinary.com/
  */
 
-const uploadToCloudinary = async (file: File): Promise<string> => {
+const uploadToCloudinary = async (
+  file: File,
+  resourceType: "image" | "raw" = "image"
+): Promise<string> => {
   const cloudinaryCloudName = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME;
   const cloudinaryUploadPreset = import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET;
 
@@ -22,7 +25,7 @@ const uploadToCloudinary = async (file: File): Promise<string> => {
   formData.append("upload_preset", cloudinaryUploadPreset);
 
   const response = await fetch(
-    `https://api.cloudinary.com/v1_1/${cloudinaryCloudName}/image/upload`,
+    `https://api.cloudinary.com/v1_1/${cloudinaryCloudName}/${resourceType}/upload`,
     {
       method: "POST",
       body: formData,
@@ -30,7 +33,7 @@ const uploadToCloudinary = async (file: File): Promise<string> => {
   );
 
   if (!response.ok) {
-    throw new Error("Failed to upload image to Cloudinary");
+    throw new Error(`Failed to upload ${resourceType} to Cloudinary`);
   }
 
   const data = await response.json();
