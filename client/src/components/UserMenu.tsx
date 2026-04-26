@@ -103,6 +103,15 @@ const UserMenu = ({ close }: { close: () => void }) => {
 
       <hr />
 
+      {user.role === "ADMIN" && (
+        <Link
+          to={"/dashboard/create-admin"}
+          className="text-sm font-bold rounded-sm p-2 hover:bg-neutral-300 flex items gap-2 text-red-500"
+        >
+          <Layers size={20} /> Create Admin
+        </Link>
+      )}
+
       <Link
         to={"/dashboard/profile"}
         className="text-sm font-bold rounded-sm p-2 hover:bg-neutral-300 flex items gap-2"

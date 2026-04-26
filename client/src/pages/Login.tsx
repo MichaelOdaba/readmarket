@@ -49,7 +49,7 @@ const Login: React.FC = () => {
         email: "",
         password: "",
       });
-      navigate("/dashboard");
+      navigate("/");
     } catch (error: any) {
       setislogin(false);
       toast.error(error?.response?.data?.message || error.message);

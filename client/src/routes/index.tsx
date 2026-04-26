@@ -12,6 +12,7 @@ import Profile from "../pages/Profile";
 import CollectionPage from "../pages/CollectionPage";
 import AddCollectionPage from "../pages/AddCollectionPage";
 import ProductDetail from "../pages/ProductDetail";
+import CreateAdminPage from "../pages/CreateAdminPage";
 
 const router = createBrowserRouter([
   {
@@ -66,6 +67,11 @@ const router = createBrowserRouter([
           {
             path: "/dashboard/collection/add",
             element: <AddCollectionPage />,
+          },
+
+          {
+            path: "/dashboard/create-admin",
+            element: <CreateAdminPage />,
           },
         ],
       },

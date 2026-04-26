@@ -22,6 +22,10 @@ const summaryApi = {
     url: "/api/user/edit",
     method: "put",
   },
+  CreateAdmin: {
+    url: "/api/user/create-admin",
+    method: "post",
+  },
   getNotifications: {
     url: "/api/notification/",
     method: "get",

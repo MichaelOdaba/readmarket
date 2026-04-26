@@ -9,11 +9,11 @@ import {
   resetPasswordController,
   refreshTokenController,
   getUserDetailsController,
+  registerAdminController,
 } from "../controllers/userController.js";
 import auth from "../middleware/Auth.js";
 
 const userRouter = express.Router();
-
 userRouter.post("/register", registerUserController);
 userRouter.post("/login", loginUserController);
 userRouter.get("/logout", auth, logoutUserController);
@@ -23,5 +23,6 @@ userRouter.post("/forgot-password", forgotPasswordController);
 userRouter.post("/reset-password", resetPasswordController);
 userRouter.put("/refresh-token", refreshTokenController);
 userRouter.get("/get-user", auth, getUserDetailsController);
+userRouter.post("/create-admin", auth, registerAdminController);
 
 export default userRouter;

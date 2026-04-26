@@ -60,6 +60,65 @@ export async function registerUserController(req, res) {
     });
   }
 }
+export async function registerAdminController(req, res) {
+  try {
+    const user = req.userId;
+    const role = req.userRole;
+
+    if (role !== "ADMIN") {
+      return res.status(403).json({
+        message: "only admins can create other admin accounts",
+        success: false,
+      });
+    }
+
+    //deconstruct the required fields from the request body
+    const { firstName, lastName, email, password, confirmPassword } = req.body;
+    if (!firstName || !lastName || !email || !password || !confirmPassword) {
+      return res.status(400).json({
+        message: "pls fill all the required fields",
+        success: false,
+      });
+    }
+    //check if a user with the provided email already exists in the database
+    const existingUser = await userModel.findOne({ email });
+    if (existingUser) {
+      return res.status(400).json({
+        message: "This user already exists",
+        success: false,
+      });
+    }
+    //check if the password and confirm password fields match
+    const checkPasswordMatch = password === confirmPassword;
+    if (!checkPasswordMatch) {
+      return res.status(400).json({
+        message: "confirm password and password do not match ",
+        success: false,
+      });
+    }
+    //hash the password using bcryptjs
+    const hashedPassword = await bcryptjs.hash(password, 10);
+    //create a new user in the database with the role of ADMIN
+    const registeredAdmin = await userModel.create({
+      firstName,
+      lastName,
+      email,
+      password: hashedPassword,
+      role: "ADMIN",
+    });
+    return res.status(201).json({
+      message: `new admin ${registeredAdmin.firstName} created successfully`,
+      success: true,
+      data: registeredAdmin,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      message: "an error occurred while registering the admin",
+      success: false,
+      error: error.message || error,
+    });
+  }
+}
 export async function loginUserController(req, res) {
   try {
     const { email, password } = req.body;
@@ -134,6 +193,7 @@ export async function loginUserController(req, res) {
     });
   }
 }
+
 export async function logoutUserController(req, res) {
   try {
     const userId = req.userId;
