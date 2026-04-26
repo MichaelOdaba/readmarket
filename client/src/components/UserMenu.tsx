@@ -73,9 +73,7 @@ const UserMenu = ({ close }: { close: () => void }) => {
           </button>
         </div>
       </div>
-
       <hr />
-
       <Link
         to={"/dashboard/upload"}
         className="text-sm font-bold rounded-sm p-2 hover:bg-neutral-300 flex items gap-2"
@@ -88,7 +86,6 @@ const UserMenu = ({ close }: { close: () => void }) => {
       >
         <Library size={20} /> My Library
       </Link>
-
       {user.role === "ADMIN" && (
         <>
           <hr />
@@ -100,9 +97,7 @@ const UserMenu = ({ close }: { close: () => void }) => {
           </Link>
         </>
       )}
-
       <hr />
-
       {user.role === "ADMIN" && (
         <Link
           to={"/dashboard/create-admin"}

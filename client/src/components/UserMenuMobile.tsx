@@ -9,6 +9,7 @@ import {
   MapPin,
   Upload,
   Loader,
+  Layers,
 } from "lucide-react";
 import { useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
@@ -295,6 +296,16 @@ const UserMenuMobile = ({ close }: { close: () => void }) => {
             >
               <Plus size={22} className="text-accent" />
               Add Collection
+            </Link>
+          )}
+          {user.role === "ADMIN" && (
+            <Link
+              to="/dashboard/create-admin"
+              onClick={() => close()}
+              className="flex items-center gap-3 p-4 hover:bg-red-500/10 transition-colors text-red-500 font-semibold"
+            >
+              <Layers size={22} className="text-red-500" />
+              Create Admin
             </Link>
           )}
 
