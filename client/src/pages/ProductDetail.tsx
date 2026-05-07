@@ -8,10 +8,12 @@ import {
   ChevronLeft,
   ChevronRight,
   User,
+  Edit,
 } from "lucide-react";
 import { toast } from "sonner";
 import customAxios from "../utils/customAxios";
 import summaryApi from "../services/SummaryAPI";
+import { useSelector } from "react-redux";
 
 interface Product {
   _id: string;
@@ -43,6 +45,8 @@ const ProductDetail = () => {
   const [error, setError] = useState<string | null>(null);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isDownloading, setIsDownloading] = useState(false);
+  const user = useSelector((state: any) => state?.user);
+  console.log(user);
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -245,7 +249,6 @@ const ProductDetail = () => {
                 </span>
               </div>
             )}
-
             {/* Product Title */}
             <div>
               <h1 className="text-4xl font-bold text-primary mb-2">
@@ -255,7 +258,6 @@ const ProductDetail = () => {
                 Updated {new Date(product.updatedAt).toLocaleDateString()}
               </p>
             </div>
-
             {/* Price */}
             <div className="bg-accent/10 rounded-lg p-4 border border-accent/20">
               <p className="text-secondary text-sm mb-1">Price</p>
@@ -263,7 +265,6 @@ const ProductDetail = () => {
                 ₦{Number(product.price).toFixed(2)}
               </p>
             </div>
-
             {/* Description */}
             <div>
               <h2 className="text-lg font-semibold text-primary mb-2">
@@ -273,7 +274,6 @@ const ProductDetail = () => {
                 {product.description}
               </p>
             </div>
-
             {/* More Details */}
             {product.more_details && (
               <div>
@@ -285,7 +285,6 @@ const ProductDetail = () => {
                 </p>
               </div>
             )}
-
             {/* Download Button */}
             <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
               <p className="text-sm text-blue-900 mb-3">
@@ -310,7 +309,6 @@ const ProductDetail = () => {
                 )}
               </button>
             </div>
-
             {/* Add to Cart Button */}
             <button
               onClick={handleAddToCart}
@@ -319,7 +317,19 @@ const ProductDetail = () => {
               <ShoppingCart size={20} />
               Add to Cart
             </button>
-
+            {/* Edit Product Button (only for seller) */}
+            {product.seller._id === user?._id && (
+              <button
+                onClick={() =>
+                  navigate(`/dashboard/product/${product._id}/edit`)
+                }
+                className="w-full bg-yellow-100 hover:bg-green-200 text-green-800 font-semibold py-3 px-4 rounded-lg transition flex items-center justify-center gap-2"
+                //style the button to fit the current design, maybe make it smaller and less prominent than the download and add to cart buttons
+              >
+                <Edit size={20} />
+                Edit Product
+              </button>
+            )}
             {/* Seller Info */}
             <div className="bg-neutral-50 rounded-lg p-4 border border-neutral-200">
               <p className="text-xs text-secondary mb-3">Sold by</p>

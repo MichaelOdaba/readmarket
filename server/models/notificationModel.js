@@ -9,14 +9,7 @@ const notificationSchema = mongoose.Schema(
     },
     type: {
       type: String,
-      enum: [
-        "LOGIN",
-        "REGISTER",
-        "PROFILE_UPDATE",
-        "UPLOAD",
-        "PURCHASE",
-        "INFO",
-      ],
+      enum: ["REGISTER", "PROFILE_UPDATE", "UPLOAD", "PURCHASE", "INFO"],
       required: true,
     },
     title: {

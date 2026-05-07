@@ -170,13 +170,6 @@ export async function loginUserController(req, res) {
       refresh_token: refreshToken,
     });
 
-    // Create login notification
-    await createNotificationController(
-      user._id,
-      "LOGIN",
-      "Login Successful",
-      `Welcome back ${user.firstName}!`
-    );
     console.log(user.role);
 
     return res.status(200).json({

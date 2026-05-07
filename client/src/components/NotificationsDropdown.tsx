@@ -69,8 +69,16 @@ const NotificationsDropdown: React.FC<NotificationsDropdownProps> = ({
       });
 
       if (response.data.success) {
-        setNotifications(response.data.data.notifications);
-        setUnreadCount(response.data.data.unreadCount);
+        // Filter out LOGIN notifications
+        const filteredNotifications = response.data.data.notifications.filter(
+          (notif: Notification) => notif.type !== "LOGIN"
+        );
+        setNotifications(filteredNotifications);
+        // Count unread non-LOGIN notifications
+        const unreadNonLogin = filteredNotifications.filter(
+          (notif: Notification) => !notif.isRead
+        ).length;
+        setUnreadCount(unreadNonLogin);
       }
     } catch (error: any) {
       console.error("Error fetching notifications:", error);
@@ -102,8 +110,6 @@ const NotificationsDropdown: React.FC<NotificationsDropdownProps> = ({
 
   const getNotificationIcon = (type: string) => {
     switch (type) {
-      case "LOGIN":
-        return <LockKeyholeOpen />;
       case "REGISTER":
         return <PartyPopper />;
       case "PROFILE_UPDATE":

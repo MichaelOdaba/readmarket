@@ -11,6 +11,8 @@ import summaryApi from "../services/SummaryAPI";
 import uploadToCloudinary from "../utils/cloudinaryUpload";
 import type { ProfileFormData, UserProfile } from "../types/profile";
 import { Mail, Phone, User, UserCheck, Upload, Loader } from "lucide-react";
+import { useDispatch } from "react-redux";
+import { setUser } from "../store/slice/userSlice";
 
 const Profile: React.FC = () => {
   const navigate = useNavigate();
@@ -25,6 +27,7 @@ const Profile: React.FC = () => {
     avatar: "",
   });
   const [preview, setPreview] = useState<string>("");
+  const dispatch = useDispatch();
 
   // Fetch user details on mount
   useEffect(() => {
@@ -81,6 +84,11 @@ const Profile: React.FC = () => {
         ...prev,
         avatar: imageUrl,
       }));
+      dispatch(
+        setUser({
+          avatar: imageUrl,
+        })
+      );
       setPreview(imageUrl);
       toast.success("Image uploaded successfully");
     } catch (error: any) {

@@ -67,8 +67,16 @@ const UserMenuMobile = ({ close }: { close: () => void }) => {
       });
 
       if (response.data.success) {
-        setNotifications(response.data.data.notifications.slice(0, 5)); // Show only 5 latest
-        setUnreadCount(response.data.data.unreadCount);
+        // Filter out LOGIN notifications
+        const filteredNotifications = response.data.data.notifications.filter(
+          (notif: Notification) => notif.type !== "LOGIN"
+        );
+        setNotifications(filteredNotifications.slice(0, 5)); // Show only 5 latest
+        // Count unread non-LOGIN notifications
+        const unreadNonLogin = filteredNotifications.filter(
+          (notif: Notification) => !notif.isRead
+        ).length;
+        setUnreadCount(unreadNonLogin);
       }
     } catch (error: any) {
       console.error("Error fetching notifications:", error);
@@ -97,8 +105,6 @@ const UserMenuMobile = ({ close }: { close: () => void }) => {
 
   const getNotificationIcon = (type: string) => {
     switch (type) {
-      case "LOGIN":
-        return "🔐";
       case "REGISTER":
         return "🎉";
       case "PROFILE_UPDATE":

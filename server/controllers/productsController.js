@@ -216,3 +216,75 @@ export async function downloadProductController(req, res) {
     });
   }
 }
+export async function editProductController(req, res) {
+  const userId = req.userId;
+  const { productId } = req.params;
+  const { name, price, description, more_details, publish } = req.body;
+
+  try {
+    // Validate productId
+    if (!mongoose.Types.ObjectId.isValid(productId)) {
+      return res.status(400).json({
+        message: "Invalid product ID",
+        success: false,
+      });
+    }
+
+    // Check authorization first (fetch minimal data)
+    const product = await productsModel.findById(productId, "seller");
+    if (!product) {
+      return res.status(404).json({
+        message: "Product not found",
+        success: false,
+      });
+    }
+
+    if (product.seller.toString() !== userId) {
+      return res.status(403).json({
+        message: "You are not authorized to edit this product",
+        success: false,
+      });
+    }
+
+    // Build update object
+    const updateData = {};
+    if (name !== undefined && name !== null) updateData.name = name.trim();
+
+    if (price !== undefined) {
+      if (isNaN(price) || price < 0) {
+        return res.status(400).json({
+          success: false,
+          message: "Price must be 0 or greater",
+        });
+      }
+      updateData.price = parseFloat(price);
+    }
+
+    if (description !== undefined && description !== null)
+      updateData.description = description.trim();
+    if (more_details !== undefined && more_details !== null)
+      updateData.more_details = more_details.trim();
+    if (publish !== undefined) updateData.publish = publish;
+
+    // Single update operation with populated response
+    const updatedProduct = await productsModel
+      .findByIdAndUpdate(productId, updateData, {
+        new: true,
+        runValidators: true,
+      })
+      .populate("seller", "firstName lastName email")
+      .populate("collection", "name");
+
+    return res.status(200).json({
+      success: true,
+      message: "Product updated successfully",
+      data: updatedProduct,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      error: error.message || error,
+      message: "An error occurred while updating the product",
+    });
+  }
+}

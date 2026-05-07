@@ -13,6 +13,8 @@ import CollectionPage from "../pages/CollectionPage";
 import AddCollectionPage from "../pages/AddCollectionPage";
 import ProductDetail from "../pages/ProductDetail";
 import CreateAdminPage from "../pages/CreateAdminPage";
+import EditProduct from "../pages/EditProduct";
+import ProtectedRoute from "./ProtectedRoute";
 
 const router = createBrowserRouter([
   {
@@ -59,6 +61,10 @@ const router = createBrowserRouter([
           {
             path: "/dashboard/upload",
             element: <UploadPage />,
+          },
+          {
+            path: "/dashboard/product/:id/edit",
+            element: <ProtectedRoute element={<EditProduct />} />,
           },
           {
             path: "/dashboard/profile",
