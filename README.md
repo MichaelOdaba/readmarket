@@ -223,43 +223,42 @@ cp .env.example .env
 
 ## ⚙️ Configuration
 
-### Backend Environment Variables (.env)
+### Environment Variables
 
-```env
-# Server
-PORT=8009
-NODE_ENV=development
+Copy `.env.example` to `.env` and fill in your actual values:
 
-# Database
-MONGODB_URL=mongodb+srv://username:password@cluster.mongodb.net/readmarket
+```bash
+# Backend
+cd server
+cp .env.example .env
 
-# JWT
-SECRET_KEY=your_secret_key_here
-REFRESH_SECRET_KEY=your_refresh_secret_key_here
-
-# Frontend URL
-FRONTEND_URL=http://localhost:5173
-
-# Cloudinary (Optional - for image uploads)
-CLOUDINARY_CLOUD_NAME=your_cloud_name
-CLOUDINARY_API_KEY=your_api_key
-CLOUDINARY_API_SECRET=your_api_secret
-
-# Admin Setup
-ADMIN_EMAIL=admin@readmarket.com
-ADMIN_PASSWORD=admin_password
+# Frontend
+cd ../client
+cp .env.example .env
 ```
 
-### Frontend Environment Variables (.env)
+**Required environment variables:**
 
-```env
-# API Configuration
-VITE_API_BASE_URL=http://localhost:8009/
+**Backend (.env):**
 
-# Cloudinary
-VITE_CLOUDINARY_CLOUD_NAME=your_cloud_name
-VITE_CLOUDINARY_UPLOAD_PRESET=your_upload_preset
-```
+- `PORT` - Server port (default: 8009)
+- `MONGODB_URL` - MongoDB connection string
+- `SECRET_KEY` - JWT secret for access tokens
+- `REFRESH_SECRET_KEY` - JWT secret for refresh tokens
+- `FRONTEND_URL` - Frontend URL for CORS
+- `CLOUDINARY_CLOUD_NAME` - Cloudinary cloud name
+- `CLOUDINARY_API_KEY` - Cloudinary API key
+- `CLOUDINARY_API_SECRET` - Cloudinary API secret
+- `ADMIN_EMAIL` - Admin account email
+- `ADMIN_PASSWORD` - Admin account password
+
+**Frontend (.env):**
+
+- `VITE_API_BASE_URL` - Backend API URL
+- `VITE_CLOUDINARY_CLOUD_NAME` - Cloudinary cloud name
+- `VITE_CLOUDINARY_UPLOAD_PRESET` - Cloudinary upload preset
+
+**⚠️ Security Note:** Never commit your `.env` files to version control. They are already included in `.gitignore`.
 
 ---
 
