@@ -8,6 +8,9 @@ import orderModel from "../models/orderModel.js";
  */
 export async function getAllProductsController(req, res) {
   try {
+    const limit = parseInt(req.query.limit) || 20; // Optional limit query parameter
+    const startIndex = parseInt(req.query.startIndex) || 0; // Optional pagination
+    const searchQuery = req.query.query || ""; // Optional search query
     const products = await productsModel
       .find()
       .populate("seller", "firstName lastName email")

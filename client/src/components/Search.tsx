@@ -2,10 +2,21 @@ import { SearchIcon } from "lucide-react";
 import type React from "react";
 import { useState } from "react";
 import { TypeAnimation } from "react-type-animation";
-
+import { useLocation, useNavigate } from "react-router-dom";
 const Search: React.FC = () => {
   const [isSearch, setIsSearch] = useState(false);
-
+  const location = useLocation();
+  const navigate = useNavigate();
+  const [searchInput, setSearchInput] = useState("");
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { value } = e.target;
+    setSearchInput(value);
+    if (searchInput !== "") {
+      navigate("/search");
+    } else {
+      navigate("/");
+    }
+  };
   return (
     <div
       className="md:w-[50%] w-full mt-7 md:m-0 flex justify-center"
@@ -41,7 +52,13 @@ const Search: React.FC = () => {
           />
         </div>
       ) : (
-        <input type="text" className="input rounded-full w-full" autoFocus />
+        <input
+          type="text"
+          className="input rounded-full w-full"
+          autoFocus
+          placeholder="search for a resource"
+          onChange={handleInputChange}
+        />
       )}
     </div>
   );

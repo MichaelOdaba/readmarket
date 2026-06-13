@@ -133,7 +133,6 @@ const ProductCard: React.FC<{ product: Product }> = ({ product }) => {
   const handleCardClick = () => {
     navigate(`/product/${product._id}`);
   };
-  console.log(product._id);
 
   const handleAddToCart = (e: React.MouseEvent) => {
     e.stopPropagation();

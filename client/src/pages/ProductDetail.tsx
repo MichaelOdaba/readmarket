@@ -147,7 +147,7 @@ const ProductDetail = () => {
 
   if (error || !product) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-neutral-50">
+      <div className="min-h-screen flex items-center justify-center bg-neutral-50 p-3">
         <div className="text-center">
           <p className="text-red-600 font-semibold mb-4">
             {error || "Product not found"}
