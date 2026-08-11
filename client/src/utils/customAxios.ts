@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, { AxiosHeaders } from "axios";
 import { auth } from "../config/firebase";
 
 const customAxios = axios.create({
@@ -13,7 +13,7 @@ customAxios.interceptors.request.use(
       const currentUser = auth.currentUser;
       if (currentUser) {
         const token = await currentUser.getIdToken();
-        if (!config.headers) config.headers = {};
+        if (!config.headers) config.headers = new AxiosHeaders();
         (config.headers as any).Authorization = `Bearer ${token}`;
       }
     } catch (err) {

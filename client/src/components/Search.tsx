@@ -2,10 +2,10 @@ import { SearchIcon } from "lucide-react";
 import type React from "react";
 import { useState } from "react";
 import { TypeAnimation } from "react-type-animation";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 const Search: React.FC = () => {
   const [isSearch, setIsSearch] = useState(false);
-  const location = useLocation();
+
   const navigate = useNavigate();
   const [searchInput, setSearchInput] = useState("");
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {

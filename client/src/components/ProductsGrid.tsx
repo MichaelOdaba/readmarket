@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { ShoppingCart, Star, User, Loader } from "lucide-react";
+import { ShoppingCart, User, Loader } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import customAxios from "../utils/customAxios";
 import summaryApi from "../services/SummaryAPI";
@@ -37,11 +37,10 @@ interface ProductsGridProps {
  * - limit: Number of products to display (default: all)
  * - featured: If true, shows only featured products
  */
-const ProductsGrid: React.FC<ProductsGridProps> = ({ limit, featured }) => {
+const ProductsGrid: React.FC<ProductsGridProps> = ({ limit }) => {
   const [products, setProducts] = useState<Product[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchProducts = async () => {
