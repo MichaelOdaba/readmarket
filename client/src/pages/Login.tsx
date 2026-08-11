@@ -10,6 +10,7 @@ import { useDispatch } from "react-redux";
 import { setUser } from "../store/slice/userSlice";
 import fetchUserDetails from "../utils/fetchUser";
 import * as authService from "../services/authService";
+import { auth } from "../config/firebase";
 
 // Maps Firebase auth error codes to user-friendly messages
 const getFirebaseErrorMessage = (code?: string): string => {
@@ -64,6 +65,7 @@ const Login: React.FC = () => {
         password: "",
       });
       navigate("/");
+      console.log("TOKEN:", await auth.currentUser?.getIdToken());
     } catch (error: any) {
       setislogin(false);
       const message = getFirebaseErrorMessage(error?.code);

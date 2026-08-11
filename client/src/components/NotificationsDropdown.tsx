@@ -3,12 +3,12 @@ import {
   Bell,
   X,
   Loader,
-  LockKeyholeOpen,
   PartyPopper,
   User2,
   Upload,
   LucideShoppingCart,
   AlertCircle,
+  MailQuestion,
 } from "lucide-react";
 import customAxios from "../utils/customAxios";
 import summaryApi from "../services/SummaryAPI";
@@ -118,6 +118,8 @@ const NotificationsDropdown: React.FC<NotificationsDropdownProps> = ({
         return <Upload />;
       case "PURCHASE":
         return <LucideShoppingCart />;
+      case "EMAIL VERIFICATION":
+        return <MailQuestion />;
       default:
         return <AlertCircle />;
     }

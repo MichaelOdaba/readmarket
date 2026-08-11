@@ -1,9 +1,9 @@
 import {
   createUserWithEmailAndPassword,
+  sendEmailVerification,
   signInWithEmailAndPassword,
   signInWithPopup,
   signOut,
-  updateProfile,
 } from "firebase/auth";
 import type { UserCredential } from "firebase/auth";
 import { auth, googleAuthProvider } from "../config/firebase";
@@ -14,6 +14,7 @@ export async function signUp(email: string, password: string) {
     email,
     password
   );
+  await sendEmailVerification(cred.user);
   return cred;
 }
 
@@ -23,13 +24,18 @@ export async function login(email: string, password: string) {
     email,
     password
   );
-  await updateProfile(cred.user, { displayName: email.split("@")[0] });
+
   return cred;
 }
 
 export async function loginWithGoogle() {
   const cred = await signInWithPopup(auth, googleAuthProvider);
   return cred;
+}
+//resend email verification
+export async function resendEmailVerification() {
+  if (!auth.currentUser) throw new Error("No user is currently signed in");
+  await sendEmailVerification(auth.currentUser);
 }
 
 export async function logout() {

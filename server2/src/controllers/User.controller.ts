@@ -1,7 +1,7 @@
 // Controllers placeholder
 
 import { ApiResponse } from "../types/Api.types.js";
-import { AuthenticatedUser, User } from "../types/user.types.js";
+import { AuthenticatedUser, loginUser, User } from "../types/user.types.js";
 import { Response } from "express";
 import { UserModel } from "../models/User.js";
 
@@ -58,6 +58,35 @@ export async function registerUserController(
   } catch (error) {
     //error handling
     console.error("Error in registerUser controller:", error);
+    return res
+      .status(500)
+      .json({ success: false, message: "Internal server error" });
+  }
+}
+//login user controller
+export async function getUserController(
+  req: AuthenticatedUser,
+  res: Response<ApiResponse<User>>
+) {
+  //destructure uid  and email from firebaseUser
+  const { uid } = req.user!;
+
+  try {
+    //find user in database
+    const user = await UserModel.findOne({ firebaseUid: uid });
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+      });
+    }
+    return res.status(200).json({
+      success: true,
+      message: "User found",
+      data: user,
+    });
+  } catch (error) {
+    console.error("Error in getUser controller:", error);
     return res
       .status(500)
       .json({ success: false, message: "Internal server error" });

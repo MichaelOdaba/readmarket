@@ -16,3 +16,7 @@ export interface User {
 export interface AuthenticatedUser extends Request {
   user?: admin.auth.DecodedIdToken;
 }
+export interface loginUser {
+  email: string;
+  password: string;
+}
