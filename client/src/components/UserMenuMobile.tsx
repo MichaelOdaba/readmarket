@@ -18,6 +18,7 @@ import { useEffect } from "react";
 import { toast } from "sonner";
 import customAxios from "../utils/customAxios";
 import summaryApi from "../services/SummaryAPI";
+import * as authService from "../services/authService";
 import type { UserState } from "../store/slice/userSlice";
 
 interface Notification {
@@ -135,16 +136,17 @@ const UserMenuMobile = ({ close }: { close: () => void }) => {
 
   const handleLogout = async () => {
     try {
-      const response = await customAxios({
-        ...summaryApi.logout,
-      });
-
-      toast.success(response.data.message);
+      await authService.logout();
+      try {
+        const response = await customAxios({ ...summaryApi.logout });
+        if (response?.data?.message) toast.success(response.data.message);
+      } catch (e) {
+        // ignore
+      }
 
       navigate("/login");
       window.location.reload();
       close();
-      console.log(response);
     } catch (error: any) {
       console.log(error);
       toast.error("an error occurred while logging out");

@@ -1,15 +1,35 @@
-import React, { useState, type SubmitEvent } from "react";
+import React, { useState } from "react";
 import banner from "../assets/banner2.jpeg";
 import type { LoginFormData } from "../types/profile";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
-import customAxios from "../utils/customAxios";
-import summaryApi from "../services/SummaryAPI";
+
 import { Eye, EyeClosed, LockIcon, Mail, Loader } from "lucide-react";
 
 import { useDispatch } from "react-redux";
 import { setUser } from "../store/slice/userSlice";
 import fetchUserDetails from "../utils/fetchUser";
+import * as authService from "../services/authService";
+
+// Maps Firebase auth error codes to user-friendly messages
+const getFirebaseErrorMessage = (code?: string): string => {
+  switch (code) {
+    case "auth/invalid-credential":
+    case "auth/wrong-password":
+      return "Incorrect email or password";
+    case "auth/user-not-found":
+      return "No account found with this email";
+    case "auth/too-many-requests":
+      return "Too many attempts. Please try again later";
+    case "auth/invalid-email":
+      return "Please enter a valid email address";
+    case "auth/user-disabled":
+      return "This account has been disabled";
+    default:
+      return "Something went wrong. Please try again";
+  }
+};
+
 const Login: React.FC = () => {
   const [userData, setUserData] = useState<LoginFormData>({
     email: "",
@@ -28,21 +48,15 @@ const Login: React.FC = () => {
       return { ...prev, [name]: value };
     });
   };
-  const handleSubmit = async (e: SubmitEvent) => {
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setislogin(true);
     try {
-      const response = await customAxios({
-        ...summaryApi.login,
-        data: userData,
-      });
-
-      console.log(response);
-      toast.success(response.data.message);
+      await authService.login(userData.email, userData.password);
+      toast.success("Signed in successfully");
 
       const fetchedUser = await fetchUserDetails();
-
-      console.log(fetchedUser);
       dispatch(setUser(fetchedUser));
 
       setUserData({
@@ -52,7 +66,8 @@ const Login: React.FC = () => {
       navigate("/");
     } catch (error: any) {
       setislogin(false);
-      toast.error(error?.response?.data?.message || error.message);
+      const message = getFirebaseErrorMessage(error?.code);
+      toast.error(message);
       console.log(error);
     }
   };
@@ -91,6 +106,7 @@ const Login: React.FC = () => {
                   className="outline-none w-full"
                   placeholder={"You@Example.com"}
                   onChange={handleInputChange}
+                  value={userData.email}
                   autoFocus
                 />
               </div>

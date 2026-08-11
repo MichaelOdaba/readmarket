@@ -13,8 +13,6 @@ const Search: React.FC = () => {
     setSearchInput(value);
     if (searchInput !== "") {
       navigate("/search");
-    } else {
-      navigate("/");
     }
   };
   return (

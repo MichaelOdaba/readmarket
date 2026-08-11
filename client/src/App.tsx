@@ -3,19 +3,31 @@ import { Toaster } from "sonner";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import { useDispatch } from "react-redux";
-import { setUser } from "./store/slice/userSlice";
+import { setUser, logoutUser } from "./store/slice/userSlice";
 import fetchUserDetails from "./utils/fetchUser";
 import { useEffect } from "react";
+import { onAuthStateChanged } from "firebase/auth";
+import { auth } from "./config/firebase";
+
 function App() {
   const dispatch = useDispatch();
-  const fetchUser = async () => {
-    const userData = await fetchUserDetails();
-    dispatch(setUser(userData));
-  };
 
   useEffect(() => {
-    fetchUser();
-  }, []);
+    const unsub = onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        try {
+          const userData = await fetchUserDetails();
+          dispatch(setUser(userData));
+        } catch (error) {
+          // ignore fetch errors; user may not have a backend profile yet
+        }
+      } else {
+        dispatch(logoutUser());
+      }
+    });
+
+    return () => unsub();
+  }, [dispatch]);
   return (
     <>
       {" "}

@@ -1,10 +1,12 @@
-import React, { useState, type SubmitEvent } from "react";
+import React, { useState } from "react";
 import banner from "../assets/banner2.jpeg";
 import type { RegisterFormData } from "../types/profile";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import customAxios from "../utils/customAxios";
 import summaryApi from "../services/SummaryAPI";
+import * as authService from "../services/authService";
+import { getFirebaseErrorMessage } from "../services/authService";
 import {
   Eye,
   EyeClosed,
@@ -22,35 +24,60 @@ const Register: React.FC = () => {
     firstName: "",
     lastName: "",
     email: "",
+    username: "",
     password: "",
-    confirmPassword: "",
   });
-  const validateForm = Object.values(userData).every((el) => el);
+
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [isRegistering, setIsRegistering] = useState(false);
 
+  //confirm password state
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const validateForm =
+    Object.values(userData).every((el) => el !== "") && confirmPassword !== "";
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setUserData((prev) => {
       return { ...prev, [name]: value };
     });
   };
-  const handleSubmit = async (e: SubmitEvent) => {
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    if (userData.password !== confirmPassword) {
+      toast.error("Passwords do not match");
+      return;
+    }
 
     setIsRegistering(true);
     try {
+      // Create user in Firebase
+      await authService.signUp(userData.email, userData.password);
+
+      // Inform backend to create the user's profile (ID token attached by interceptor)
       const response = await customAxios({
         ...summaryApi.register,
-        data: userData,
+        data: {
+          username: userData.username,
+          firstName: userData.firstName,
+          lastName: userData.lastName,
+          email: userData.email,
+        },
       });
 
-      toast.success(response.data.message);
+      toast.success(response.data.message || "Registered successfully");
+
       navigate("/login");
     } catch (error: any) {
-      console.log(error.response);
-      toast.error(error.response.data.message);
+      // Firebase errors have a `.code`; backend/axios errors have `.response`
+      console.log(error);
+      const message = error?.code
+        ? getFirebaseErrorMessage(error.code)
+        : error?.response?.data?.message;
+      toast.error(message || "Something went wrong");
+
       setIsRegistering(false);
     }
   };
@@ -79,7 +106,6 @@ const Register: React.FC = () => {
                 Please enter your details to register
               </p>
             </div>
-
             <div className="flex flex-col items-start w-full px-2 text-left gap-1">
               <label htmlFor="email" className="w-full">
                 Email Address:
@@ -93,8 +119,28 @@ const Register: React.FC = () => {
                   name="email"
                   className="outline-none w-full"
                   placeholder={"You@Example.com"}
+                  value={userData.email}
                   onChange={handleInputChange}
                   autoFocus
+                />
+              </div>
+            </div>
+
+            <div className="flex flex-col items-start w-full px-2 text-left gap-1">
+              <label htmlFor="username" className="w-full">
+                Username:
+              </label>
+              <div className="flex w-full items-center gap-2 input focus-within:border-[#103a3f] ">
+                <div className="text-neutral-600">
+                  <User size={20} />
+                </div>
+                <input
+                  type="text"
+                  name="username"
+                  className="outline-none w-full"
+                  placeholder="john_doe"
+                  value={userData.username}
+                  onChange={handleInputChange}
                 />
               </div>
             </div>
@@ -156,7 +202,7 @@ const Register: React.FC = () => {
             </div>
             <div className="flex flex-col items-start w-full px-2 text-left gap-1">
               <label htmlFor="confirmPassword" className="w-full">
-                Password:
+                Confirm Password:
               </label>
               <div className="flex w-full items-center gap-2 input focus-within:border-[#103a3f] ">
                 <div className="text-neutral-600">
@@ -166,8 +212,8 @@ const Register: React.FC = () => {
                   type={showConfirmPassword ? "text" : "password"}
                   name="confirmPassword"
                   className="outline-none w-full"
-                  onChange={handleInputChange}
-                  value={userData.confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  value={confirmPassword}
                 />
                 <div onClick={() => setShowConfirmPassword((prev) => !prev)}>
                   {showConfirmPassword ? <Eye /> : <EyeClosed />}

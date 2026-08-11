@@ -39,5 +39,6 @@ productsRouter.get(
   optionalAuth,
   downloadProductController
 );
+//add comments for everything
 
 export default productsRouter;
