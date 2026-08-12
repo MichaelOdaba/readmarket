@@ -1,10 +1,10 @@
 # ReadMarket
 
-> A fullstack MERN marketplace for buying and selling ebooks and digital resources
+> A fullstack marketplace for buying and selling ebooks and digital resources, built for Nigerian university students.
 
-**Live Demo:** [Coming Soon]  
-**API Documentation:** [docs/API.md](./docs/API.md)  
-**Issues:** [Report a Bug](https://github.com/yourusername/readmarket/issues)
+**Live Demo:** [https://readmarket.netlify.app](https://readmarket.netlify.app)
+**API Documentation:** [docs/API.md](./docs/API.md)
+**Issues:** [Report a Bug](https://github.com/MichaelOdaba/readmarket/issues)
 
 ---
 
@@ -28,14 +28,14 @@
 
 ## 🎯 Overview
 
-**ReadMarket** is a modern, fullstack ebook marketplace platform designed to solve the problem of manual PDF distribution in educational settings. Built with MERN stack (MongoDB, Express, React, Node.js), it enables users to:
+**ReadMarket** is a modern, fullstack ebook marketplace platform designed to solve the problem of manual PDF distribution in educational settings. Built with React, TypeScript, Express, and MongoDB, it enables users to:
 
 - **Buy** digital resources (ebooks, PDFs, study materials)
 - **Sell** their own content to a growing community
 - **Manage** inventory and view purchase history
 - **Collaborate** through secure transactions and notifications
 
-Originally created to help students in school buy and sell past question papers and books digitally, ReadMarket now serves as a complete platform for digital resource commerce.
+Originally created to help students buy and sell past question papers and books digitally, ReadMarket now serves as a complete platform for digital resource commerce, targeting the Nigerian and African university market.
 
 ---
 
@@ -69,6 +69,12 @@ Originally created to help students in school buy and sell past question papers 
 - ✅ View system analytics and reports
 - ✅ Moderate user content
 
+### Account & Security
+
+- ✅ Authentication via Firebase (Email/Password + Google Sign-In)
+- ✅ Email verification, required before purchasing or uploading content
+- ✅ Backend token verification via Firebase Admin SDK on every protected route
+
 ---
 
 ## 📦 Project Structure
@@ -80,16 +86,21 @@ readmarket/
 │   │   ├── components/              # Reusable React components
 │   │   │   ├── Header.tsx
 │   │   │   ├── UserMenu.tsx
-│   │   │   ├── ProductsGrid.jsx
+│   │   │   ├── NotificationsDropdown.tsx
+│   │   │   ├── ProductsGrid.tsx
 │   │   │   ├── CollectionGrid.tsx
 │   │   │   └── ...
 │   │   ├── pages/                   # Route pages
 │   │   │   ├── Home.tsx
 │   │   │   ├── Login.tsx
+│   │   │   ├── Register.tsx
 │   │   │   ├── UploadPage.tsx
 │   │   │   └── ...
-│   │   ├── services/                # API call definitions
-│   │   │   └── SummaryAPI.ts
+│   │   ├── config/                  # Firebase client config
+│   │   │   └── firebase.ts
+│   │   ├── services/                # API and auth service definitions
+│   │   │   ├── SummaryAPI.ts
+│   │   │   └── authService.ts
 │   │   ├── store/                   # Redux store
 │   │   │   ├── index.ts
 │   │   │   └── slice/
@@ -98,44 +109,36 @@ readmarket/
 │   │   │   ├── cloudinaryUpload.ts
 │   │   │   ├── customAxios.ts
 │   │   │   └── fetchUser.ts
+│   │   ├── public/
+│   │   │   └── _redirects           # SPA fallback routing for Netlify
 │   │   └── main.tsx
 │   ├── vite.config.ts
 │   ├── tsconfig.json
 │   └── package.json
 │
-├── server/                          # Backend (Node.js + Express)
-│   ├── controllers/                 # Route controllers
-│   │   ├── userController.js
-│   │   ├── productsController.js
-│   │   ├── collectionController.js
-│   │   └── ...
-│   ├── models/                      # MongoDB schemas
-│   │   ├── userModel.js
-│   │   ├── productsModel.js
-│   │   ├── collectionModel.js
-│   │   └── ...
-│   ├── routes/                      # API routes
-│   │   ├── userRoutes.js
-│   │   ├── productsRoutes.js
-│   │   └── ...
-│   ├── middleware/                  # Express middleware
-│   │   ├── Auth.js                  # JWT authentication
-│   │   └── RoleAuth.js              # Role-based access
-│   ├── config/
-│   │   └── db.js                    # MongoDB connection
-│   ├── utils/
-│   │   ├── generateAccessToken.js
-│   │   ├── generateRefreshToken.js
-│   │   └── initAdmin.js
-│   ├── server.js                    # Express app entry point
+├── server/                          # Legacy backend (kept for reference only — not deployed)
+│   (legacy Node/Express JavaScript server using JWT auth — superseded by server2)
+│
+├── server2/                         # Active backend (TypeScript + Express + Firebase Auth)
+│   ├── src/
+│   │   ├── config/                  # DB and Firebase Admin config
+│   │   │   ├── db.ts
+│   │   │   └── firebaseAdmin.ts
+│   │   ├── controllers/
+│   │   ├── middleware/
+│   │   │   ├── verifyFirebaseToken.ts
+│   │   │   └── requireVerifiedEmail.ts
+│   │   ├── models/
+│   │   ├── routes/
+│   │   └── types/
 │   └── package.json
 │
 ├── docs/                            # Documentation
 │   └── API.md                       # API endpoint documentation
 │
 ├── README.md                        # This file
+├── .env.example                     # Example environment variables (placeholders)
 └── LICENSE
-
 ```
 
 ---
@@ -144,29 +147,31 @@ readmarket/
 
 ### Frontend
 
-| Technology        | Purpose                 |
-| ----------------- | ----------------------- |
-| **React 18**      | UI library              |
-| **TypeScript**    | Type safety             |
-| **Vite**          | Build tool & dev server |
-| **Redux Toolkit** | State management        |
-| **Tailwind CSS**  | Styling                 |
-| **Lucide Icons**  | Icon library            |
-| **Sonner**        | Toast notifications     |
-| **Axios**         | HTTP client             |
+| Technology          | Purpose                    |
+| ------------------- | -------------------------- |
+| **React 19**        | UI library                 |
+| **TypeScript**      | Type safety                |
+| **Vite**            | Build tool & dev server    |
+| **Redux Toolkit**   | State management           |
+| **Tailwind CSS**    | Styling                    |
+| **Lucide Icons**    | Icon library               |
+| **Sonner**          | Toast notifications        |
+| **Axios**           | HTTP client                |
+| **Firebase JS SDK** | Client-side authentication |
 
 ### Backend
 
-| Technology        | Purpose                      |
-| ----------------- | ---------------------------- |
-| **Node.js**       | JavaScript runtime           |
-| **Express.js**    | Web framework                |
-| **MongoDB**       | Database                     |
-| **Mongoose**      | ODM (Object Document Mapper) |
-| **JWT**           | Authentication tokens        |
-| **Cloudinary**    | Image hosting                |
-| **Cors**          | Cross-origin requests        |
-| **Cookie-parser** | Cookie parsing               |
+| Technology             | Purpose                             |
+| ---------------------- | ----------------------------------- |
+| **Node.js**            | JavaScript runtime                  |
+| **Express.js**         | Web framework                       |
+| **MongoDB**            | Database                            |
+| **Mongoose**           | ODM (Object Document Mapper)        |
+| **Firebase Admin SDK** | Server-side auth token verification |
+| **Cloudinary**         | File/image hosting                  |
+| **Cors**               | Cross-origin requests               |
+
+> **Note:** Authentication is fully delegated to Firebase Authentication. The backend never stores or handles passwords — it only verifies Firebase-issued ID tokens on protected routes and stores app-specific profile data (linked by Firebase UID) in MongoDB.
 
 ---
 
@@ -174,10 +179,11 @@ readmarket/
 
 Before installation, ensure you have:
 
-- **Node.js** >= 16.0.0
-- **npm** or **yarn** package manager
+- **Node.js** >= 20.0.0
+- **pnpm** package manager (recommended)
 - **MongoDB** Atlas account or local MongoDB instance
-- **Cloudinary** account for image uploads
+- **Firebase** project with Email/Password and Google sign-in enabled
+- **Cloudinary** account for file uploads
 - **Git** for version control
 
 ---
@@ -187,17 +193,17 @@ Before installation, ensure you have:
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/yourusername/readmarket.git
+git clone https://github.com/MichaelOdaba/readmarket.git
 cd readmarket
 ```
 
 ### 2. Backend Setup
 
 ```bash
-cd server
+cd server2
 
 # Install dependencies
-npm install
+pnpm install
 
 # Create .env file
 cp .env.example .env
@@ -211,7 +217,7 @@ cp .env.example .env
 cd ../client
 
 # Install dependencies
-npm install
+pnpm install
 
 # Create .env file
 cp .env.example .env
@@ -225,40 +231,46 @@ cp .env.example .env
 
 ### Environment Variables
 
-Copy `.env.example` to `.env` and fill in your actual values:
+Copy `.env.example` to `.env` in both `server2` and `client`, then fill in your actual values.
 
-```bash
-# Backend
-cd server
-cp .env.example .env
+**Backend (`server2/.env`):**
 
-# Frontend
-cd ../client
-cp .env.example .env
+```
+PORT=3000
+MONGO_URI=your_mongodb_connection_string
+FRONTEND_URL=http://localhost:5173
+
+FIREBASE_PROJECT_ID=your_project_id
+FIREBASE_CLIENT_EMAIL=firebase-adminsdk-xxxxx@your_project_id.iam.gserviceaccount.com
+FIREBASE_PRIVATE_KEY="-----BEGIN PRIVATE KEY-----\n...\n-----END PRIVATE KEY-----\n"
 ```
 
-**Required environment variables:**
+Get the three `FIREBASE_*` values from Firebase console → Project Settings → Service Accounts → Generate new private key. Keep the `\n` characters as literal escaped text in the private key, wrapped in double quotes.
 
-**Backend (.env):**
+**Frontend (`client/.env`):**
 
-- `PORT` - Server port (default: 8009)
-- `MONGODB_URL` - MongoDB connection string
-- `SECRET_KEY` - JWT secret for access tokens
-- `REFRESH_SECRET_KEY` - JWT secret for refresh tokens
-- `FRONTEND_URL` - Frontend URL for CORS
-- `CLOUDINARY_CLOUD_NAME` - Cloudinary cloud name
-- `CLOUDINARY_API_KEY` - Cloudinary API key
-- `CLOUDINARY_API_SECRET` - Cloudinary API secret
-- `ADMIN_EMAIL` - Admin account email
-- `ADMIN_PASSWORD` - Admin account password
+```
+VITE_API_BASE_URL=http://localhost:3000
 
-**Frontend (.env):**
+VITE_FIREBASE_API_KEY=
+VITE_FIREBASE_AUTH_DOMAIN=
+VITE_FIREBASE_PROJECT_ID=
+VITE_FIREBASE_STORAGE_BUCKET=
+VITE_FIREBASE_MESSAGING_SENDER_ID=
+VITE_FIREBASE_APP_ID=
 
-- `VITE_API_BASE_URL` - Backend API URL
-- `VITE_CLOUDINARY_CLOUD_NAME` - Cloudinary cloud name
-- `VITE_CLOUDINARY_UPLOAD_PRESET` - Cloudinary upload preset
+VITE_CLOUDINARY_CLOUD_NAME=
+VITE_CLOUDINARY_UPLOAD_PRESET=
+```
 
-**⚠️ Security Note:** Never commit your `.env` files to version control. They are already included in `.gitignore`.
+Get the six `VITE_FIREBASE_*` values from Firebase console → Project Settings → General → Your apps → Web app SDK config. These are safe to be public; they identify your project, not grant admin access.
+
+**⚠️ Security Note:**
+
+- Keep only placeholders in `.env.example`; never commit real secrets.
+- **Never** put the Firebase Admin private key (or any `FIREBASE_PRIVATE_KEY`-style value) in a `VITE_`-prefixed variable — anything prefixed `VITE_` is bundled into the public frontend JavaScript and exposed to anyone who visits the site.
+- Do not paste secrets into issue trackers or public PRs.
+- Use your hosting platform's environment variable manager (Render, Netlify, etc.) for production, and rotate keys if one is ever exposed.
 
 ---
 
@@ -266,46 +278,48 @@ cp .env.example .env
 
 ### Development Mode
 
-**Terminal 1 - Start Backend:**
+**Terminal 1 - Start Backend (server2):**
 
 ```bash
-cd server
-npm start
-# Server running on http://localhost:8009
+cd server2
+pnpm run dev
+# Server running on http://localhost:3000 (default)
 ```
 
 **Terminal 2 - Start Frontend:**
 
 ```bash
 cd client
-npm run dev
+pnpm run dev
 # Frontend running on http://localhost:5173
 ```
 
 ### Production Build
 
 ```bash
-# Backend - no build needed, runs directly with Node.js
+# Backend
+cd server2
+pnpm run build   # compiles TypeScript to dist/
+pnpm run start   # runs dist/index.js
 
-# Frontend - Create optimized build
+# Frontend
 cd client
-npm run build
-npm run preview  # Preview production build locally
+pnpm run build
+pnpm run preview  # Preview production build locally
 ```
 
 ---
 
 ## 📡 API Endpoints
 
-### Authentication
+### Authentication & Users
+
+Login and registration credentials are handled entirely client-side by Firebase Authentication — the backend never receives or stores a password. The routes below only run _after_ Firebase has already authenticated the request, verified via a `Bearer` ID token on every call.
 
 ```
-POST   /api/user/register       - Register new user
-POST   /api/user/login          - Login user
-GET    /api/user/logout         - Logout user
-GET    /api/user/get-user       - Get current user
+POST   /api/user/register       - Create the Mongo profile for a newly-registered Firebase user
+GET    /api/user/get-user       - Get the current authenticated user's profile
 PUT    /api/user/edit           - Update user details
-PUT    /api/user/change-password - Change password
 ```
 
 ### Products
@@ -313,7 +327,7 @@ PUT    /api/user/change-password - Change password
 ```
 GET    /api/products            - Get all products
 GET    /api/products/:productId - Get single product
-POST   /api/products/upload     - Upload product (authenticated)
+POST   /api/products/upload     - Upload product (authenticated, requires verified email)
 ```
 
 ### Collections
@@ -360,13 +374,41 @@ ReadMarket follows a cohesive design system to ensure consistency across all int
 - **Accent** - Revenue-driving actions (Buy, Checkout)
 - **Danger** - Destructive actions (Delete, Remove)
 
+### Card & Content Layout
+
+Book and content cards follow a minimal reading-focused layout:
+
+- Background: White
+- Border: Soft Gray (`#E3E8EA`)
+- Shadow: Subtle elevation
+- Hover: Slight lift with teal highlight
+
+### Color Usage Principle
+
+The interface follows the **60–30–10 rule**:
+
+- **60%** Neutral backgrounds and surfaces
+- **30%** Brand teal colors
+- **10%** Accent color for key actions
+
+### Design Philosophy
+
+ReadMarket's UI emphasizes:
+
+- Clarity over decoration
+- Calm reading environments
+- Consistent interaction feedback
+- Conversion without visual overload
+
+The goal is to create a trustworthy and distraction-free digital bookstore experience.
+
 ---
 
 ## 📝 Project Convention
 
 ### Code Style
 
-- Use **TypeScript** for type safety (Frontend strongly encouraged)
+- Use **TypeScript** for type safety across both frontend and backend
 - Use **ESLint** for code linting
 - Follow **Prettier** formatting rules
 - Use camelCase for variables/functions, PascalCase for components/classes
@@ -416,7 +458,7 @@ We welcome contributions! Please follow these steps:
 
 - Write clear commit messages
 - Update documentation for new features
-- Test your changes before submitting PR
+- Test your changes before submitting a PR
 - Follow the project's code style
 - Add comments for complex logic
 
@@ -432,126 +474,30 @@ This project is licensed under the **MIT License** - see [LICENSE](LICENSE) file
 
 For questions or issues:
 
-- 📧 Email: support@readmarket.com
-- 🐛 [Report Bug](https://github.com/yourusername/readmarket/issues)
-- 💡 [Request Feature](https://github.com/yourusername/readmarket/issues)
+- 🐛 [Report Bug](https://github.com/MichaelOdaba/readmarket/issues)
+- 💡 [Request Feature](https://github.com/MichaelOdaba/readmarket/issues)
 
 ---
 
 ## 🗺️ Roadmap
 
-- [ ] Payment integration (Stripe/Razorpay)
+- [ ] Payment integration (Paystack)
+- [ ] Sign in with Google (find-or-create backend flow)
 - [ ] User ratings and reviews system
 - [ ] Advanced search and filtering
 - [ ] Mobile native apps (React Native)
 - [ ] Wishlist and recommendations
-- [ ] author Dashboard analytics
+- [ ] Author dashboard analytics
 - [ ] DRM for purchased ebooks
-- [ ] API Rate limiting and caching
+- [ ] API rate limiting and caching
 
 ---
 
 ## 👥 Author
 
-**Created by:** [Your Name]  
-**GitHub:** [@yourusername](https://github.com/yourusername)
+**Created by:** Michael Odaba Adeyi
+**GitHub:** [@MichaelOdaba](https://github.com/MichaelOdaba)
 
 ---
 
 **Thank you for using ReadMarket!** 🎉
-
----
-
-### 📚 Card & Content Layout
-
-Book and content cards follow a minimal reading-focused layout:
-
-- Background: White
-- Border: Soft Gray (`#E3E8EA`)
-- Shadow: Subtle elevation
-- Hover: Slight lift with teal highlight
-
-This approach maintains focus on content while preserving visual hierarchy.
-
----
-
-### 🎯 Color Usage Principle
-
-The interface follows the **60–30–10 rule**:
-
-- **60%** Neutral backgrounds and surfaces
-- **30%** Brand teal colors
-- **10%** Accent color for key actions
-
-This ensures balance, readability, and strong action visibility.
-
----
-
-### ✨ Design Philosophy
-
-Read Market’s UI emphasizes:
-
-- Clarity over decoration
-- Calm reading environments
-- Consistent interaction feedback
-- Conversion without visual overload
-
-The goal is to create a trustworthy and distraction-free digital bookstore experience.
-
-[Add 2-3 screenshots when you have UI]
-
-## Installation
-
-### Prerequisites
-
-- Node.js v[version]
-- MongoDB
-- Cloudinary account
-
-### Setup
-
-```bash
-# Clone repo
-git clone [your-repo]
-
-# Install dependencies
-cd client && npm install
-cd ../server && npm install
-
-# Environment variables
-# Create .env in server folder with:
-# MONGODB_URI=
-# JWT_SECRET=
-# CLOUDINARY_CLOUD_NAME=
-# etc.
-
-# Run
-npm run dev
-```
-
-### What was done every day
-
-# day one:
-
-so today i started building "readmarket" an online ebooks and PDF makertplace, here is what was achieved today,
-
-- i created the folder structure for the backend of aplication
-- i intialized an express server and successfully connected to a mongoDB database
-- i created the required database models
-- i finished the register functionality on the backend, users can now register
-  -i also finished the login functionality on the backend, users can now login
-  -designed the database tables and struture
-
-## Lessons Learned
-
-[Add this section later - talk about challenges you faced]
-
-## Future Improvements
-
-- Stripe payment integration
-- Review system
-- Advanced search/filtering
-
-## License
-
-MIT
