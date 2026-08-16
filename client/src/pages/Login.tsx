@@ -64,8 +64,7 @@ const Login: React.FC = () => {
         email: "",
         password: "",
       });
-      navigate("/");
-      console.log("TOKEN:", await auth.currentUser?.getIdToken());
+      navigate("/app");
     } catch (error: any) {
       setislogin(false);
       const message = getFirebaseErrorMessage(error?.code);

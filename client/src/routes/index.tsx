@@ -15,68 +15,75 @@ import ProductDetail from "../pages/ProductDetail";
 import CreateAdminPage from "../pages/CreateAdminPage";
 import EditProduct from "../pages/EditProduct";
 import ProtectedRoute from "./ProtectedRoute";
+import LandingPage from "../pages/LandingPage";
+import ErrorPage from "../pages/ErrorPage";
 
 const router = createBrowserRouter([
   {
     path: "/",
+    element: <LandingPage />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: "/app",
     element: <App />,
-    errorElement: <div>Not found</div>,
+    errorElement: <ErrorPage />,
     children: [
       {
-        path: "",
+        path: "/app",
         element: <Home />,
       },
       {
-        path: "/register",
+        path: "/app/register",
         element: <Register />,
       },
       {
-        path: "/login",
+        path: "/app/login",
         element: <Login />,
       },
       {
-        path: "/search",
+        path: "/app/search",
         element: <SearchPage />,
       },
       {
-        path: "collection/:id",
+        path: "/app/collection/:id",
         element: <CollectionPage />,
       },
       {
-        path: "product/:id",
+        path: "/app/product/:id",
         element: <ProductDetail />,
       },
       {
-        path: "todo",
+        path: "/app/todo",
         element: <Todo />,
       },
       {
-        path: "/dashboard",
+        path: "/app/dashboard",
         element: <DashBoard />,
         children: [
           {
-            path: "/dashboard/library",
+            path: "/app/dashboard/library",
             element: <Library />,
           },
           {
-            path: "/dashboard/upload",
+            path: "/app/dashboard/upload",
             element: <UploadPage />,
           },
           {
-            path: "/dashboard/product/:id/edit",
+            path: "/app/dashboard/product/:id/edit",
             element: <ProtectedRoute element={<EditProduct />} />,
           },
           {
-            path: "/dashboard/profile",
+            path: "/app/dashboard/profile",
             element: <Profile />,
           },
           {
-            path: "/dashboard/collection/add",
+            path: "/app/dashboard/collection/add",
             element: <AddCollectionPage />,
           },
 
           {
-            path: "/dashboard/create-admin",
+            path: "/app/dashboard/create-admin",
             element: <CreateAdminPage />,
           },
         ],

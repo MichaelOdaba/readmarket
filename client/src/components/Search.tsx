@@ -12,7 +12,7 @@ const Search: React.FC = () => {
     const { value } = e.target;
     setSearchInput(value);
     if (searchInput !== "") {
-      navigate("/search");
+      navigate("/app/search");
     }
   };
   return (

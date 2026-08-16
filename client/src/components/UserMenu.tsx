@@ -69,7 +69,7 @@ const UserMenu = ({ close }: { close: () => void }) => {
           <button
             className="btn-primary text-sm flex items-center justify-center gap-2"
             onClick={() => {
-              navigate("/dashboard/profile");
+              navigate("/app/dashboard/profile");
             }}
           >
             View Profile <LucideLink size={15} />
@@ -78,13 +78,13 @@ const UserMenu = ({ close }: { close: () => void }) => {
       </div>
       <hr />
       <Link
-        to={"/dashboard/upload"}
+        to={"/app/dashboard/upload"}
         className="text-sm font-bold rounded-sm p-2 hover:bg-neutral-300 flex items gap-2"
       >
         <Upload size={20} /> Upload Resource
       </Link>
       <Link
-        to={"/dashboard/library"}
+        to={"/app/dashboard/library"}
         className="text-sm font-bold rounded-sm p-2 hover:bg-neutral-300 flex items gap-2"
       >
         <Library size={20} /> My Library
@@ -93,7 +93,7 @@ const UserMenu = ({ close }: { close: () => void }) => {
         <>
           <hr />
           <Link
-            to={"/dashboard/collection/add"}
+            to={"/app/dashboard/collection/add"}
             className="text-sm font-bold rounded-sm p-2 hover:bg-neutral-300 flex items gap-2 text-accent"
           >
             <LayersPlus size={20} /> Add Collection
@@ -103,7 +103,7 @@ const UserMenu = ({ close }: { close: () => void }) => {
       <hr />
       {user.role === "ADMIN" && (
         <Link
-          to={"/dashboard/create-admin"}
+          to={"/app/dashboard/create-admin"}
           className="text-sm font-bold rounded-sm p-2 hover:bg-neutral-300 flex items gap-2 text-red-500"
         >
           <Layers size={20} /> Create Admin
@@ -111,7 +111,7 @@ const UserMenu = ({ close }: { close: () => void }) => {
       )}
 
       <Link
-        to={"/dashboard/profile"}
+        to={"/app/dashboard/profile"}
         className="text-sm font-bold rounded-sm p-2 hover:bg-neutral-300 flex items gap-2"
       >
         <Save size={20} /> Manage Address

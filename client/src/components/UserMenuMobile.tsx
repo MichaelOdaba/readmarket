@@ -144,7 +144,7 @@ const UserMenuMobile = ({ close }: { close: () => void }) => {
         // ignore
       }
 
-      navigate("/login");
+      navigate("/app/login");
       window.location.reload();
       close();
     } catch (error: any) {
@@ -192,7 +192,7 @@ const UserMenuMobile = ({ close }: { close: () => void }) => {
             </div>
           </div>
           <Link
-            to="/dashboard/profile"
+            to="/app/dashboard/profile"
             onClick={() => close()}
             className="mt-4 w-full bg-primary hover:bg-primary/90 text-white font-semibold py-2 px-4 rounded-lg flex items-center justify-center gap-2 transition-colors"
           >
@@ -280,7 +280,7 @@ const UserMenuMobile = ({ close }: { close: () => void }) => {
         {/* Menu Items */}
         <div className="flex-1 divide-y divide-neutral-100">
           <Link
-            to="/dashboard/upload"
+            to="/app/dashboard/upload"
             onClick={() => close()}
             className="flex items-center gap-3 p-4 hover:bg-secondary/10 transition-colors text-primary font-semibold"
           >
@@ -288,7 +288,7 @@ const UserMenuMobile = ({ close }: { close: () => void }) => {
             Upload Resource
           </Link>
           <Link
-            to="/dashboard/library"
+            to="/app/dashboard/library"
             onClick={() => close()}
             className="flex items-center gap-3 p-4 hover:bg-secondary/10 transition-colors text-primary font-semibold"
           >
@@ -298,7 +298,7 @@ const UserMenuMobile = ({ close }: { close: () => void }) => {
 
           {user.role === "ADMIN" && (
             <Link
-              to="/dashboard/collection/add"
+              to="/app/dashboard/collection/add"
               onClick={() => close()}
               className="flex items-center gap-3 p-4 hover:bg-accent/10 transition-colors text-accent font-semibold"
             >
@@ -308,7 +308,7 @@ const UserMenuMobile = ({ close }: { close: () => void }) => {
           )}
           {user.role === "ADMIN" && (
             <Link
-              to="/dashboard/create-admin"
+              to="/app/dashboard/create-admin"
               onClick={() => close()}
               className="flex items-center gap-3 p-4 hover:bg-red-500/10 transition-colors text-red-500 font-semibold"
             >
@@ -318,7 +318,7 @@ const UserMenuMobile = ({ close }: { close: () => void }) => {
           )}
 
           <Link
-            to="/dashboard/profile"
+            to="/app/dashboard/profile"
             onClick={() => close()}
             className="flex items-center gap-3 p-4 hover:bg-secondary/10 transition-colors text-primary font-semibold"
           >

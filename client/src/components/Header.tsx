@@ -65,7 +65,7 @@ const Header = () => {
             <div
               className="flex gap-2 items-center justify-center cursor-pointer text-accent"
               onClick={() => {
-                navigate("/");
+                navigate("/app");
               }}
             >
               <BookOpen size={35} />
@@ -76,7 +76,7 @@ const Header = () => {
                 if (user._id) {
                   setOpenMobileMenu(true);
                 } else {
-                  navigate("/login");
+                  navigate("/app/login");
                 }
               }}
             >
@@ -93,7 +93,7 @@ const Header = () => {
             <div
               className="flex gap-2 items-center justify-center cursor-pointer"
               onClick={() => {
-                navigate("/");
+                navigate("/app");
               }}
             >
               <BookOpen className="text-accent" />
@@ -108,36 +108,36 @@ const Header = () => {
                   <div className="flex items-center justify-center text-primary gap-4 px-2">
                     <button
                       className={
-                        location.pathname === "/"
+                        location.pathname === "/app"
                           ? "border-b-2 border-primary py-1"
                           : "hover:bg-neutral-300 p-2 rounded-md"
                       }
                       onClick={() => {
-                        navigate("/");
+                        navigate("/app");
                       }}
                     >
                       Home
                     </button>
                     <button
                       className={
-                        location.pathname === "/dashboard/library"
+                        location.pathname === "/app/dashboard/library"
                           ? "border-b-2 border-primary py-1"
                           : "hover:bg-neutral-300 p-2 rounded-md"
                       }
                       onClick={() => {
-                        navigate("/dashboard/library");
+                        navigate("/app/dashboard/library");
                       }}
                     >
                       Library
                     </button>
                     <button
                       className={
-                        location.pathname === "/dashboard/upload"
+                        location.pathname === "/app/dashboard/upload"
                           ? "border-b-2 border-primary py-1"
                           : "hover:bg-neutral-300 p-2 rounded-md"
                       }
                       onClick={() => {
-                        navigate("/dashboard/upload");
+                        navigate("/app/dashboard/upload");
                       }}
                     >
                       Upload
@@ -180,7 +180,7 @@ const Header = () => {
                   <button
                     className="btn-secondary text-sm"
                     onClick={() => {
-                      navigate("/login");
+                      navigate("/app/login");
                     }}
                   >
                     Sign In
@@ -199,7 +199,7 @@ const Header = () => {
         <div
           className="w-full px-4"
           onClick={() => {
-            navigate("/search");
+            navigate("/app/search");
           }}
         >
           <Search />

@@ -69,7 +69,7 @@ const Register: React.FC = () => {
 
       toast.success(response.data.message || "Registered successfully");
 
-      navigate("/login");
+      navigate("/app/login");
     } catch (error: any) {
       // Firebase errors have a `.code`; backend/axios errors have `.response`
       console.log(error);
@@ -239,7 +239,7 @@ const Register: React.FC = () => {
             </button>
             <p>
               Already have an account?{" "}
-              <Link className="text-secondary cursor-pointer" to={"/login"}>
+              <Link className="text-secondary cursor-pointer" to={"/app/login"}>
                 Login
               </Link>
             </p>
