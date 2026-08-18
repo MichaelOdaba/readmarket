@@ -43,11 +43,13 @@ const UserMenu = ({ close }: { close: () => void }) => {
       try {
         const response = await customAxios({ ...summaryApi.logout });
         if (response?.data?.message) toast.success(response.data.message);
+        window.location.reload();
+        close();
       } catch (e) {
         // ignore backend logout errors
       }
 
-      navigate("/login");
+      navigate("/app/login");
       window.location.reload();
       close();
     } catch (error: any) {
