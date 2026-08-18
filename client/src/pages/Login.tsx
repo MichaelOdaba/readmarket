@@ -54,7 +54,7 @@ const Login: React.FC = () => {
     setislogin(true);
     try {
       await authService.login(userData.email, userData.password);
-      toast.success("Signed in successfully");
+      
 
       const fetchedUser = await fetchUserDetails();
       dispatch(setUser(fetchedUser));
@@ -63,6 +63,7 @@ const Login: React.FC = () => {
         email: "",
         password: "",
       });
+      toast.success("Signed in successfully");
       navigate("/app");
     } catch (error: any) {
       setislogin(false);
@@ -156,7 +157,10 @@ const Login: React.FC = () => {
             </button>
             <p>
               Don't have an account?{" "}
-              <Link className="text-secondary cursor-pointer" to={"/register"}>
+              <Link
+                className="text-secondary cursor-pointer"
+                to={"/app/register"}
+              >
                 Register
               </Link>
             </p>
