@@ -3,9 +3,11 @@ import type { Request, Response } from "express";
 import { connectDB } from "./config/db.js";
 import cors from "cors";
 import dotenv from "dotenv";
-import router from "./routes/User.routes.js";
+
 import { initFirebase } from "./config/firebaseAdmin.js";
 import { UserModel } from "./models/User.js";
+import notificationRouter from "./routes/notification.routes.js";
+import userRouter from "./routes/User.routes.js";
 
 dotenv.config();
 //initialize firebase admin sdk
@@ -41,7 +43,8 @@ app.get("/test-db", async (req, res) => {
     });
   }
 });
-app.use("/api/user", router);
+app.use("/api/user", userRouter);
+app.use("/api/notification", notificationRouter);
 
 const PORT = process.env.PORT || 3000;
 //connect to database here if needed

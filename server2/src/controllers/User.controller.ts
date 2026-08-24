@@ -4,6 +4,7 @@ import { ApiResponse } from "../types/Api.types.js";
 import { AuthenticatedUser, loginUser, User } from "../types/user.types.js";
 import { Response } from "express";
 import { UserModel } from "../models/User.js";
+import { createNotifications } from "./notification.controller.js";
 
 //register user controller
 export async function registerUserController(
@@ -50,6 +51,13 @@ export async function registerUserController(
         message: "Failed to create user",
       });
     }
+
+    createNotifications(
+      newUser._id.toString(),
+      "REGISTER",
+      "welcome to readmarket!",
+      `welcome ${newUser.firstName} to read market!`
+    );
     return res.status(201).json({
       success: true,
       message: "User created successfully",
@@ -63,6 +71,7 @@ export async function registerUserController(
       .json({ success: false, message: "Internal server error" });
   }
 }
+
 //login user controller
 export async function getUserController(
   req: AuthenticatedUser,
@@ -80,6 +89,7 @@ export async function getUserController(
         message: "User not found",
       });
     }
+
     return res.status(200).json({
       success: true,
       message: "User found",
@@ -91,4 +101,36 @@ export async function getUserController(
       .status(500)
       .json({ success: false, message: "Internal server error" });
   }
+}
+
+export async function verifyEmailController(
+  req: AuthenticatedUser,
+  res: Response
+) {
+  const { uid } = req.user!;
+  try {
+    const user = await UserModel.find({ firebaseUid: uid });
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+      });
+    }
+
+    //email verification takes place here
+    // const emailVerified: Boolean = true;
+
+    // if (emailVerified) {
+    //   createNotifications(
+    //     uid,
+    //     "EMAIL",
+    //     "Email verified successfully",
+    //     "Your email has been successfully verified"
+    //   );
+    //   return res.status(200).json({
+    //     success: true,
+    //     message: "email verified successfully ",
+    //   });
+    // }
+  } catch (error) {}
 }

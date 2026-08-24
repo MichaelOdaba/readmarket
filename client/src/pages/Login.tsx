@@ -3,6 +3,7 @@ import banner from "../assets/banner2.jpeg";
 import type { LoginFormData } from "../types/profile";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
+import googleLogo from "../assets/icons8-google-144.png";
 
 import { Eye, EyeClosed, LockIcon, Mail, Loader } from "lucide-react";
 
@@ -54,7 +55,6 @@ const Login: React.FC = () => {
     setislogin(true);
     try {
       await authService.login(userData.email, userData.password);
-      
 
       const fetchedUser = await fetchUserDetails();
       dispatch(setUser(fetchedUser));
@@ -92,7 +92,19 @@ const Login: React.FC = () => {
               <p className="text-primary text-2xl font-bold">Welcome Back</p>
               <p className="text-muted">Please enter your details to sign in</p>
             </div>
-
+            <div className="flex flex-col">
+              <div className="flex justify-center">
+                <div className="btn-secondary px-5 py-2 w-[80%] font-bold border flex items-center gap-2 justify-center cursor-pointer">
+                  <img src={googleLogo} alt="Google" className="w-5 h-5" />
+                  <p>Continue with Google</p>
+                </div>
+              </div>
+              <div className="flex items-center gap-3 my-5 text-sm text-muted">
+                <div className="flex-1  h-px bg-neutral-200"></div>
+                <span>or</span>
+                <div className="flex-1  h-px bg-neutral-200"></div>
+              </div>
+            </div>
             <div className="flex flex-col items-start w-full px-2 text-left gap-1">
               <label htmlFor="email" className="w-full" autoFocus>
                 Email Address:
@@ -155,6 +167,7 @@ const Login: React.FC = () => {
                 "Sign in"
               )}
             </button>
+
             <p>
               Don't have an account?{" "}
               <Link

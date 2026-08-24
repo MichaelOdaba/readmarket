@@ -4,9 +4,14 @@ import {
   registerUserController,
 } from "../controllers/User.controller.js";
 import { verifyFirebaseToken } from "../middleware/verifyFirebaseToken.js";
+import { requireVerifyEmail } from "../middleware/requireVerifyEmail.js";
 
-const router = Router();
-router.post("/register", verifyFirebaseToken, registerUserController);
-export default router;
+const userRouter = Router();
+userRouter.post("/register", verifyFirebaseToken, registerUserController);
+
 //get user route with verifyFirebaseToken middleware
-router.get("/get-user", verifyFirebaseToken, getUserController);
+userRouter.get("/get-user", verifyFirebaseToken, getUserController);
+
+//verify email router
+
+export default userRouter;

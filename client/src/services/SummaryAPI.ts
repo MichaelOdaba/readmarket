@@ -27,7 +27,7 @@ const summaryApi = {
     method: "post",
   },
   getNotifications: {
-    url: "/api/notification/",
+    url: "/api/notification/get-notifications",
     method: "get",
   },
   markNotificationAsRead: {
