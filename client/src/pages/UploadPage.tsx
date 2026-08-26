@@ -142,7 +142,7 @@ const UploadPage = () => {
     setUploadingImages(true);
     try {
       const uploadPromises = form.images.map((file) =>
-        uploadToCloudinary(file)
+        uploadToCloudinary(file, "productImages")
       );
       const uploadedUrls = await Promise.all(uploadPromises);
 

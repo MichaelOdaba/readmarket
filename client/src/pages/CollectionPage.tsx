@@ -101,7 +101,7 @@ const CollectionPage = () => {
     <section className="container section">
       {/* Back Button */}
       <button
-        onClick={() => navigate("/")}
+        onClick={() => navigate("/app")}
         className="flex items-center gap-2 text-primary hover:text-secondary mb-6 transition-colors"
       >
         <ChevronLeft size={20} />
