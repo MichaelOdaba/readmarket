@@ -23,14 +23,16 @@ const ErrorPage: React.FC = () => {
               to="/"
               className="px-4 py-2 rounded-md bg-[#103a3f] text-white font-semibold hover:bg-[#164c52] transition"
             >
-              Go to Landing
+              Go To Home
             </Link>
-            <Link
-              to="/app"
+            <button
               className="px-4 py-2 rounded-md border border-[#103a3f] text-[#103a3f] font-semibold hover:bg-[#f2f9f9] transition"
+              onClick={() => {
+                history.back();
+              }}
             >
-              Open App
-            </Link>
+              Go Back
+            </button>
           </div>
         </div>
       </div>

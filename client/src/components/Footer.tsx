@@ -19,7 +19,7 @@ const Footer = () => {
   };
 
   const handleNavigation = (path: string) => {
-    navigate(`/${path.toLowerCase().replace(/\s+/g, "-")}`);
+    navigate(`/app/${path.toLowerCase().replace(/\s+/g, "-")}`);
   };
 
   return (

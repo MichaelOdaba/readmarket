@@ -19,7 +19,7 @@ const summaryApi = {
     method: "get",
   },
   editUser: {
-    url: "/api/user/edit",
+    url: "/api/user/edit-user",
     method: "put",
   },
   CreateAdmin: {

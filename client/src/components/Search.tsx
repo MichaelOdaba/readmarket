@@ -8,11 +8,21 @@ const Search: React.FC = () => {
 
   const navigate = useNavigate();
   const [searchInput, setSearchInput] = useState("");
+  const [backspaceButton, setBackspaceButton] = useState(false);
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Backspace") {
+        setBackspaceButton(true);
+      }
+    });
     const { value } = e.target;
     setSearchInput(value);
     if (searchInput !== "") {
       navigate("/app/search");
+    }
+
+    if (searchInput !== "" && backspaceButton) {
+      return null;
     }
   };
   return (

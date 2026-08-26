@@ -102,7 +102,7 @@ export async function getUserController(
       .json({ success: false, message: "Internal server error" });
   }
 }
-
+//TODO: incomplete function, needs to be completed
 export async function verifyEmailController(
   req: AuthenticatedUser,
   res: Response
@@ -132,5 +132,61 @@ export async function verifyEmailController(
     //     message: "email verified successfully ",
     //   });
     // }
-  } catch (error) {}
+  } catch (error) {
+    console.error("Error in verifyEmail controller:", error);
+    return res
+      .status(500)
+      .json({ success: false, message: "Internal server error" });
+  }
+}
+//editUserProfile controller
+export async function editUserProfileController(
+  req: AuthenticatedUser,
+  res: Response<ApiResponse<User>>
+) {
+  const { uid } = req.user!;
+  const { firstName, lastName, username, avatar, email, mobile } = req.body;
+  console.log(req.body);
+
+  //check if the no fields are provided for update
+  if (!firstName && !lastName && !username && !avatar && !email && !mobile) {
+    return res.status(400).json({
+      success: false,
+      message: "No fields provided for update",
+    });
+  }
+
+  //update user profile in database
+  try {
+    //update the user to the database effectively
+    const updatedUser = await UserModel.findOneAndUpdate(
+      { firebaseUid: uid },
+      {
+        ...(firstName && { firstName }),
+        ...(lastName && { lastName }),
+        ...(username && { username }),
+        ...(avatar && { avatar }),
+        ...(email && { email }),
+        ...(mobile && { mobile }),
+      }
+    );
+
+    if (!updatedUser) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      message: "Profile updated successfully",
+      data: updatedUser,
+    });
+  } catch (error) {
+    console.error("Error in editUserProfile controller:", error);
+    return res
+      .status(500)
+      .json({ success: false, message: "Internal server error" });
+  }
 }

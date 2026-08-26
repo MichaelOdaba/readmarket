@@ -13,6 +13,7 @@ import type { ProfileFormData, UserProfile } from "../types/profile";
 import { Mail, Phone, User, UserCheck, Upload, Loader } from "lucide-react";
 import { useDispatch } from "react-redux";
 import { setUser } from "../store/slice/userSlice";
+import { auth } from "../config/firebase";
 
 const Profile: React.FC = () => {
   const navigate = useNavigate();
@@ -56,13 +57,20 @@ const Profile: React.FC = () => {
         toast.error(
           error?.response?.data?.message || "Failed to fetch profile"
         );
-        navigate("/login");
       } finally {
         setIsLoading(false);
       }
     };
 
-    fetchUserData();
+    const unsubscribe = auth.onAuthStateChanged((firebaseUser) => {
+      if (firebaseUser) {
+        fetchUserData();
+      } else {
+        setIsLoading(false);
+      }
+    });
+
+    return () => unsubscribe();
   }, [navigate]);
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -79,7 +87,7 @@ const Profile: React.FC = () => {
 
     try {
       setIsUploadingImage(true);
-      const imageUrl = await uploadToCloudinary(file);
+      const imageUrl = await uploadToCloudinary(file, "avatars");
       setProfileData((prev) => ({
         ...prev,
         avatar: imageUrl,
@@ -106,6 +114,7 @@ const Profile: React.FC = () => {
       toast.error("Please fill in all required fields");
       return;
     }
+    console.log(profileData);
 
     try {
       setIsSaving(true);

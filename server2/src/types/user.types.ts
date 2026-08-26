@@ -9,6 +9,10 @@ export interface User {
   lastName: string;
   email: string;
   password: string;
+  avatar?: string;
+  mobile?: string;
+  role: "user" | "admin";
+  isEmailVerified: boolean;
   createdAt: Date;
   updatedAt: Date;
 }

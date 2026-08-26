@@ -9,6 +9,7 @@
 
 const uploadToCloudinary = async (
   file: File,
+  folder: string,
   resourceType: "image" | "raw" = "image"
 ): Promise<string> => {
   const cloudinaryCloudName = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME;
@@ -23,6 +24,7 @@ const uploadToCloudinary = async (
   const formData = new FormData();
   formData.append("file", file);
   formData.append("upload_preset", cloudinaryUploadPreset);
+  formData.append("folder", `readmarket/${folder}`);
 
   const response = await fetch(
     `https://api.cloudinary.com/v1_1/${cloudinaryCloudName}/${resourceType}/upload`,
