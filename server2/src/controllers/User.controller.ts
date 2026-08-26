@@ -5,6 +5,7 @@ import { AuthenticatedUser, loginUser, User } from "../types/user.types.js";
 import { Response } from "express";
 import { UserModel } from "../models/User.js";
 import { createNotifications } from "./notification.controller.js";
+import { NotificationModel } from "../models/Notifications.js";
 
 //register user controller
 export async function registerUserController(
@@ -89,6 +90,21 @@ export async function getUserController(
         message: "User not found",
       });
     }
+    if (!req.user?.email_verified) {
+      const emailNotificationExists = await NotificationModel.findOne({
+        user_id: user._id,
+        type: "EMAIL VERIFICATION",
+        isRead: false,
+      });
+      if (!emailNotificationExists) {
+        await createNotifications(
+          user._id.toString(),
+          "EMAIL VERIFICATION",
+          "Verify your email",
+          "Please go to profile to verify your email address to unlock purchasing and uploading on ReadMarket."
+        );
+      }
+    }
 
     return res.status(200).json({
       success: true,
@@ -146,6 +162,7 @@ export async function editUserProfileController(
 ) {
   const { uid } = req.user!;
   const { firstName, lastName, username, avatar, email, mobile } = req.body;
+
   console.log(req.body);
 
   //check if the no fields are provided for update

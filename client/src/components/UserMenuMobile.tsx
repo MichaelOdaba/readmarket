@@ -20,6 +20,7 @@ import customAxios from "../utils/customAxios";
 import summaryApi from "../services/SummaryAPI";
 import * as authService from "../services/authService";
 import type { UserState } from "../store/slice/userSlice";
+import { auth } from "../config/firebase";
 
 interface Notification {
   _id: string;
@@ -37,8 +38,35 @@ const UserMenuMobile = ({ close }: { close: () => void }) => {
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [unreadCount, setUnreadCount] = useState(0);
   const [isLoadingNotifications, setIsLoadingNotifications] = useState(false);
+
+  const [userImage, setuserImage] = useState("");
   const [showNotifications, setShowNotifications] = useState(false);
 
+  // Fetch user details on mount
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const response = await customAxios({
+          ...summaryApi.getUser,
+        });
+
+        setuserImage(response.data.data.avatar);
+      } catch (error: any) {
+        console.error("Error fetching user data:", error);
+        toast.error(
+          error?.response?.data?.message || "Failed to fetch user details"
+        );
+      }
+    };
+
+    const unsubscribe = auth.onAuthStateChanged((firebaseUser) => {
+      if (firebaseUser) {
+        fetchUserData();
+      }
+    });
+
+    return () => unsubscribe();
+  }, [navigate]);
   useEffect(() => {
     const handleClickOutside = (event: any) => {
       if (menuRef.current && !menuRef.current.contains(event.target)) {
@@ -53,13 +81,6 @@ const UserMenuMobile = ({ close }: { close: () => void }) => {
     };
   }, []);
 
-  // Fetch notifications when menu opens
-  useEffect(() => {
-    if (user._id) {
-      fetchNotifications();
-    }
-  }, [user._id]);
-
   const fetchNotifications = async () => {
     try {
       setIsLoadingNotifications(true);
@@ -72,7 +93,7 @@ const UserMenuMobile = ({ close }: { close: () => void }) => {
         const filteredNotifications = response.data.data.notifications.filter(
           (notif: Notification) => notif.type !== "LOGIN"
         );
-        setNotifications(filteredNotifications.slice(0, 5)); // Show only 5 latest
+        setNotifications(filteredNotifications);
         // Count unread non-LOGIN notifications
         const unreadNonLogin = filteredNotifications.filter(
           (notif: Notification) => !notif.isRead
@@ -81,6 +102,7 @@ const UserMenuMobile = ({ close }: { close: () => void }) => {
       }
     } catch (error: any) {
       console.error("Error fetching notifications:", error);
+      toast.error("Failed to fetch notifications");
     } finally {
       setIsLoadingNotifications(false);
     }
@@ -104,6 +126,12 @@ const UserMenuMobile = ({ close }: { close: () => void }) => {
     }
   };
 
+  // Fetch notifications when menu opens
+  useEffect(() => {
+    if (user._id) {
+      fetchNotifications();
+    }
+  }, [user._id]);
   const getNotificationIcon = (type: string) => {
     switch (type) {
       case "REGISTER":
@@ -174,9 +202,9 @@ const UserMenuMobile = ({ close }: { close: () => void }) => {
         <div className="p-6 border-b border-neutral-100">
           <div className="flex items-center gap-4">
             <div className="w-16 h-16 rounded-full bg-gradient-to-br from-primary/20 to-secondary/20 flex items-center justify-center flex-shrink-0 overflow-hidden border-2 border-primary/20">
-              {user.avatarUrl ? (
+              {userImage ? (
                 <img
-                  src={user.avatarUrl}
+                  src={userImage}
                   alt="Profile"
                   className="w-full h-full object-cover"
                 />

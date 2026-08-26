@@ -5,7 +5,7 @@ export interface UserState {
   firstName: string;
   lastName: string;
   email: string;
-  avatarUrl: string;
+  avatar: string;
   mobile: string;
   verify_email: string;
   last_login_date: string;
@@ -21,7 +21,7 @@ const initialValue: UserState = {
   firstName: "",
   lastName: "",
   email: "",
-  avatarUrl: "",
+  avatar: "",
   mobile: "",
   verify_email: "",
   last_login_date: "",
@@ -41,7 +41,7 @@ const userSlice = createSlice({
       state.firstName = action.payload.firstName;
       state.lastName = action.payload.lastName;
       state.email = action.payload.email;
-      state.avatarUrl = action.payload.avatarUrl;
+      state.avatar = action.payload.avatarUrl;
       state.mobile = action.payload.mobile;
       state.verify_email = action.payload.verify_email;
       state.last_login_date = action.payload.last_login_date;
@@ -56,7 +56,7 @@ const userSlice = createSlice({
       state.firstName = "";
       state.lastName = "";
       state.email = "";
-      state.avatarUrl = "";
+      state.avatar = "";
       state.mobile = "";
       state.verify_email = "";
       state.last_login_date = "";

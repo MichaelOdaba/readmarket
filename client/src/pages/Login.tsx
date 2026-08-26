@@ -57,14 +57,18 @@ const Login: React.FC = () => {
       await authService.login(userData.email, userData.password);
 
       const fetchedUser = await fetchUserDetails();
+
+      console.log(fetchedUser);
+
       dispatch(setUser(fetchedUser));
 
       setUserData({
         email: "",
         password: "",
       });
-      toast.success("Signed in successfully");
+
       navigate("/app");
+      toast.success("Signed in successfully");
     } catch (error: any) {
       setislogin(false);
       const message = getFirebaseErrorMessage(error?.code);

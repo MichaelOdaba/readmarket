@@ -68,6 +68,7 @@ export const getNotifications = async (
         .status(200)
         .json({ success: true, data: { notifications: [] } });
     }
+
     //count the number of unread notifications for the user
     const unreadCount = await NotificationModel.countDocuments({
       user_id: user._id,

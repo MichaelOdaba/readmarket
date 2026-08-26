@@ -17,11 +17,40 @@ import customAxios from "../utils/customAxios";
 import summaryApi from "../services/SummaryAPI";
 import * as authService from "../services/authService";
 import type { UserState } from "../store/slice/userSlice";
+import { auth } from "../config/firebase";
+import { useState } from "react";
 
 const UserMenu = ({ close }: { close: () => void }) => {
   const user = useSelector((state: { user: UserState }) => state?.user);
   const navigate = useNavigate();
   const menuRef = useRef<HTMLDivElement | null>(null);
+  const [userImage, setuserImage] = useState("");
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const response = await customAxios({
+          ...summaryApi.getUser,
+        });
+
+        setuserImage(response.data.data.avatar);
+      } catch (error: any) {
+        console.error("Error fetching user data:", error);
+        toast.error(
+          error?.response?.data?.message || "Failed to fetch user details"
+        );
+      }
+    };
+
+    const unsubscribe = auth.onAuthStateChanged((firebaseUser) => {
+      if (firebaseUser) {
+        fetchUserData();
+      }
+    });
+
+    return () => unsubscribe();
+  }, [navigate]);
+
   useEffect(() => {
     const handleClickOutside = (event: any) => {
       if (menuRef.current && !menuRef.current.contains(event.target)) {
@@ -43,8 +72,6 @@ const UserMenu = ({ close }: { close: () => void }) => {
       try {
         const response = await customAxios({ ...summaryApi.logout });
         if (response?.data?.message) toast.success(response.data.message);
-        window.location.reload();
-        close();
       } catch (e) {
         // ignore backend logout errors
       }
@@ -60,8 +87,16 @@ const UserMenu = ({ close }: { close: () => void }) => {
   return (
     <div ref={menuRef} className="flex flex-col gap-3">
       <div className="py-2 flex items-center gap-2">
-        <div className="bg-neutral-300 p-4 rounded-full">
-          <User size={30} />
+        <div className="bg-neutral-300 rounded-full h-16 w-16 overflow-hidden">
+          {userImage ? (
+            <img
+              src={userImage}
+              alt="Profile Avatar"
+              className="w-full h-full object-cover"
+            />
+          ) : (
+            <User size={30} className="text-neutral-400 m-4" />
+          )}
         </div>
         <div className="text-black flex flex-col gap-1">
           <p className="font-bold">

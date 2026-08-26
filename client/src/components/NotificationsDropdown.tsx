@@ -38,12 +38,6 @@ const NotificationsDropdown: React.FC<NotificationsDropdownProps> = ({
   const notificationsRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
-    if (isOpen) {
-      fetchNotifications();
-    }
-  }, [isOpen]);
-
-  useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
         notificationsRef.current &&
@@ -67,18 +61,15 @@ const NotificationsDropdown: React.FC<NotificationsDropdownProps> = ({
       const response = await customAxios({
         ...summaryApi.getNotifications,
       });
+      console.log(response);
 
       if (response.data.success) {
-        // Filter out LOGIN notifications
-        const filteredNotifications = response.data.data.notifications.filter(
-          (notif: Notification) => notif.type !== "LOGIN"
-        );
-        setNotifications(filteredNotifications);
-        // Count unread non-LOGIN notifications
-        const unreadNonLogin = filteredNotifications.filter(
-          (notif: Notification) => !notif.isRead
-        ).length;
-        setUnreadCount(unreadNonLogin);
+        //check if email verification notification exists
+        setNotifications(response.data.data.notifications);
+
+        // Returns the notification object if found, or undefined if not found
+
+        console.log(); // returns true or false
       }
     } catch (error: any) {
       console.error("Error fetching notifications:", error);
@@ -87,6 +78,11 @@ const NotificationsDropdown: React.FC<NotificationsDropdownProps> = ({
       setIsLoading(false);
     }
   };
+  useEffect(() => {
+    if (isOpen) {
+      fetchNotifications();
+    }
+  }, [isOpen]);
 
   const handleMarkAsRead = async (notificationId: string) => {
     try {

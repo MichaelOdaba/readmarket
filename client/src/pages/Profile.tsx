@@ -14,6 +14,7 @@ import { Mail, Phone, User, UserCheck, Upload, Loader } from "lucide-react";
 import { useDispatch } from "react-redux";
 import { setUser } from "../store/slice/userSlice";
 import { auth } from "../config/firebase";
+import { sendEmailVerification } from "firebase/auth";
 
 const Profile: React.FC = () => {
   const navigate = useNavigate();
@@ -28,6 +29,8 @@ const Profile: React.FC = () => {
     avatar: "",
   });
   const [preview, setPreview] = useState<string>("");
+  const [isEmailVerified, setIsEmailVerified] = useState(false);
+  const [isSendingVerification, setIsSendingVerification] = useState(false);
   const dispatch = useDispatch();
 
   // Fetch user details on mount
@@ -62,9 +65,23 @@ const Profile: React.FC = () => {
       }
     };
 
-    const unsubscribe = auth.onAuthStateChanged((firebaseUser) => {
+    const unsubscribe = auth.onAuthStateChanged(async (firebaseUser) => {
       if (firebaseUser) {
-        fetchUserData();
+        try {
+          await firebaseUser.reload();
+
+          // Get the refreshed user after reload
+          const refreshedUser = auth.currentUser;
+
+          if (refreshedUser) {
+            setIsEmailVerified(refreshedUser.emailVerified);
+          }
+
+          fetchUserData();
+        } catch (error) {
+          console.error("Error checking email verification:", error);
+          setIsLoading(false);
+        }
       } else {
         setIsLoading(false);
       }
@@ -104,6 +121,49 @@ const Profile: React.FC = () => {
       toast.error(error.message || "Failed to upload image");
     } finally {
       setIsUploadingImage(false);
+    }
+  };
+  const handleVerifyEmail = async () => {
+    const firebaseUser = auth.currentUser;
+
+    if (!firebaseUser) {
+      toast.error("You are not authenticated");
+      return;
+    }
+
+    try {
+      setIsSendingVerification(true);
+
+      await sendEmailVerification(firebaseUser);
+
+      toast.success(
+        "Verification email sent. Check your inbox and verify your email."
+      );
+    } catch (error: any) {
+      console.error("Error sending verification email:", error);
+
+      if (error?.code === "auth/too-many-requests") {
+        toast.error("Too many requests. Please try again later.");
+      } else {
+        toast.error("Failed to send verification email");
+      }
+    } finally {
+      setIsSendingVerification(false);
+    }
+  };
+  const checkEmailVerification = async () => {
+    const firebaseUser = auth.currentUser;
+
+    if (!firebaseUser) return;
+
+    await firebaseUser.reload();
+
+    setIsEmailVerified(firebaseUser.emailVerified);
+
+    if (firebaseUser.emailVerified) {
+      toast.success("Email verified successfully!");
+    } else {
+      toast.info("Your email is not verified yet.");
     }
   };
 
@@ -264,6 +324,36 @@ const Profile: React.FC = () => {
                 />
               </div>
             </div>
+
+            {/** verify email button which only appears when if the user is not verified */}
+            {!isEmailVerified && (
+              <div className="p-4 border rounded-lg">
+                <p className="font-medium text-red-500">
+                  Your email is not verified
+                </p>
+
+                <div className="flex gap-3 mt-3">
+                  <button
+                    type="button"
+                    onClick={handleVerifyEmail}
+                    disabled={isSendingVerification}
+                    className="bg-primary text-white px-4 py-2 rounded-lg cursor-pointer"
+                  >
+                    {isSendingVerification
+                      ? "Sending..."
+                      : "Send Verification Email"}
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={checkEmailVerification}
+                    className="bg-green-600 text-primary px-4 py-2 rounded-lg cursor-pointer"
+                  >
+                    I've Verified
+                  </button>
+                </div>
+              </div>
+            )}
 
             {/* Submit Button */}
             <div className="flex gap-4 pt-4">
