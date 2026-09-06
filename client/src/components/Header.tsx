@@ -5,6 +5,8 @@ import {
   ShoppingCart,
   User2,
   UserCircle2Icon,
+  Moon,
+  Sun,
 } from "lucide-react";
 import Search from "./Search";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -16,6 +18,7 @@ import UserMenuMobile from "./UserMenuMobile";
 import NotificationsDropdown from "./NotificationsDropdown";
 import customAxios from "../utils/customAxios";
 import summaryApi from "../services/SummaryAPI";
+import { useTheme } from "../hooks/useTheme";
 
 const Header = () => {
   const navigate = useNavigate();
@@ -26,6 +29,7 @@ const Header = () => {
   const [openMobileMenu, setOpenMobileMenu] = useState(false);
   const [openNotifications, setOpenNotifications] = useState(false);
   const [unreadCount, setUnreadCount] = useState(0);
+  const { theme, toggleTheme } = useTheme();
 
   const closeUserMenu = () => {
     setOpenUserMenu(false);
@@ -142,6 +146,15 @@ const Header = () => {
                     >
                       Upload
                     </button>
+                    <button
+                      type="button"
+                      onClick={toggleTheme}
+                      className="hover:bg-neutral-300 p-2 rounded-md cursor-pointer"
+                      aria-label={`Switch to ${theme === "light" ? "dark" : "light"} mode`}
+                      title={`Switch to ${theme === "light" ? "dark" : "light"} mode`}
+                    >
+                      {theme === "light" ? <Moon size={20} /> : <Sun size={20} />}
+                    </button>
                     <div className="relative hover:bg-neutral-300 p-2 rounded-md cursor-pointer">
                       <button
                         onClick={() => setOpenNotifications((prev) => !prev)}
@@ -167,7 +180,7 @@ const Header = () => {
                     </div>{" "}
                     {openUserMenu && (
                       <div className="absolute top-17 right-8">
-                        <div className="bg-white rounded p-4 min-w-52 lg:shadow-lg ">
+                        <div className="bg-surface rounded p-4 min-w-52 lg:shadow-lg ">
                           {" "}
                           <UserMenu close={closeUserMenu} />
                         </div>

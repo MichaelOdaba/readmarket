@@ -144,7 +144,7 @@ const ProductCard: React.FC<{ product: Product }> = ({ product }) => {
       onClick={handleCardClick}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
-      className="bg-white rounded-lg shadow-sm hover:shadow-xl transition-all duration-300 cursor-pointer overflow-hidden group"
+      className="bg-surface rounded-lg shadow-sm hover:shadow-xl transition-all duration-300 cursor-pointer overflow-hidden group"
     >
       {/* Image Container */}
       <div className="relative w-full overflow-hidden bg-neutral-100 h-48 md:h-56">

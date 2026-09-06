@@ -26,7 +26,7 @@ const CollectionFilter = ({
   }
 
   return (
-    <div className="bg-white rounded-lg shadow-md p-4 mb-6">
+    <div className="bg-surface rounded-lg shadow-md p-4 mb-6">
       {/* Filter Header */}
       <div
         className="flex justify-between items-center cursor-pointer"

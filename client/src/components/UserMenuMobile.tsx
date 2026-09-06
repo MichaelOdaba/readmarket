@@ -21,6 +21,7 @@ import summaryApi from "../services/SummaryAPI";
 import * as authService from "../services/authService";
 import type { UserState } from "../store/slice/userSlice";
 import { auth } from "../config/firebase";
+import { useTheme } from "../hooks/useTheme";
 
 interface Notification {
   _id: string;
@@ -41,6 +42,7 @@ const UserMenuMobile = ({ close }: { close: () => void }) => {
 
   const [userImage, setuserImage] = useState("");
   const [showNotifications, setShowNotifications] = useState(false);
+  const { theme, toggleTheme } = useTheme();
 
   // Fetch user details on mount
   useEffect(() => {
@@ -185,7 +187,7 @@ const UserMenuMobile = ({ close }: { close: () => void }) => {
     <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-end sm:items-center justify-center">
       <div
         ref={menuRef}
-        className="bg-white w-full sm:w-96 rounded-t-3xl sm:rounded-2xl shadow-2xl max-h-[90vh] overflow-y-auto flex flex-col"
+        className="bg-surface w-full sm:w-96 rounded-t-3xl sm:rounded-2xl shadow-2xl max-h-[90vh] overflow-y-auto flex flex-col"
       >
         {/* Header with Close Button */}
         <div className="flex justify-between items-center p-6 border-b border-neutral-100 bg-gradient-to-r from-primary/5 to-secondary/5">
@@ -197,6 +199,23 @@ const UserMenuMobile = ({ close }: { close: () => void }) => {
             <X size={24} className="text-primary" />
           </button>
         </div>
+
+        <button
+          type="button"
+          onClick={toggleTheme}
+          role="switch"
+          aria-checked={theme === "dark"}
+          aria-label="Toggle dark mode"
+          className="flex items-center justify-between p-4 border-b border-neutral-100 text-primary font-semibold hover:bg-neutral-50 transition-colors"
+        >
+          <span>Dark mode</span>
+          <span
+            aria-hidden="true"
+            className={`theme-switch ${theme === "dark" ? "theme-switch-on" : ""}`}
+          >
+            <span className="theme-switch-thumb" />
+          </span>
+        </button>
 
         {/* User Profile Section */}
         <div className="p-6 border-b border-neutral-100">

@@ -8,9 +8,11 @@ import fetchUserDetails from "./utils/fetchUser";
 import { useEffect } from "react";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "./config/firebase";
+import { useTheme } from "./hooks/useTheme";
 
 function App() {
   const dispatch = useDispatch();
+  const { theme } = useTheme();
 
   useEffect(() => {
     const unsub = onAuthStateChanged(auth, async (user) => {
@@ -32,7 +34,7 @@ function App() {
     <>
       {" "}
       <div className="flex flex-col">
-        <Toaster />
+        <Toaster theme={theme} />
 
         <Header />
         <main className="h-auto w-full min-h-screen md:mt-16 ">

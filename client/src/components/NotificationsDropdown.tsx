@@ -148,7 +148,7 @@ const NotificationsDropdown: React.FC<NotificationsDropdownProps> = ({
       {isOpen && (
         <div
           ref={notificationsRef}
-          className="fixed top-17 left-0 right-0 md:left-auto md:right-8 md:top-17 z-50 md:w-96 max-h-96 bg-white rounded-lg shadow-lg md:rounded-lg border border-neutral-200"
+          className="fixed top-17 left-0 right-0 md:left-auto md:right-8 md:top-17 z-50 md:w-96 max-h-96 bg-surface rounded-lg shadow-lg md:rounded-lg border border-neutral-200"
         >
           {/* Header */}
           <div className="flex justify-between items-center p-4 border-b border-neutral-200">

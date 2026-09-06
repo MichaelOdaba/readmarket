@@ -33,8 +33,8 @@ const Search: React.FC = () => {
       }}
     >
       {!isSearch ? (
-        <div className="input w-full flex gap-4 items-center rounded-full">
-          <SearchIcon />
+        <div className="search-surface input w-full flex gap-4 items-center rounded-full">
+          <SearchIcon className="search-icon" />
           <TypeAnimation
             sequence={[
               // Same substring at the start will only be typed out once, initially
@@ -62,7 +62,7 @@ const Search: React.FC = () => {
       ) : (
         <input
           type="text"
-          className="input rounded-full w-full"
+          className="search-surface input rounded-full w-full"
           autoFocus
           placeholder="search for a resource"
           onChange={handleInputChange}

@@ -109,7 +109,7 @@ const CollectionPage = () => {
       </button>
 
       {/* Collection Header */}
-      <div className="bg-white rounded-lg shadow-md overflow-hidden mb-8">
+      <div className="bg-surface rounded-lg shadow-md overflow-hidden mb-8">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 p-6 md:p-8">
           {/* Collection Image */}
           <div className="flex justify-center items-center">
@@ -149,7 +149,7 @@ const CollectionPage = () => {
               {products.map((product) => (
                 <div
                   key={product._id}
-                  className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300 group cursor-pointer"
+                  className="bg-surface rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300 group cursor-pointer"
                   onClick={() => navigate(`/product/${product._id}`)}
                 >
                   {/* Product Image */}

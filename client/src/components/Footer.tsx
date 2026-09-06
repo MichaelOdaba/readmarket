@@ -23,7 +23,7 @@ const Footer = () => {
   };
 
   return (
-    <footer className="bg-gradient-to-b from-white to-neutral-50 border-t border-neutral-200 mt-12">
+    <footer className="bg-surface border-t border-neutral-200 mt-12">
       {/* Main Footer Content */}
       <div className="max-w-7xl mx-auto px-4 md:px-6 py-12">
         {/* Footer Grid */}

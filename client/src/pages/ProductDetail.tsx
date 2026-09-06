@@ -136,7 +136,7 @@ const ProductDetail = () => {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-neutral-50">
+      <div className="min-h-screen flex items-center justify-center bg-neutral">
         <div className="flex flex-col items-center gap-4">
           <Loader size={40} className="animate-spin text-primary" />
           <p className="text-secondary">Loading product details...</p>
@@ -147,7 +147,7 @@ const ProductDetail = () => {
 
   if (error || !product) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-neutral-50 p-3">
+      <div className="min-h-screen flex items-center justify-center bg-neutral p-3">
         <div className="text-center">
           <p className="text-red-600 font-semibold mb-4">
             {error || "Product not found"}
@@ -165,7 +165,7 @@ const ProductDetail = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-neutral-50 to-white py-8">
+    <div className="min-h-screen bg-neutral py-8">
       <div className="max-w-6xl mx-auto px-4 md:px-0">
         {/* Back Button */}
         <button
@@ -331,7 +331,7 @@ const ProductDetail = () => {
               </button>
             )}
             {/* Seller Info */}
-            <div className="bg-neutral-50 rounded-lg p-4 border border-neutral-200">
+            <div className="bg-surface-raised rounded-lg p-4 border border-neutral-200">
               <p className="text-xs text-secondary mb-3">Sold by</p>
               <div className="flex items-center gap-3">
                 <div className="w-12 h-12 bg-neutral-300 rounded-full flex items-center justify-center">
@@ -352,23 +352,23 @@ const ProductDetail = () => {
 
         {/* Product Details Grid */}
         <div className="mt-12 grid grid-cols-2 md:grid-cols-4 gap-4">
-          <div className="bg-white rounded-lg p-4 border border-neutral-200 text-center">
+          <div className="bg-surface rounded-lg p-4 border border-neutral-200 text-center">
             <p className="text-2xl font-bold text-primary">
               {product.image?.length || 0}
             </p>
             <p className="text-sm text-secondary">Preview Images</p>
           </div>
-          <div className="bg-white rounded-lg p-4 border border-neutral-200 text-center">
+          <div className="bg-surface rounded-lg p-4 border border-neutral-200 text-center">
             <p className="text-2xl font-bold text-primary">1</p>
             <p className="text-sm text-secondary">Product File</p>
           </div>
-          <div className="bg-white rounded-lg p-4 border border-neutral-200 text-center">
+          <div className="bg-surface rounded-lg p-4 border border-neutral-200 text-center">
             <p className="text-2xl font-bold text-primary">
               {Math.floor(Math.random() * 500) + 10}
             </p>
             <p className="text-sm text-secondary">Downloads</p>
           </div>
-          <div className="bg-white rounded-lg p-4 border border-neutral-200 text-center">
+          <div className="bg-surface rounded-lg p-4 border border-neutral-200 text-center">
             <p className="text-2xl font-bold text-primary">
               {(Math.random() * 2 + 3).toFixed(1)}★
             </p>

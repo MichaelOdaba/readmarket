@@ -314,7 +314,7 @@ const UploadPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-neutral-50 to-white py-8">
+    <div className="min-h-screen bg-neutral py-8">
       <div className="max-w-2xl mx-auto px-4 md:px-0">
         {/* Header */}
         <div className="mb-8">
@@ -329,7 +329,7 @@ const UploadPage = () => {
         {/* Form */}
         <form
           onSubmit={handleSubmit}
-          className="bg-white rounded-lg shadow-md p-6 md:p-8 space-y-6"
+          className="bg-surface rounded-lg shadow-md p-6 md:p-8 space-y-6"
         >
           {/* Product Name */}
           <div>

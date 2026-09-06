@@ -50,7 +50,7 @@ const CollectionGrid = ({ collections }: CollectionGridProps) => {
             <div
               key={collection._id}
               onClick={() => navigate(`/collection/${collection._id}`)}
-              className="group cursor-pointer bg-white rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-all duration-300 transform hover:scale-105"
+              className="group cursor-pointer bg-surface rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-all duration-300 transform hover:scale-105"
             >
               {/* Collection Image */}
               <div className="relative h-48 bg-border overflow-hidden">
