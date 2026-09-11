@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { ChevronLeft, Loader, Upload as UploadIcon } from "lucide-react";
 import customAxios from "../utils/customAxios";
 import summaryApi from "../services/SummaryAPI";
+import uploadToCloudinary from "../utils/cloudinaryUpload";
 
 interface FormData {
   name: string;
@@ -10,9 +11,7 @@ interface FormData {
   description: string;
 }
 
-interface CloudinaryResponse {
-  url: string;
-}
+
 
 const AddCollectionPage = () => {
   const navigate = useNavigate();
@@ -47,37 +46,21 @@ const AddCollectionPage = () => {
     };
     reader.readAsDataURL(file);
 
-    // Upload to Cloudinary
+    // Upload to Cloudinary to a collection-specific folder
     try {
-      const formDataCloud = new FormData();
-      formDataCloud.append("file", file);
-      formDataCloud.append(
-        "upload_preset",
-        import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET || "readmarket"
-      );
-
-      const response = await fetch(
-        `https://api.cloudinary.com/v1_1/${
-          import.meta.env.VITE_CLOUDINARY_CLOUD_NAME || "dq7l0z3ql"
-        }/image/upload`,
-        {
-          method: "POST",
-          body: formDataCloud,
-        }
-      );
-
-      const data: CloudinaryResponse = await response.json();
+      const uploadedImageUrl = await uploadToCloudinary(file, "collections");
       setFormData((prev) => ({
         ...prev,
-        image: data.url,
+        image: uploadedImageUrl,
       }));
-    } catch (err) {
+    } catch (err: any) {
       setError("Failed to upload image. Please try again.");
       setImagePreview(null);
       setFormData((prev) => ({
         ...prev,
         image: "",
       }));
+      console.error("Cloudinary upload error:", err);
     }
   };
 

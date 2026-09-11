@@ -118,7 +118,7 @@ export async function getUserController(
       .json({ success: false, message: "Internal server error" });
   }
 }
-//TODO: incomplete function, needs to be completed
+//TODO: work on email template 
 export async function verifyEmailController(
   req: AuthenticatedUser,
   res: Response
@@ -133,20 +133,6 @@ export async function verifyEmailController(
       });
     }
 
-    //email verification takes place here
-    // const emailVerified: Boolean = true;
-
-    // if (emailVerified) {
-    //   createNotifications(
-    //     uid,
-    //     "EMAIL",
-    //     "Email verified successfully",
-    //     "Your email has been successfully verified"
-    //   );
-    //   return res.status(200).json({
-    //     success: true,
-    //     message: "email verified successfully ",
-    //   });
     // }
   } catch (error) {
     console.error("Error in verifyEmail controller:", error);

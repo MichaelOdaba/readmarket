@@ -250,17 +250,18 @@ const Profile: React.FC = () => {
               <label htmlFor="firstName" className="font-medium">
                 First Name *
               </label>
-              <div className="flex w-full items-center gap-2 input focus-within:border-primary">
+              <div className="profile-field flex w-full items-center gap-2 input focus-within:border-primary ">
                 <User size={20} className="text-neutral-600" />
                 <input
                   type="text"
                   name="firstName"
                   id="firstName"
-                  className="outline-none w-full"
+                  className="outline-none w-full text-primary"
                   placeholder="John"
                   value={profileData.firstName}
                   onChange={handleInputChange}
                   disabled={isSaving}
+               
                 />
               </div>
             </div>
@@ -270,7 +271,7 @@ const Profile: React.FC = () => {
               <label htmlFor="lastName" className="font-medium">
                 Last Name *
               </label>
-              <div className="flex w-full items-center gap-2 input focus-within:border-primary">
+              <div className="profile-field flex w-full items-center gap-2 input focus-within:border-primary">
                 <UserCheck size={20} className="text-neutral-600" />
                 <input
                   type="text"
@@ -290,7 +291,7 @@ const Profile: React.FC = () => {
               <label htmlFor="email" className="font-medium">
                 Email Address *
               </label>
-              <div className="flex w-full items-center gap-2 input focus-within:border-primary">
+              <div className="profile-field flex w-full items-center gap-2 input focus-within:border-primary">
                 <Mail size={20} className="text-neutral-600" />
                 <input
                   type="email"
@@ -310,7 +311,7 @@ const Profile: React.FC = () => {
               <label htmlFor="mobile" className="font-medium">
                 Mobile Number
               </label>
-              <div className="flex w-full items-center gap-2 input focus-within:border-primary">
+              <div className="profile-field flex w-full items-center gap-2 input focus-within:border-primary">
                 <Phone size={20} className="text-neutral-600" />
                 <input
                   type="tel"

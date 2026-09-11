@@ -1,6 +1,5 @@
 import {
   Bell,
-  BookOpen,
   Menu,
   ShoppingCart,
   User2,
@@ -19,6 +18,7 @@ import NotificationsDropdown from "./NotificationsDropdown";
 import customAxios from "../utils/customAxios";
 import summaryApi from "../services/SummaryAPI";
 import { useTheme } from "../hooks/useTheme";
+import logo from "../assets/read_market_logo_transparent.png"
 
 const Header = () => {
   const navigate = useNavigate();
@@ -72,17 +72,16 @@ const Header = () => {
                 navigate("/app");
               }}
             >
-              <BookOpen size={35} />
+             <img src={logo} alt="Read Market Logo" className="h-10 w-auto" />
             </div>
             <div className="flex items-center gap-2 text-primary">
               <button
                 type="button"
-                onClick={toggleTheme}
-                className="p-2 rounded-md hover:bg-neutral-300"
-                aria-label={`Switch to ${theme === "light" ? "dark" : "light"} mode`}
-                title={`Switch to ${theme === "light" ? "dark" : "light"} mode`}
+                className="p-2 rounded-md hover:bg-neutral-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+                aria-label="Shopping cart"
+                title="Shopping cart"
               >
-                {theme === "light" ? <Moon size={20} /> : <Sun size={20} />}
+                <ShoppingCart size={24} />
               </button>
               <button
                 type="button"
@@ -97,9 +96,9 @@ const Header = () => {
                 aria-label={user._id ? "Open menu" : "Sign in"}
               >
                 {user._id ? (
-                  <Menu size={35} />
+                  <Menu size={30} />
                 ) : (
-                  <UserCircle2Icon size={35} />
+                  <UserCircle2Icon size={30} />
                 )}
               </button>
             </div>
@@ -113,10 +112,9 @@ const Header = () => {
                 navigate("/app");
               }}
             >
-              <BookOpen className="text-accent" />
-              <p className="text-primary font-bold text-xl md:hidden lg:block">
-                READ <span className="text-secondary">MARKET</span>
-              </p>
+              <img src={logo} alt="Read Market Logo" className="h-10 w-auto" />
+            </div>
+            <div className="flex items-center gap-4">
             </div>
             <Search />
             <div>
@@ -158,6 +156,14 @@ const Header = () => {
                       }}
                     >
                       Upload
+                    </button>
+                    <button
+                      type="button"
+                      className="hover:bg-neutral-300 p-2 rounded-md cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary animate-bounce"
+                      aria-label="Shopping cart"
+                      title="Shopping cart"
+                    >
+                      <ShoppingCart size={25} />
                     </button>
                     <button
                       type="button"
