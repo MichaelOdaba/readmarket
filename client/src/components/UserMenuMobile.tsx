@@ -343,7 +343,7 @@ const UserMenuMobile = ({ close }: { close: () => void }) => {
             My Library
           </Link>
 
-          {user.role === "ADMIN" && (
+          {user.role === "admin" && (
             <Link
               to="/app/dashboard/collection/add"
               onClick={() => close()}
@@ -353,7 +353,7 @@ const UserMenuMobile = ({ close }: { close: () => void }) => {
               Add Collection
             </Link>
           )}
-          {user.role === "ADMIN" && (
+          {user.role === "admin" && (
             <Link
               to="/app/dashboard/create-admin"
               onClick={() => close()}

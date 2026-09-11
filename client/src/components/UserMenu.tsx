@@ -32,6 +32,7 @@ const UserMenu = ({ close }: { close: () => void }) => {
         const response = await customAxios({
           ...summaryApi.getUser,
         });
+        
 
         setuserImage(response.data.data.avatar);
       } catch (error: any) {
@@ -98,7 +99,7 @@ const UserMenu = ({ close }: { close: () => void }) => {
             <User size={30} className="text-neutral-400 m-4" />
           )}
         </div>
-        <div className="text-black flex flex-col gap-1">
+        <div className=" flex flex-col gap-1">
           <p className="font-bold">
             {user.firstName} {user.lastName}
           </p>
@@ -126,7 +127,7 @@ const UserMenu = ({ close }: { close: () => void }) => {
       >
         <Library size={20} /> My Library
       </Link>
-      {user.role === "ADMIN" && (
+      {user.role === "admin" && (
         <>
           <hr />
           <Link
@@ -138,7 +139,7 @@ const UserMenu = ({ close }: { close: () => void }) => {
         </>
       )}
       <hr />
-      {user.role === "ADMIN" && (
+      {user.role === "admin" && (
         <Link
           to={"/app/dashboard/create-admin"}
           className="text-sm font-bold rounded-sm p-2 hover:bg-neutral-300 flex items gap-2 text-red-500"

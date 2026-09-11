@@ -124,14 +124,14 @@ const Register: React.FC = () => {
               <label htmlFor="email" className="w-full">
                 Email Address:
               </label>
-              <div className="flex w-full items-center gap-2 input focus-within:border-[#103a3f] ">
+              <div className="flex w-full items-center gap-2 input">
                 <div className="text-neutral-600">
                   <Mail size={20} />
                 </div>
                 <input
                   type="email"
                   name="email"
-                  className="outline-none w-full"
+                  className="auth-input outline-none w-full bg-transparent"
                   placeholder={"You@Example.com"}
                   value={userData.email}
                   onChange={handleInputChange}
@@ -144,14 +144,14 @@ const Register: React.FC = () => {
               <label htmlFor="username" className="w-full">
                 Username:
               </label>
-              <div className="flex w-full items-center gap-2 input focus-within:border-[#103a3f] ">
+              <div className="flex w-full items-center gap-2 input">
                 <div className="text-neutral-600">
                   <User size={20} />
                 </div>
                 <input
                   type="text"
                   name="username"
-                  className="outline-none w-full"
+                  className="auth-input outline-none w-full bg-transparent"
                   placeholder="john_doe"
                   value={userData.username}
                   onChange={handleInputChange}
@@ -162,14 +162,14 @@ const Register: React.FC = () => {
               <label htmlFor="firstName" className="w-full">
                 First Name:
               </label>
-              <div className="flex w-full items-center gap-2 input focus-within:border-[#103a3f] ">
+              <div className="flex w-full items-center gap-2 input">
                 <div className="text-neutral-600">
                   <User size={20} />
                 </div>
                 <input
                   type="text"
                   name="firstName"
-                  className="outline-none w-full"
+                  className="auth-input outline-none w-full bg-transparent"
                   value={userData.firstName}
                   onChange={handleInputChange}
                   placeholder="John"
@@ -180,14 +180,14 @@ const Register: React.FC = () => {
               <label htmlFor="lastName" className="w-full">
                 Last Name:
               </label>
-              <div className="flex w-full items-center gap-2 input focus-within:border-[#103a3f] ">
+              <div className="flex w-full items-center gap-2 input">
                 <div className="text-neutral-600">
                   <UserCheck size={20} />
                 </div>
                 <input
                   type="text"
                   name="lastName"
-                  className="outline-none w-full"
+                  className="auth-input outline-none w-full bg-transparent"
                   value={userData.lastName}
                   onChange={handleInputChange}
                   placeholder="Doe"
@@ -198,14 +198,14 @@ const Register: React.FC = () => {
               <label htmlFor="password" className="w-full">
                 Password:
               </label>
-              <div className="flex w-full items-center gap-2 input focus-within:border-[#103a3f] ">
+              <div className="flex w-full items-center gap-2 input">
                 <div className="text-neutral-600">
                   <Lock size={20} />
                 </div>
                 <input
                   type={showPassword ? "text" : "password"}
                   name="password"
-                  className="outline-none w-full"
+                  className="auth-input outline-none w-full bg-transparent"
                   onChange={handleInputChange}
                   value={userData.password}
                 />
@@ -225,7 +225,7 @@ const Register: React.FC = () => {
                 <input
                   type={showConfirmPassword ? "text" : "password"}
                   name="confirmPassword"
-                  className="outline-none w-full"
+                  className="auth-input outline-none w-full bg-transparent"
                   onChange={(e) => setConfirmPassword(e.target.value)}
                   value={confirmPassword}
                 />

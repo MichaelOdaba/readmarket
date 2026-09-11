@@ -15,6 +15,7 @@ import ProductDetail from "../pages/ProductDetail";
 import CreateAdminPage from "../pages/CreateAdminPage";
 import EditProduct from "../pages/EditProduct";
 import ProtectedRoute from "./ProtectedRoute";
+import AdminRoute from "./AdminRoute";
 import LandingPage from "../pages/LandingPage";
 import ErrorPage from "../pages/ErrorPage";
 
@@ -79,12 +80,12 @@ const router = createBrowserRouter([
           },
           {
             path: "/app/dashboard/collection/add",
-            element: <AddCollectionPage />,
+            element: <AdminRoute element={<AddCollectionPage />} />,
           },
 
           {
             path: "/app/dashboard/create-admin",
-            element: <CreateAdminPage />,
+            element: <AdminRoute element={<CreateAdminPage />} />,
           },
         ],
       },

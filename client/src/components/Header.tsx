@@ -74,21 +74,34 @@ const Header = () => {
             >
               <BookOpen size={35} />
             </div>
-            <div
-              className="text-primary"
-              onClick={() => {
-                if (user._id) {
-                  setOpenMobileMenu(true);
-                } else {
-                  navigate("/app/login");
-                }
-              }}
-            >
-              {user._id ? (
-                <Menu size={35} className="text-primary" />
-              ) : (
-                <UserCircle2Icon size={35} />
-              )}
+            <div className="flex items-center gap-2 text-primary">
+              <button
+                type="button"
+                onClick={toggleTheme}
+                className="p-2 rounded-md hover:bg-neutral-300"
+                aria-label={`Switch to ${theme === "light" ? "dark" : "light"} mode`}
+                title={`Switch to ${theme === "light" ? "dark" : "light"} mode`}
+              >
+                {theme === "light" ? <Moon size={20} /> : <Sun size={20} />}
+              </button>
+              <button
+                type="button"
+                className="text-primary"
+                onClick={() => {
+                  if (user._id) {
+                    setOpenMobileMenu(true);
+                  } else {
+                    navigate("/app/login");
+                  }
+                }}
+                aria-label={user._id ? "Open menu" : "Sign in"}
+              >
+                {user._id ? (
+                  <Menu size={35} />
+                ) : (
+                  <UserCircle2Icon size={35} />
+                )}
+              </button>
             </div>
             {openMobileMenu && <UserMenuMobile close={closeMobileMenu} />}
           </div>
@@ -190,6 +203,15 @@ const Header = () => {
                 </div>
               ) : (
                 <div className="flex px-2 gap-4">
+                  <button
+                    type="button"
+                    onClick={toggleTheme}
+                    className="hover:bg-neutral-300 p-2 rounded-md cursor-pointer text-primary"
+                    aria-label={`Switch to ${theme === "light" ? "dark" : "light"} mode`}
+                    title={`Switch to ${theme === "light" ? "dark" : "light"} mode`}
+                  >
+                    {theme === "light" ? <Moon size={20} /> : <Sun size={20} />}
+                  </button>
                   <button
                     className="btn-secondary text-sm"
                     onClick={() => {

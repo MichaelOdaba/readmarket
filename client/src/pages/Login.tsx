@@ -84,7 +84,7 @@ const Login: React.FC = () => {
           <img
             src={banner}
             alt="read market banner"
-            className="object-cover h-full"
+            className="object-cover h-full mt-5"
           />
         </div>
         <div className="h-full flex items-center justify-center p-4">
@@ -113,14 +113,14 @@ const Login: React.FC = () => {
               <label htmlFor="email" className="w-full" autoFocus>
                 Email Address:
               </label>
-              <div className="flex w-full items-center gap-2 input focus-within:border-[#103a3f] ">
+              <div className="flex w-full items-center gap-2 input">
                 <div className="text-neutral-600">
                   <Mail size={20} />
                 </div>
                 <input
                   type="email"
                   name="email"
-                  className="outline-none w-full"
+                  className="auth-input outline-none w-full bg-transparent"
                   placeholder={"You@Example.com"}
                   onChange={handleInputChange}
                   value={userData.email}
@@ -133,7 +133,7 @@ const Login: React.FC = () => {
               <label htmlFor="password" className="w-full">
                 Password:
               </label>
-              <div className="flex w-full items-center gap-2 input focus-within:border-[#103a3f]">
+              <div className="flex w-full items-center gap-2 input">
                 <div className="text-neutral-600">
                   <LockIcon size={20} />
                 </div>
@@ -141,7 +141,7 @@ const Login: React.FC = () => {
                 <input
                   type={showPassword ? "text" : "password"}
                   name="password"
-                  className="w-full outline-none"
+                  className="auth-input w-full outline-none bg-transparent"
                   onChange={handleInputChange}
                   value={userData.password}
                 />

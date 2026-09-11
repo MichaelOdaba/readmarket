@@ -283,6 +283,34 @@ body {
     box-shadow: 0 0 0 3px var(--color-focus-ring);
   }
 
+  .input:focus-within {
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px var(--color-focus-ring);
+  }
+
+  .input > input {
+    background-color: transparent;
+    color: var(--color-text) !important;
+    caret-color: var(--color-text);
+    -webkit-text-fill-color: var(--color-text);
+  }
+
+  .input > input::placeholder {
+    color: var(--color-text-secondary);
+    opacity: 1;
+  }
+
+  .auth-input {
+    color: var(--color-text) !important;
+    -webkit-text-fill-color: var(--color-text) !important;
+    opacity: 1 !important;
+  }
+
+  [data-theme="dark"] .auth-input {
+    color: #edf7f6 !important;
+    -webkit-text-fill-color: #edf7f6 !important;
+  }
+
   .input::placeholder,
   .textarea::placeholder {
     color: var(--color-text-secondary);
