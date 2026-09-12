@@ -18,6 +18,7 @@ import ProtectedRoute from "./ProtectedRoute";
 import AdminRoute from "./AdminRoute";
 import LandingPage from "../pages/LandingPage";
 import ErrorPage from "../pages/ErrorPage";
+import CollectionsPage from "../pages/CollectionsPage";
 
 const router = createBrowserRouter([
   {
@@ -45,6 +46,10 @@ const router = createBrowserRouter([
       {
         path: "/app/search",
         element: <SearchPage />,
+      },
+      {
+        path: "/app/collections",
+        element: <CollectionsPage />,
       },
       {
         path: "/app/collection/:id",

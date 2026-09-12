@@ -24,7 +24,9 @@ const uploadToCloudinary = async (
   const formData = new FormData();
   formData.append("file", file);
   formData.append("upload_preset", cloudinaryUploadPreset);
-  formData.append("folder", `readmarket/${folder}`);
+  const uploadFolder = `readmarket/${folder}`;
+  formData.append("folder", uploadFolder);
+  formData.append("asset_folder", uploadFolder);
 
   const response = await fetch(
     `https://api.cloudinary.com/v1_1/${cloudinaryCloudName}/${resourceType}/upload`,

@@ -87,7 +87,7 @@ const CollectionPage = () => {
             {error || "Collection not found"}
           </p>
           <button
-            onClick={() => navigate("/")}
+            onClick={() => navigate("/app")}
             className="px-6 py-2 bg-primary text-white rounded-lg hover:bg-secondary transition-colors"
           >
             Back to Home

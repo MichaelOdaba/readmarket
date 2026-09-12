@@ -89,7 +89,7 @@ const Login: React.FC = () => {
         </div>
         <div className="h-full flex items-center justify-center p-4">
           <form
-            className="card bg-surface flex flex-col  text-center p-4 gap-3 w-full md:w-[80%] "
+            className="auth-form card bg-surface flex flex-col  text-center p-4 gap-3 w-full md:w-[80%] "
             onSubmit={handleSubmit}
           >
             <div>

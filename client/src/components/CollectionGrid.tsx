@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { ChevronRight } from "lucide-react";
+import { ChevronRight, ArrowRight } from "lucide-react";
 
 interface Collection {
   _id: string;
@@ -11,9 +11,10 @@ interface Collection {
 
 interface CollectionGridProps {
   collections: Collection[];
+  showAll?: boolean;
 }
 
-const CollectionGrid = ({ collections }: CollectionGridProps) => {
+const CollectionGrid = ({ collections, showAll = false }: CollectionGridProps) => {
   const navigate = useNavigate();
 
   if (!collections || collections.length === 0) {
@@ -33,27 +34,50 @@ const CollectionGrid = ({ collections }: CollectionGridProps) => {
     <section className="py-12 px-6">
       <div className="container mx-auto">
         {/* Section Header */}
-        <div className="flex justify-between items-center mb-8">
+        <div className="flex flex-col gap-4 sm:flex-row sm:justify-between sm:items-end mb-8">
           <div>
-            <h2 className="text-3xl font-bold text-primary mb-2">
+            <h2 className="text-2xl md:text-3xl font-bold text-primary mb-2">
               Explore Collections
             </h2>
             <p className="text-secondary-text">
               Browse our curated collection of ebooks and PDFs
             </p>
           </div>
+          {!showAll && collections.length > 8 && (
+            <button
+              type="button"
+              onClick={() => navigate("/app/collections")}
+              className="inline-flex items-center gap-2 text-sm font-semibold text-primary hover:text-secondary transition-colors self-start sm:self-auto"
+            >
+              View all <ArrowRight size={16} />
+            </button>
+          )}
         </div>
 
         {/* Collections Grid */}
-        <div className="grid grid-cols-2  sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          {collections.map((collection) => (
-            <div
+        <div
+          className={
+            showAll
+              ? "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
+              : "flex gap-4 overflow-x-auto pb-4 snap-x snap-mandatory sm:gap-6"
+          }
+        >
+          {(showAll ? collections : collections.slice(0, 8)).map((collection) => (
+            <article
               key={collection._id}
-              onClick={() => navigate(`/collection/${collection._id}`)}
-              className="group cursor-pointer bg-surface rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-all duration-300 transform hover:scale-105"
+              role="button"
+              tabIndex={0}
+              onClick={() => navigate(`/app/collection/${collection._id}`)}
+              onKeyDown={(event) => {
+                if (event.key === "Enter" || event.key === " ") {
+                  event.preventDefault();
+                  navigate(`/app/collection/${collection._id}`);
+                }
+              }}
+              className="group min-w-[calc(50%_-_0.75rem)] snap-start cursor-pointer bg-surface rounded-lg overflow-hidden shadow-md hover:shadow-lg focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary transition-all duration-300 sm:min-w-[calc(33.333%_-_1rem)]"
             >
               {/* Collection Image */}
-              <div className="relative h-48 bg-border overflow-hidden">
+              <div className="relative h-32 sm:h-48 bg-border overflow-hidden">
                 <img
                   src={collection.image}
                   alt={collection.name}
@@ -76,7 +100,7 @@ const CollectionGrid = ({ collections }: CollectionGridProps) => {
                   {collection.description}
                 </p>
               </div>
-            </div>
+            </article>
           ))}
         </div>
       </div>

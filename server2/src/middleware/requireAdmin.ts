@@ -9,6 +9,7 @@ const requireAdmin = async (
 ) => {
   const firebaseUid = req.user?.uid;
 
+ 
   if (!firebaseUid) {
     return res.status(401).json({ error: "Authentication required." });
   }

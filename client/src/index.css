@@ -87,6 +87,30 @@ body {
   transition: background-color 150ms ease, color 150ms ease;
 }
 
+.glass-header {
+  background-color: rgba(255, 255, 255, 0.82);
+  border-bottom: 1px solid rgba(227, 232, 234, 0.8);
+  box-shadow: 0 8px 24px rgba(16, 58, 63, 0.08);
+  -webkit-backdrop-filter: blur(16px) saturate(140%);
+  backdrop-filter: blur(16px) saturate(140%);
+}
+
+[data-theme="dark"] .glass-header {
+  background-color: rgba(23, 40, 44, 0.78);
+  border-bottom-color: rgba(53, 80, 87, 0.72);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.28);
+}
+
+@supports not ((backdrop-filter: blur(1px))) {
+  .glass-header {
+    background-color: #ffffff;
+  }
+
+  [data-theme="dark"] .glass-header {
+    background-color: #17282c;
+  }
+}
+
 .landing-reveal {
   opacity: 0;
   transform: translateY(16px);
@@ -375,8 +399,26 @@ body {
   }
 
   [data-theme="dark"] .auth-input {
-    color: #edf7f6 !important;
-    -webkit-text-fill-color: #edf7f6 !important;
+    color: #1a2b32 !important;
+    -webkit-text-fill-color: #1a2b32 !important;
+    color-scheme: light;
+  }
+
+  [data-theme="dark"] .auth-form .input {
+    background-color: #f4f2f2;
+    border-color: #e3e8ea;
+  }
+
+  [data-theme="dark"] .auth-form .auth-input {
+    background-color: transparent;
+    color: #1a2b32 !important;
+    caret-color: #1a2b32;
+    -webkit-text-fill-color: #1a2b32 !important;
+  }
+
+  [data-theme="dark"] .auth-form .auth-input::placeholder {
+    color: #6b7c85;
+    opacity: 1;
   }
 
   .input::placeholder,

@@ -184,10 +184,12 @@ const UserMenuMobile = ({ close }: { close: () => void }) => {
   };
 
   return (
-    <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-end sm:items-center justify-center">
+  //menu should be positioned at the bottom of the screen
+    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/30 backdrop-blur-sm">
+        {/** menu should be positioned at the bottom of the screen */}
       <div
         ref={menuRef}
-        className="bg-surface w-full sm:w-96 rounded-t-3xl sm:rounded-2xl shadow-2xl max-h-[90vh] overflow-y-auto flex flex-col"
+        className="bg-white w-full sm:w-96 rounded-t-lg sm:rounded-lg shadow-lg overflow-hidden max-h-[90vh] flex flex-col"
       >
         {/* Header with Close Button */}
         <div className="flex justify-between items-center p-6 border-b border-neutral-100 bg-gradient-to-r from-primary/5 to-secondary/5">
@@ -325,7 +327,7 @@ const UserMenuMobile = ({ close }: { close: () => void }) => {
         </div>
 
         {/* Menu Items */}
-        <div className="flex-1 divide-y divide-neutral-100">
+        <div className="divide-y divide-neutral-100">
           <Link
             to="/app/dashboard/upload"
             onClick={() => close()}

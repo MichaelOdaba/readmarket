@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ChevronLeft, Loader, Upload as UploadIcon } from "lucide-react";
+import { useRef } from "react";
 import customAxios from "../utils/customAxios";
 import summaryApi from "../services/SummaryAPI";
 import uploadToCloudinary from "../utils/cloudinaryUpload";
@@ -11,10 +12,9 @@ interface FormData {
   description: string;
 }
 
-
-
 const AddCollectionPage = () => {
   const navigate = useNavigate();
+  const imageInputRef = useRef<HTMLInputElement | null>(null);
   const [formData, setFormData] = useState<FormData>({
     name: "",
     image: "",
@@ -24,6 +24,7 @@ const AddCollectionPage = () => {
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [isUploadingImage, setIsUploadingImage] = useState(false);
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -39,6 +40,22 @@ const AddCollectionPage = () => {
     const file = e.target.files?.[0];
     if (!file) return;
 
+    setError(null);
+    setImagePreview(null);
+    setFormData((prev) => ({ ...prev, image: "" }));
+
+    if (!file.type.startsWith("image/")) {
+      setError("Please select an image file.");
+      e.target.value = "";
+      return;
+    }
+
+    if (file.size > 5 * 1024 * 1024) {
+      setError("Image is too large. The maximum size is 5MB.");
+      e.target.value = "";
+      return;
+    }
+
     // Show preview
     const reader = new FileReader();
     reader.onloadend = () => {
@@ -48,6 +65,7 @@ const AddCollectionPage = () => {
 
     // Upload to Cloudinary to a collection-specific folder
     try {
+      setIsUploadingImage(true);
       const uploadedImageUrl = await uploadToCloudinary(file, "collections");
       setFormData((prev) => ({
         ...prev,
@@ -61,12 +79,19 @@ const AddCollectionPage = () => {
         image: "",
       }));
       console.error("Cloudinary upload error:", err);
+    } finally {
+      setIsUploadingImage(false);
     }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
+
+    if (isUploadingImage) {
+      setError("Please wait for the image upload to finish.");
+      return;
+    }
 
     if (
       !formData.name.trim() ||
@@ -88,10 +113,13 @@ const AddCollectionPage = () => {
         setSuccess(true);
         setFormData({ name: "", image: "", description: "" });
         setImagePreview(null);
+        if (imageInputRef.current) {
+          imageInputRef.current.value = "";
+        }
 
         // Redirect to dashboard after 2 seconds
         setTimeout(() => {
-          navigate("/dashboard/library");
+          navigate("/app/dashboard/library");
         }, 2000);
       } else {
         setError(response.data.message || "Failed to create collection");
@@ -110,7 +138,7 @@ const AddCollectionPage = () => {
     <section className="container section">
       {/* Back Button */}
       <button
-        onClick={() => navigate("/dashboard")}
+        onClick={() => navigate("/app/dashboard/library")}
         className="flex items-center gap-2 text-primary hover:text-secondary mb-6 transition-colors"
       >
         <ChevronLeft size={20} />
@@ -118,7 +146,7 @@ const AddCollectionPage = () => {
       </button>
 
       <div className="max-w-2xl mx-auto">
-        <div className="bg-white rounded-lg shadow-md p-8">
+        <div className="bg-surface rounded-lg shadow-md p-8">
           <h1 className="text-3xl font-bold text-primary mb-2">
             Add New Collection
           </h1>
@@ -189,7 +217,7 @@ const AddCollectionPage = () => {
               >
                 Collection Image *
               </label>
-              <div className="border-2 border-dashed border-border rounded-lg p-8 text-center hover:border-primary transition-colors">
+              <div className="border-2 border-dashed border-border rounded-lg p-8 text-center hover:border-primary transition-colors bg-surface">
                 {imagePreview ? (
                   <div className="space-y-4">
                     <img
@@ -198,13 +226,15 @@ const AddCollectionPage = () => {
                       className="w-full h-48 object-cover rounded-lg"
                     />
                     <p className="text-sm text-secondary-text">
-                      {formData.image && "Image uploaded successfully"}
+                      {isUploadingImage
+                        ? "Uploading image..."
+                        : formData.image && "Image uploaded successfully"}
                     </p>
                     <label
                       htmlFor="image"
                       className="inline-block px-4 py-2 bg-primary text-white rounded-lg cursor-pointer hover:bg-secondary transition-colors"
                     >
-                      Change Image
+                      {isUploadingImage ? "Uploading..." : "Change Image"}
                     </label>
                   </div>
                 ) : (
@@ -215,7 +245,7 @@ const AddCollectionPage = () => {
                         Click to upload or drag and drop
                       </p>
                       <p className="text-xs text-secondary-text">
-                        PNG, JPG, GIF up to 10MB
+                        PNG, JPG, GIF up to 5MB
                       </p>
                     </div>
                     <label
@@ -227,10 +257,12 @@ const AddCollectionPage = () => {
                   </div>
                 )}
                 <input
+                  ref={imageInputRef}
                   type="file"
                   id="image"
                   accept="image/*"
                   onChange={handleImageChange}
+                  disabled={isUploadingImage || isLoading}
                   className="hidden"
                   required={!formData.image}
                 />
@@ -244,7 +276,7 @@ const AddCollectionPage = () => {
             <div className="flex gap-4">
               <button
                 type="submit"
-                disabled={isLoading}
+                disabled={isLoading || isUploadingImage || success}
                 className="flex-1 px-6 py-3 bg-accent text-white rounded-lg font-medium hover:bg-opacity-90 disabled:opacity-50 disabled:cursor-not-allowed transition-all flex items-center justify-center gap-2"
               >
                 {isLoading ? (
@@ -258,7 +290,8 @@ const AddCollectionPage = () => {
               </button>
               <button
                 type="button"
-                onClick={() => navigate("/dashboard")}
+                onClick={() => navigate("/app/dashboard/library")}
+                disabled={isLoading || isUploadingImage}
                 className="flex-1 px-6 py-3 bg-border text-primary-text rounded-lg font-medium hover:bg-opacity-80 transition-colors"
               >
                 Cancel

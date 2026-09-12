@@ -19,14 +19,12 @@ import * as authService from "../services/authService";
 import type { UserState } from "../store/slice/userSlice";
 import { auth } from "../config/firebase";
 import { useState } from "react";
-import { useTheme } from "../hooks/useTheme";
 
 const UserMenu = ({ close }: { close: () => void }) => {
   const user = useSelector((state: { user: UserState }) => state?.user);
   const navigate = useNavigate();
   const menuRef = useRef<HTMLDivElement | null>(null);
   const [userImage, setuserImage] = useState("");
-  const { theme, toggleTheme } = useTheme();
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -116,23 +114,6 @@ const UserMenu = ({ close }: { close: () => void }) => {
           </button>
         </div>
       </div>
-      <hr />
-      <button
-        type="button"
-        onClick={toggleTheme}
-        role="switch"
-        aria-checked={theme === "dark"}
-        aria-label="Toggle dark mode"
-        className="flex items-center justify-between text-sm font-bold rounded-sm p-2 hover:bg-neutral-300"
-      >
-        <span>Dark mode</span>
-        <span
-          aria-hidden="true"
-          className={`theme-switch ${theme === "dark" ? "theme-switch-on" : ""}`}
-        >
-          <span className="theme-switch-thumb" />
-        </span>
-      </button>
       <hr />
       <Link
         to={"/app/dashboard/upload"}

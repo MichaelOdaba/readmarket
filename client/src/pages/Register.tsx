@@ -86,16 +86,16 @@ const Register: React.FC = () => {
   return (
     <section className={"container section"}>
       <div className="grid grid-cols-1 lg:grid-cols-2 items-center h-full ">
-        <div className=" h-70  flex justify-center lg:h-[80%]">
+        <div className=" h-70  lg:h-full flex justify-center ">
           <img
             src={banner}
             alt="read market banner"
-            className="object-cover h-full"
+            className="object-cover lg:h-100 mt-5"
           />
         </div>
         <div className="h-full flex items-center justify-center p-4">
           <form
-            className="card bg-surface flex flex-col  text-center p-4 gap-3 w-full md:w-[80%] "
+            className="auth-form card bg-surface flex flex-col  text-center p-4 gap-3 w-full md:w-[80%] "
             onSubmit={handleSubmit}
           >
             <div>

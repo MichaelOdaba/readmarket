@@ -62,8 +62,9 @@ const Header = () => {
   }, [user._id]);
 
   return (
-    <header>
-      <div className="bg-white shadow-md h-17 flex justify-between items-center px-6 py-2 sticky md:fixed z-10 top-0 w-full">
+    <>
+      <header>
+      <div className="glass-header h-17 flex justify-between items-center px-6 py-2 sticky md:fixed z-10 top-0 w-full">
         {isMobile ? (
           <div className="flex justify-between items-center w-full">
             <div
@@ -102,7 +103,6 @@ const Header = () => {
                 )}
               </button>
             </div>
-            {openMobileMenu && <UserMenuMobile close={closeMobileMenu} />}
           </div>
         ) : (
           <>
@@ -246,7 +246,9 @@ const Header = () => {
           <Search />
         </div>
       )}
-    </header>
+      </header>
+      {openMobileMenu && <UserMenuMobile close={closeMobileMenu} />}
+    </>
   );
 };
 

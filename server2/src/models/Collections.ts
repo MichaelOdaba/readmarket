@@ -8,5 +8,5 @@ const collectionSchema = new Schema<Collection>({
   description: { type: String, required: true },
 }, { timestamps: true });
 
-const Collection = model<Collection>("Collection", collectionSchema);
-export default Collection;
+const CollectionModel = model<Collection>("Collection", collectionSchema);
+export default CollectionModel;

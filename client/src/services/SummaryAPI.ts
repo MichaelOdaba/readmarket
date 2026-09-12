@@ -37,7 +37,7 @@ const summaryApi = {
 
   // Collection APIs
   getCollections: {
-    url: "/api/collection",
+    url: "/api/collection/get-collections",
     method: "get",
   },
   getCollectionById: (id: string) => ({
@@ -53,7 +53,7 @@ const summaryApi = {
     method: "get",
   }),
   addCollection: {
-    url: "/api/collection/add",
+    url: "/api/collection/add-collection",
     method: "post",
   },
   updateCollection: (id: string) => ({
