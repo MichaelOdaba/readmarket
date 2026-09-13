@@ -63,8 +63,8 @@ const Header = () => {
 
   return (
     <>
-      <header>
-      <div className="glass-header h-17 flex justify-between items-center px-6 py-2 sticky md:fixed z-10 top-0 w-full">
+      <header className="fixed inset-x-0 top-0 z-10">
+      <div className="glass-header h-17 flex justify-between items-center py-6 px-2 w-full">
         {isMobile ? (
           <div className="flex justify-between items-center w-full">
             <div
@@ -75,6 +75,7 @@ const Header = () => {
             >
              <img src={logo} alt="Read Market Logo" className="h-10 w-auto" />
             </div>
+            <Search compact />
             <div className="flex items-center gap-2 text-primary">
               <button
                 type="button"
@@ -236,16 +237,6 @@ const Header = () => {
           </>
         )}
       </div>
-      {isMobile && (
-        <div
-          className="w-full px-4"
-          onClick={() => {
-            navigate("/app/search");
-          }}
-        >
-          <Search />
-        </div>
-      )}
       </header>
       {openMobileMenu && <UserMenuMobile close={closeMobileMenu} />}
     </>

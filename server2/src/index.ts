@@ -9,6 +9,7 @@ import { UserModel } from "./models/User.js";
 import notificationRouter from "./routes/notification.routes.js";
 import userRouter from "./routes/User.routes.js";
 import collectionsRouter from "./routes/collections.routes.js";
+import productsRouter from "./routes/products.routes.js";
 
 dotenv.config();
 //initialize firebase admin sdk
@@ -47,6 +48,7 @@ app.get("/test-db", async (req, res) => {
 app.use("/api/user", userRouter);
 app.use("/api/notification", notificationRouter);
 app.use("/api/collection", collectionsRouter);
+app.use("/api/product", productsRouter);
 
 const PORT = process.env.PORT || 3000;
 //connect to database here if needed

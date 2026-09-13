@@ -37,7 +37,7 @@ function App() {
         <Toaster theme={theme} />
 
         <Header />
-        <main className="h-auto w-full min-h-screen md:mt-16 ">
+        <main className="h-auto w-full min-h-screen pt-20">
           <Outlet />
         </main>
         <Footer />

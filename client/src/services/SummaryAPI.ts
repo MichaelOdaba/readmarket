@@ -41,7 +41,7 @@ const summaryApi = {
     method: "get",
   },
   getCollectionById: (id: string) => ({
-    url: `/api/collection/${id}`,
+    url: `/api/collection/get-collection/${id}`,
     method: "get",
   }),
   getCollectionProducts: (
@@ -67,20 +67,20 @@ const summaryApi = {
 
   // Product APIs
   getAllProducts: {
-    url: "/api/products",
+    url: "/api/product/get-products",
     method: "get",
   },
   getProductById: (id: string) => ({
-    url: `/api/products/${id}`,
+    url: `/api/product/${id}`,
     method: "get",
   }),
   uploadProduct: {
-    url: "/api/products/upload",
+    url: "/api/product/upload-product",
     method: "post",
   },
   endpoints: {
     downloadProduct: (id: string) => ({
-      url: `/api/products/${id}/download`,
+      url: `/api/product/${id}/download`,
       method: "get",
     }),
   },

@@ -125,11 +125,60 @@ body {
   }
 }
 
+@keyframes collection-card-reveal {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes collection-track-peek {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  50% {
+    transform: translateX(-10px);
+  }
+}
+
+.collection-card {
+  animation: collection-card-reveal 500ms cubic-bezier(0.22, 1, 0.36, 1)
+    both;
+}
+
+.collection-card:nth-child(2) {
+  animation-delay: 70ms;
+}
+
+.collection-card:nth-child(3) {
+  animation-delay: 140ms;
+}
+
+.collection-card:nth-child(4) {
+  animation-delay: 210ms;
+}
+
+@media (max-width: 639px) {
+  .collection-track {
+    animation: collection-track-peek 900ms ease-out 700ms both;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .landing-reveal {
     animation: none;
     opacity: 1;
     transform: none;
+  }
+
+  .collection-track,
+  .collection-card {
+    animation: none;
   }
 }
 

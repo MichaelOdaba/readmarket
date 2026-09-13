@@ -4,9 +4,10 @@ import {
   Github,
   Instagram,
   Twitter,
-  BookOpen,
+  
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import logo from "../assets/read_market_logo_transparent.png";
 
 const Footer = () => {
   const navigate = useNavigate();
@@ -31,12 +32,7 @@ const Footer = () => {
           {/* Brand Section */}
           <div className="col-span-2 md:col-span-1">
             <div className="flex gap-2 items-center mb-4">
-              <BookOpen className="text-accent" size={28} />
-              <div>
-                <p className="font-bold text-primary text-lg">
-                  READ <span className="text-secondary">MARKET</span>
-                </p>
-              </div>
+              <img src={logo} alt="Read Market Logo" className="h-10 w-auto" />
             </div>
             <p className="text-sm text-neutral-600 leading-relaxed">
               Your premier platform for discovering and sharing educational

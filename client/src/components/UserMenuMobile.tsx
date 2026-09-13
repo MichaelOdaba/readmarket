@@ -189,7 +189,7 @@ const UserMenuMobile = ({ close }: { close: () => void }) => {
         {/** menu should be positioned at the bottom of the screen */}
       <div
         ref={menuRef}
-        className="bg-white w-full sm:w-96 rounded-t-lg sm:rounded-lg shadow-lg overflow-hidden max-h-[90vh] flex flex-col"
+        className="bg-white w-full sm:w-96 rounded-t-lg sm:rounded-lg shadow-lg max-h-[90dvh] overflow-y-auto overscroll-contain flex flex-col"
       >
         {/* Header with Close Button */}
         <div className="flex justify-between items-center p-6 border-b border-neutral-100 bg-gradient-to-r from-primary/5 to-secondary/5">
@@ -377,7 +377,7 @@ const UserMenuMobile = ({ close }: { close: () => void }) => {
         </div>
 
         {/* Logout Button */}
-        <div className="p-4 border-t border-neutral-100 bg-neutral-50">
+        <div className="p-4 border-t border-neutral-100 bg-transparent">
           <button
             onClick={() => {
               handleLogout();

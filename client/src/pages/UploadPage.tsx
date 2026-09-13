@@ -11,9 +11,8 @@ interface ProductForm {
   more_details: string;
   price: string;
   collection: string;
-  images: File[];
-  previewUrls: string[];
-  imageUrls: string[];
+  coverImageUrl: string;
+  coverImagePreviewUrl: string;
   publish: boolean;
   productFile: File | null;
   fileUrl: string;
@@ -31,9 +30,8 @@ const UploadPage = () => {
     more_details: "",
     price: "",
     collection: "",
-    images: [],
-    previewUrls: [],
-    imageUrls: [],
+    coverImageUrl: "",
+    coverImagePreviewUrl: "",
     publish: true,
     productFile: null,
     fileUrl: "",
@@ -42,8 +40,9 @@ const UploadPage = () => {
   const [isFree, setIsFree] = useState(false);
   const [collections, setCollections] = useState<Collection[]>([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [uploadingImages, setUploadingImages] = useState(false);
+  const [uploadingImage, setUploadingImage] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [imageFile, setImageFile] = useState<File | null>(null);
 
   // Fetch collections on mount
   useEffect(() => {
@@ -91,8 +90,8 @@ const UploadPage = () => {
     if (!form.collection) {
       newErrors.collection = "Please select a collection";
     }
-    if (form.imageUrls.length === 0 && form.images.length === 0) {
-      newErrors.images = "Please upload at least one image";
+    if (!form.coverImagePreviewUrl) {
+      newErrors.coverImagePreviewUrl = "Please upload a cover image";
     }
     if (!form.fileUrl && !form.productFile) {
       newErrors.productFile = "Please upload the resource file";
@@ -102,70 +101,39 @@ const UploadPage = () => {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleImageSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const selectedFiles = e.target.files;
-    console.log(selectedFiles);
+const handleImageSelect = (
+  e: React.ChangeEvent<HTMLInputElement>
+) => {
+  const file = e.target.files?.[0];
 
-    if (!selectedFiles) return;
+  if (!file) return;
 
-    const validFiles: File[] = [];
-    const validPreviews: string[] = [];
-    const validationErrors: string[] = [];
+  if (!file.type.startsWith("image/")) {
+    toast.error("Please select an image file");
+    return;
+  }
 
-    Array.from(selectedFiles).forEach((file) => {
-      if (!file.type.startsWith("image/")) {
-        validationErrors.push(`${file.name} is not an image`);
-        return;
-      }
-      if (file.size > 5 * 1024 * 1024) {
-        validationErrors.push(`${file.name} is too large (max 5MB)`);
-        return;
-      }
-      validFiles.push(file);
-      validPreviews.push(URL.createObjectURL(file));
-    });
+  if (file.size > 5 * 1024 * 1024) {
+    toast.error("Image is too large (max 5MB)");
+    return;
+  }
 
-    if (validationErrors.length > 0) {
-      toast.error(validationErrors.join(", "));
-    }
+  // Keep the actual file in memory
+  setImageFile(file);
 
-    setForm((prev) => ({
-      ...prev,
-      images: [...prev.images, ...validFiles],
-      previewUrls: [...prev.previewUrls, ...validPreviews],
-    }));
-    console.log(form);
-  };
+  // Create a temporary local preview
+  const previewUrl = URL.createObjectURL(file);
 
-  const uploadImages = async (): Promise<string[] | null> => {
-    if (form.images.length === 0) return [];
-    setUploadingImages(true);
-    try {
-      const uploadPromises = form.images.map((file) =>
-        uploadToCloudinary(file, "productImages")
-      );
-      const uploadedUrls = await Promise.all(uploadPromises);
+  setForm((prev) => ({
+    ...prev,
+    coverImagePreviewUrl: previewUrl,
+  }));
 
-      // Revoke object URLs to free memory
-      form.previewUrls.forEach((url) => URL.revokeObjectURL(url));
-
-      setForm((prev) => ({
-        ...prev,
-        imageUrls: [...prev.imageUrls, ...uploadedUrls],
-        images: [],
-        previewUrls: [],
-      }));
-      console.log(form);
-
-      return uploadedUrls;
-    } catch (error) {
-      console.error("Image upload failed:", error);
-      toast.error("Failed to upload images. Please try again.");
-      return null;
-    } finally {
-      setUploadingImages(false);
-    }
-  };
+  setErrors((prev) => ({
+    ...prev,
+    coverImagePreviewUrl: "",
+  }));
+};
 
   const handleProductFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = e.target.files?.[0];
@@ -209,7 +177,7 @@ const UploadPage = () => {
     if (!form.productFile) return null;
 
     try {
-      const fileUrl = await uploadToCloudinary(form.productFile, "raw");
+      const fileUrl = await uploadToCloudinary(form.productFile, "productFiles", "raw");
       setForm((prev) => ({
         ...prev,
         fileUrl: fileUrl,
@@ -232,87 +200,79 @@ const UploadPage = () => {
     setErrors((prev) => ({ ...prev, productFile: "" }));
   };
 
-  const removeImage = (index: number) => {
+  const removeCoverImage = () => {
+    if (form.coverImagePreviewUrl) {
+      URL.revokeObjectURL(form.coverImagePreviewUrl);
+    }
     setForm((prev) => ({
       ...prev,
-      imageUrls: prev.imageUrls.filter((_, i) => i !== index),
+      coverImagePreviewUrl: "",
     }));
+    setErrors((prev) => ({ ...prev, coverImageUrl: "" }));
   };
 
-  const removeFile = (index: number) => {
-    URL.revokeObjectURL(form.previewUrls[index]);
-    setForm((prev) => ({
-      ...prev,
-      images: prev.images.filter((_, i) => i !== index),
-      previewUrls: prev.previewUrls.filter((_, i) => i !== index),
-    }));
-  };
+const handleSubmit = async (
+  e: React.FormEvent<HTMLFormElement>
+) => {
+  e.preventDefault();
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  if (!validateForm()) return;
 
-    if (!validateForm()) return;
+  setIsLoading(true);
 
-    let finalImageUrls = form.imageUrls;
-    let finalFileUrl = form.fileUrl;
+  try {
+    // 1. Upload the actual image file to Cloudinary
+    let uploadedImageUrl = "";
 
-    if (form.images.length > 0) {
-      const uploaded = await uploadImages();
-      if (!uploaded) return;
-      finalImageUrls = [...form.imageUrls, ...uploaded];
+    if (imageFile) {
+      uploadedImageUrl = await uploadToCloudinary(
+        imageFile,
+        "productImages",
+        "image"
+      );
+      setUploadingImage(true);
     }
 
-    // Upload product file if exists and not already uploaded
+    // 2. Upload product file if necessary
+    let finalFileUrl = form.fileUrl;
+
     if (form.productFile && !finalFileUrl) {
       const uploadedFileUrl = await uploadProductFile();
+
       if (!uploadedFileUrl) return;
+
       finalFileUrl = uploadedFileUrl;
     }
 
-    setIsLoading(true);
-    console.log("finalImageUrls being sent:", finalImageUrls);
-    console.log("fileUrl being sent:", finalFileUrl);
-    try {
-      const response = await customAxios({
-        ...summaryApi.uploadProduct,
-        data: {
-          name: form.name.trim(),
-          description: form.description.trim(),
-          more_details: form.more_details.trim(),
-          price: parseFloat(form.price),
-          collection: form.collection,
-          image: finalImageUrls,
-          fileUrl: finalFileUrl,
-          publish: form.publish,
-        },
-      });
+    // 3. Now send everything to your backend
+    const response = await customAxios({
+      ...summaryApi.uploadProduct,
+      data: {
+        name: form.name.trim(),
+        description: form.description.trim(),
+        more_details: form.more_details.trim(),
+        price: parseFloat(form.price),
+        collectionId: form.collection,
+        coverImageUrl: uploadedImageUrl,
+        fileUrl: finalFileUrl,
+        publish: form.publish,
+      },
+    });
 
-      if (response.data.success) {
-        toast.success("Product uploaded successfully! 🎉");
-        setForm({
-          name: "",
-          description: "",
-          more_details: "",
-          price: "",
-          collection: "",
-          images: [],
-          previewUrls: [],
-          imageUrls: [],
-          publish: true,
-          productFile: null,
-          fileUrl: "",
-        });
-        setErrors({});
-        setIsFree(false);
-      }
-    } catch (error: any) {
-      console.error("Upload error:", error);
-      toast.error(error.response?.data?.message || "Failed to upload product");
-    } finally {
-      setIsLoading(false);
+    if (response.data.success) {
+      toast.success("Product uploaded successfully!");
     }
-  };
 
+  } catch (error: any) {
+    console.error("Upload error:", error);
+    toast.error(
+      error.response?.data?.message ||
+      "Failed to upload product"
+    );
+  } finally {
+    setIsLoading(false);
+  }
+};
   return (
     <div className="min-h-screen bg-neutral py-8">
       <div className="max-w-2xl mx-auto px-4 md:px-0">
@@ -581,13 +541,11 @@ const UploadPage = () => {
             )}
           </div>
 
-          {/* Image Upload */}
+          {/* Cover Image Upload */}
           <div>
             <label className="block text-sm font-semibold text-primary mb-2">
-              Product Images <span className="text-red-500">*</span>
+              Cover Image <span className="text-red-500">*</span>
             </label>
-
-            {/* Upload Area */}
             <label
               htmlFor="image-input"
               className="flex flex-col items-center border-2 border-dashed border-neutral-300 rounded-lg p-8 text-center cursor-pointer hover:border-primary transition"
@@ -595,92 +553,47 @@ const UploadPage = () => {
               <input
                 id="image-input"
                 type="file"
-                multiple
                 accept="image/*"
                 onChange={handleImageSelect}
-                disabled={uploadingImages}
+                disabled={uploadingImage || isLoading}
                 className="hidden"
               />
-              <Upload className="mx-auto mb-3 text-secondary" size={32} />
-              <p className="text-primary font-semibold mb-1">
-                Click to upload or drag and drop
-              </p>
-              <p className="text-sm text-secondary">
-                PNG, JPG, JPEG up to 5MB each
-              </p>
+              {form.coverImagePreviewUrl ? (
+                <div className="relative w-full max-w-sm">
+                  <img
+                    src={form.coverImagePreviewUrl}
+                    alt="Product cover preview"
+                    className="h-48 w-full rounded-lg object-cover"
+                  />
+                  <button
+                    type="button"
+                    onClick={(event) => {
+                      event.preventDefault();
+                      removeCoverImage();
+                    }}
+                    className="absolute right-2 top-2 rounded-full bg-red-500 p-2 text-white"
+                    aria-label="Remove cover image"
+                  >
+                    <X size={16} />
+                  </button>
+                </div>
+              ) : (
+                <>
+                  <Upload className="mx-auto mb-3 text-secondary" size={32} />
+                  <p className="text-primary font-semibold mb-1">
+                    Click to upload a cover image
+                  </p>
+                  <p className="text-sm text-secondary">PNG, JPG, or JPEG up to 5MB</p>
+                </>
+              )}
             </label>
-
-            {errors.images && (
-              <p className="text-red-500 text-sm mt-2">{errors.images}</p>
+            {uploadingImage && (
+              <p className="mt-2 flex items-center gap-2 text-sm text-secondary">
+                <Loader className="animate-spin" size={16} /> Uploading cover image...
+              </p>
             )}
-
-            {/* Uploaded Images */}
-            {form.imageUrls.length > 0 && (
-              <div className="mt-4">
-                <p className="text-sm font-semibold text-primary mb-2">
-                  Uploaded Images ({form.imageUrls.length})
-                </p>
-                <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                  {form.imageUrls.map((url, index) => (
-                    <div key={index} className="relative group">
-                      <img
-                        src={url}
-                        alt={`Product ${index + 1}`}
-                        className="w-full h-32 object-cover rounded-lg border border-neutral-200"
-                      />
-                      <button
-                        type="button"
-                        onClick={() => removeImage(index)}
-                        className="absolute top-1 right-1 bg-red-500 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition"
-                        aria-label="Remove image"
-                      >
-                        <X size={16} />
-                      </button>
-                      <CheckCircle
-                        className="absolute bottom-1 right-1 text-green-500"
-                        size={20}
-                      />
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {/* Pending Files with Thumbnail Preview */}
-            {form.images.length > 0 && (
-              <div className="mt-4">
-                <p className="text-sm font-semibold text-primary mb-2">
-                  Pending Upload ({form.images.length})
-                </p>
-                <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                  {form.images.map((file, index) => (
-                    <div key={index} className="relative group">
-                      <img
-                        src={form.previewUrls[index]}
-                        alt={file.name}
-                        className="w-full h-32 object-cover rounded-lg border border-neutral-200 opacity-70"
-                      />
-                      <button
-                        type="button"
-                        onClick={() => removeFile(index)}
-                        className="absolute top-1 right-1 bg-red-500 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition"
-                        aria-label="Remove file"
-                      >
-                        <X size={16} />
-                      </button>
-                      <div className="absolute bottom-0 left-0 right-0 bg-black/50 rounded-b-lg px-2 py-1">
-                        <p className="text-white text-xs truncate">
-                          {file.name}
-                        </p>
-                      </div>
-                      <Loader
-                        className="absolute top-1 left-1 animate-spin text-white"
-                        size={16}
-                      />
-                    </div>
-                  ))}
-                </div>
-              </div>
+            {errors.coverImageUrl && (
+              <p className="text-red-500 text-sm mt-2">{errors.coverImageUrl}</p>
             )}
           </div>
 
@@ -708,13 +621,13 @@ const UploadPage = () => {
           {/* Submit Button */}
           <button
             type="submit"
-            disabled={isLoading || uploadingImages}
+            disabled={isLoading || uploadingImage}
             className="w-full btn-primary py-3 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            {isLoading || uploadingImages ? (
+            {isLoading || uploadingImage ? (
               <>
                 <Loader className="animate-spin" size={20} />
-                {uploadingImages ? "Uploading Images..." : "Uploading..."}
+                {uploadingImage ? "Uploading Image..." : "Uploading..."}
               </>
             ) : (
               <>

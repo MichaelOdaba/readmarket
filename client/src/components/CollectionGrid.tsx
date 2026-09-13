@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
-import { ChevronRight, ArrowRight } from "lucide-react";
+import { ChevronLeft, ChevronRight, ArrowRight } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
 
 interface Collection {
   _id: string;
@@ -16,6 +17,40 @@ interface CollectionGridProps {
 
 const CollectionGrid = ({ collections, showAll = false }: CollectionGridProps) => {
   const navigate = useNavigate();
+  const trackRef = useRef<HTMLDivElement | null>(null);
+  const [canScrollBack, setCanScrollBack] = useState(false);
+  const [canScrollForward, setCanScrollForward] = useState(false);
+
+  useEffect(() => {
+    const track = trackRef.current;
+    if (!track || showAll) return;
+
+    const updateScrollState = () => {
+      setCanScrollBack(track.scrollLeft > 4);
+      setCanScrollForward(
+        track.scrollLeft + track.clientWidth < track.scrollWidth - 4
+      );
+    };
+
+    updateScrollState();
+    track.addEventListener("scroll", updateScrollState, { passive: true });
+    window.addEventListener("resize", updateScrollState);
+
+    return () => {
+      track.removeEventListener("scroll", updateScrollState);
+      window.removeEventListener("resize", updateScrollState);
+    };
+  }, [collections.length, showAll]);
+
+  const scrollCollections = (direction: "back" | "forward") => {
+    const track = trackRef.current;
+    if (!track) return;
+
+    track.scrollBy({
+      left: direction === "forward" ? track.clientWidth * 0.85 : -track.clientWidth * 0.85,
+      behavior: "smooth",
+    });
+  };
 
   if (!collections || collections.length === 0) {
     return (
@@ -39,9 +74,10 @@ const CollectionGrid = ({ collections, showAll = false }: CollectionGridProps) =
             <h2 className="text-2xl md:text-3xl font-bold text-primary mb-2">
               Explore Collections
             </h2>
-            <p className="text-secondary-text">
+            <p className="text-sm md:text-md text-primary">
               Browse our curated collection of ebooks and PDFs
             </p>
+           
           </div>
           {!showAll && collections.length > 8 && (
             <button
@@ -56,10 +92,11 @@ const CollectionGrid = ({ collections, showAll = false }: CollectionGridProps) =
 
         {/* Collections Grid */}
         <div
+          ref={trackRef}
           className={
             showAll
               ? "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
-              : "flex gap-4 overflow-x-auto pb-4 snap-x snap-mandatory sm:gap-6"
+              : "collection-track flex gap-4 overflow-x-auto pb-4 snap-x snap-mandatory sm:gap-6"
           }
         >
           {(showAll ? collections : collections.slice(0, 8)).map((collection) => (
@@ -74,7 +111,7 @@ const CollectionGrid = ({ collections, showAll = false }: CollectionGridProps) =
                   navigate(`/app/collection/${collection._id}`);
                 }
               }}
-              className="group min-w-[calc(50%_-_0.75rem)] snap-start cursor-pointer bg-surface rounded-lg overflow-hidden shadow-md hover:shadow-lg focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary transition-all duration-300 sm:min-w-[calc(33.333%_-_1rem)]"
+              className="collection-card group min-w-[calc(100vw-3.5rem)] snap-start cursor-pointer bg-surface rounded-lg overflow-hidden shadow-md hover:shadow-lg focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary transition-all duration-300 sm:min-w-[calc(33.333%_-_1rem)]"
             >
               {/* Collection Image */}
               <div className="relative h-32 sm:h-48 bg-border overflow-hidden">
@@ -103,6 +140,36 @@ const CollectionGrid = ({ collections, showAll = false }: CollectionGridProps) =
             </article>
           ))}
         </div>
+
+        {!showAll && collections.length > 1 && (
+          <div className="mt-4 flex items-center justify-between">
+            <p className="text-xs text-secondary-text sm:hidden">
+              Swipe or use the arrows to explore
+            </p>
+            <div className="ml-auto flex items-center gap-2">
+              <button
+                type="button"
+                onClick={() => scrollCollections("back")}
+                disabled={!canScrollBack}
+                className="rounded-full border border-border p-2 text-primary transition hover:bg-surface-raised disabled:cursor-not-allowed disabled:opacity-40"
+                aria-label="Previous collection"
+                title="Previous collection"
+              >
+                <ChevronLeft size={18} />
+              </button>
+              <button
+                type="button"
+                onClick={() => scrollCollections("forward")}
+                disabled={!canScrollForward}
+                className="rounded-full border border-border p-2 text-primary transition hover:bg-surface-raised disabled:cursor-not-allowed disabled:opacity-40"
+                aria-label="Next collection"
+                title="Next collection"
+              >
+                <ChevronRight size={18} />
+              </button>
+            </div>
+          </div>
+        )}
       </div>
     </section>
   );

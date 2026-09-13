@@ -13,7 +13,14 @@ export const getAllCollections = async (req: Request, res: Response) => {
 
 //get a single collection by id
 export const getCollectionById = async (req: Request, res: Response) => {
-  try {} catch (error) {
+  try {
+    const {id} = req.params;
+    const collection = await CollectionModel.findById(id);
+    if (!collection) {
+      return res.status(404).json({ message: "Collection not found" });
+    }
+    res.status(200).json({ message: "Collection retrieved successfully", success: true, data: collection });
+  } catch (error) {
     res.status(500).json({ message: "Server error" });
   }
 };
@@ -38,3 +45,13 @@ const { name, image, description } = req.body;
     res.status(500).json({ message: "Server error" });
   }
 };
+//edit collection controller
+export const editCollection = async (req: Request, res: Response) => {
+  const { id } = req.params;
+  try {
+    
+  } catch (error) {
+    return res.status(500).json({ message: "Server error" });
+  }
+  
+}
