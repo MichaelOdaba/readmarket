@@ -16,7 +16,7 @@ interface Collection {
 interface Product {
   _id: string;
   name: string;
-  image: string[];
+  coverImageUrl: string;
   price: string;
   discount?: number;
   description: string;
@@ -155,7 +155,7 @@ const CollectionPage = () => {
                   {/* Product Image */}
                   <div className="h-48 bg-border overflow-hidden">
                     <img
-                      src={product.image[0]}
+                      src={product.coverImageUrl}
                       alt={product.name}
                       className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
                     />

@@ -6,6 +6,7 @@ import CollectionGrid from "../components/CollectionGrid";
 import customAxios from "../utils/customAxios";
 import summaryApi from "../services/SummaryAPI";
 import { Loader } from "lucide-react";
+// import ProductsGrid from "../components/ProductsGrid";
 
 interface Collection {
   _id: string;
@@ -13,10 +14,20 @@ interface Collection {
   image: string;
   description: string;
 }
+// interface Product {
+//   _id: string;
+//   name: string;
+//   coverImageUrl: string;
+//   price: number;
+//   discount?: number;
+//   description: string;
+//   collectionId: string | null;
+// }
 
 const Home = () => {
   const [isMobile] = useMobile();
   const [collections, setCollections] = useState<Collection[]>([]);
+  // const [products, setProducts] = useState<Product[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -35,8 +46,14 @@ const Home = () => {
       }
     };
 
+      //fetch products
+
+
     fetchCollections();
   }, []);
+
+
+
 
   return (
     <div>
@@ -58,6 +75,9 @@ const Home = () => {
 
       {/* Collections Section */}
       {!isLoading && <CollectionGrid collections={collections} />}
+
+      {/**products available */}
+      {/* {isLoading && <ProductsGrid products={products} />} */}
     </div>
   );
 };

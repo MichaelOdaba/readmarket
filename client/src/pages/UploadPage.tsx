@@ -4,6 +4,7 @@ import { toast } from "sonner";
 import customAxios from "../utils/customAxios";
 import uploadToCloudinary from "../utils/cloudinaryUpload";
 import summaryApi from "../services/SummaryAPI";
+import { useNavigate } from "react-router-dom";
 
 interface ProductForm {
   name: string;
@@ -43,6 +44,7 @@ const UploadPage = () => {
   const [uploadingImage, setUploadingImage] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [imageFile, setImageFile] = useState<File | null>(null);
+  const navigate = useNavigate();
 
   // Fetch collections on mount
   useEffect(() => {
@@ -262,6 +264,7 @@ const handleSubmit = async (
     if (response.data.success) {
       toast.success("Product uploaded successfully!");
     }
+   navigate("/app/products");
 
   } catch (error: any) {
     console.error("Upload error:", error);
@@ -271,6 +274,7 @@ const handleSubmit = async (
     );
   } finally {
     setIsLoading(false);
+    setUploadingImage(false);
   }
 };
   return (
@@ -624,10 +628,10 @@ const handleSubmit = async (
             disabled={isLoading || uploadingImage}
             className="w-full btn-primary py-3 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            {isLoading || uploadingImage ? (
+            {isLoading? (
               <>
                 <Loader className="animate-spin" size={20} />
-                {uploadingImage ? "Uploading Image..." : "Uploading..."}
+               uploading...
               </>
             ) : (
               <>

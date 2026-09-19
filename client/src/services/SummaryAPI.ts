@@ -49,7 +49,7 @@ const summaryApi = {
     page: number = 1,
     limit: number = 12
   ) => ({
-    url: `/api/collection/${id}/products?page=${page}&limit=${limit}`,
+    url: `/api/collection/get-collection/${id}/products?page=${page}&limit=${limit}`,
     method: "get",
   }),
   addCollection: {
