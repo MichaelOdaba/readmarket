@@ -1,6 +1,7 @@
 //controller for collections
 import { Request, Response } from "express";
 import CollectionModel from "../models/Collections.js";
+import ProductModel from "../models/Products.js";
 //get all collections
 export const getAllCollections = async (req: Request, res: Response) => {
   try {
@@ -54,4 +55,49 @@ export const editCollection = async (req: Request, res: Response) => {
     return res.status(500).json({ message: "Server error" });
   }
   
+}
+export const getCollectionProducts = async (req:Request, res: Response) => {
+  const { id } = req.params;
+  try {
+     const page = parseInt(req.query.page as string) || 1;
+  const limit = parseInt(req.query.limit as string) || 12;
+  const skip = (page - 1) * limit;
+
+  const collection = await CollectionModel.findById(id);
+  //check if collection exists
+  if (!collection) {
+    return res.status(404).json({ message: "Collection not found" });
+  }
+  const products = await ProductModel.find({ collectionId: id })
+    .skip(skip)
+    .limit(limit)
+    .sort({ createdAt: -1 });
+
+    //check if products exist
+  if (!products || products.length === 0) {
+    return res.status(200).json({ message: "No products found for this collection" });
+  }
+
+  const totalProducts = await ProductModel.countDocuments({ collectionId: id });
+  const totalPages = Math.ceil(totalProducts / limit);
+  return res.status(200).json({
+    message: "Products retrieved successfully",
+    success: true,
+    data: products,
+    collection: collection,
+    pagination: {
+      totalProducts,
+      currentPage: page,
+      totalPages,
+      limit,
+    },
+  });
+  
+ 
+  } catch (error) {
+    //print the error to the console
+    console.error(error);
+    return res.status(500).json({ message: "Server error" });
+  }
+ 
 }

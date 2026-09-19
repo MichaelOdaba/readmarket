@@ -18,13 +18,13 @@ interface Products {
     _id: mongoose.Schema.Types.ObjectId;
     seller: mongoose.Schema.Types.ObjectId;
     name: string;
-    more_details: string;
+    more_details?: string;
     coverImageUrl: string;
     fileUrl: string;
     description: string;
     price: number;
     discount?: number;
-    collection: mongoose.Schema.Types.ObjectId | null;
+    collectionId: mongoose.Schema.Types.ObjectId | null;
     createdAt: Date;
     updatedAt: Date;
 }
@@ -40,7 +40,6 @@ const productSchema = new Schema<Products>({
     },
     more_details: {
         type: String,
-        required: true,
     },
     coverImageUrl: {
         type: String,
@@ -62,7 +61,7 @@ const productSchema = new Schema<Products>({
         type: Number,
         default: null,
     },
-    collection: {
+    collectionId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Collection",
         default: null,

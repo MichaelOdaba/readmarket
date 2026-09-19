@@ -2,6 +2,7 @@
 import { Request, Response } from "express";
 import ProductModel from "../models/Products.js";
 import CollectionModel from "../models/Collections.js";
+import { UserModel } from "../models/User.js";
 import { AuthenticatedUser } from "../types/user.types.js";
 
 // Product {
@@ -20,10 +21,20 @@ import { AuthenticatedUser } from "../types/user.types.js";
 //add product
 export const uploadProduct = async (req: AuthenticatedUser, res: Response) => {
   try {
-    const { name, description, price, coverImageUrl,fileUrl, more_details, collectionId } = req.body;
-    const userId = req.user?.uid; // Assuming you have the user ID in the request object after authentication
+    const { name, description, price, coverImageUrl, fileUrl, more_details, collectionId } = req.body;
+    const firebaseUid = req.user?.uid;
+
+    if (!firebaseUid) {
+      return res.status(401).json({ success: false, message: "Unauthorized" });
+    }
+
+    const seller = await UserModel.findOne({ firebaseUid });
+    if (!seller) {
+      return res.status(404).json({ success: false, message: "User not found" });
+    }
+
       //check if all fields are provided
-    if (!name || !description || !price || !coverImageUrl ) {
+    if (!name || !description || price === undefined || !coverImageUrl) {
       return res.status(400).json({ success: false, message: "All fields are required" });
     }
     //if the collectionId is not provided, return an error
@@ -45,11 +56,29 @@ export const uploadProduct = async (req: AuthenticatedUser, res: Response) => {
     }
 
   
-    const newProduct = await ProductModel.create({ name, description, price, coverImageUrl, fileUrl, more_details, collection: collectionId });
+    const productData = {
+      seller: seller._id,
+      name,
+      description,
+      price,
+      coverImageUrl,
+      fileUrl,
+      collectionId,
+      ...(typeof more_details === "string" && more_details.trim()
+        ? { more_details: more_details.trim() }
+        : {}),
+    };
+
+    const newProduct = await ProductModel.create(productData);
 
     //if the product is created successfully, return the product
     
     res.status(201).json({ message: "Product created successfully", success: true, data: newProduct });
   }catch (error) {
     res.status(500).json({ message: "Server error" });
+    console.error(error);
   }}
+
+  //get all products
+
+  
