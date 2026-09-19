@@ -71,6 +71,15 @@ export const uploadProduct = async (req: AuthenticatedUser, res: Response) => {
 
     const newProduct = await ProductModel.create(productData);
 
+    //create a new notification for the user about the successful upload
+    const notification = {
+      type: "UPLOAD",
+      title: "Product Uploaded",
+      message: `Your product "${name}" has been uploaded successfully.`,
+      isRead: false,
+      createdAt: new Date(),
+    };
+
     //if the product is created successfully, return the product
     
     res.status(201).json({ message: "Product created successfully", success: true, data: newProduct });
@@ -80,5 +89,25 @@ export const uploadProduct = async (req: AuthenticatedUser, res: Response) => {
   }}
 
   //get all products
+  export const getAllProducts = async (req: Request, res: Response) => {
+    try{
+      const products = await ProductModel.find().sort({ createdAt: -1 }).populate("seller", "firstName lastName avatar email").populate("collectionId", "name");
+      res.status(200).json({ message: "Products retrieved successfully", success: true, data: products, count: products.length });
+    }catch (error) {
+      res.status(500).json({ message: "Server error" });
+    }
+  }
+  export const getProductById = async (req: Request, res: Response) => {
+    try {
+      const { id } = req.params;
+      const product = await ProductModel.findById(id).populate("seller", "firstName lastName avatar email").populate("collectionId", "name");
+      if (!product) {
+        return res.status(404).json({ message: "Product not found" });
+      }
+      res.status(200).json({ message: "Product retrieved successfully", success: true, data: product });
+    } catch (error) {
+      res.status(500).json({ message: "Server error" });
+    }
+  }
 
   

@@ -264,6 +264,10 @@ const handleSubmit = async (
     if (response.data.success) {
       toast.success("Product uploaded successfully!");
     }
+
+    // create a new notification for the user about the successful upload
+
+  
    navigate("/app/products");
 
   } catch (error: any) {

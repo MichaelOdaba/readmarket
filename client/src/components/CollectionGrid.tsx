@@ -66,7 +66,7 @@ const CollectionGrid = ({ collections, showAll = false }: CollectionGridProps) =
   }
 
   return (
-    <section className="py-12 px-6">
+    <section className="py-4 px-6">
       <div className="container mx-auto">
         {/* Section Header */}
         <div className="flex flex-col gap-4 sm:flex-row sm:justify-between sm:items-end mb-8">

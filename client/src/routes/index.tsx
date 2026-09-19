@@ -19,6 +19,7 @@ import AdminRoute from "./AdminRoute";
 import LandingPage from "../pages/LandingPage";
 import ErrorPage from "../pages/ErrorPage";
 import CollectionsPage from "../pages/CollectionsPage";
+import ForgotPassword from "../pages/Forgotpassword";
 
 const router = createBrowserRouter([
   {
@@ -31,6 +32,7 @@ const router = createBrowserRouter([
     element: <App />,
     errorElement: <ErrorPage />,
     children: [
+      // Public routes
       {
         path: "/app",
         element: <Home />,
@@ -63,6 +65,7 @@ const router = createBrowserRouter([
         path: "/app/todo",
         element: <Todo />,
       },
+      // Protected routes
       {
         path: "/app/dashboard",
         element: <DashBoard />,
@@ -82,6 +85,11 @@ const router = createBrowserRouter([
           {
             path: "/app/dashboard/profile",
             element: <Profile />,
+          },
+
+          {
+            path: "/app/dashboard/forgot-password",
+            element: <ForgotPassword />,
           },
           {
             path: "/app/dashboard/collection/add",

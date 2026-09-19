@@ -6,7 +6,7 @@ import CollectionGrid from "../components/CollectionGrid";
 import customAxios from "../utils/customAxios";
 import summaryApi from "../services/SummaryAPI";
 import { Loader } from "lucide-react";
-// import ProductsGrid from "../components/ProductsGrid";
+import ProductsGrid from "../components/ProductsGrid";
 
 interface Collection {
   _id: string;
@@ -27,7 +27,7 @@ interface Collection {
 const Home = () => {
   const [isMobile] = useMobile();
   const [collections, setCollections] = useState<Collection[]>([]);
-  // const [products, setProducts] = useState<Product[]>([]);
+
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -77,7 +77,9 @@ const Home = () => {
       {!isLoading && <CollectionGrid collections={collections} />}
 
       {/**products available */}
-      {/* {isLoading && <ProductsGrid products={products} />} */}
+      <div className="container mx-auto py-6">
+      <ProductsGrid />
+    </div>
     </div>
   );
 };

@@ -1,6 +1,7 @@
 import {
   createUserWithEmailAndPassword,
   sendEmailVerification,
+  sendPasswordResetEmail,
   signInWithEmailAndPassword,
   signInWithPopup,
   signOut,
@@ -38,6 +39,11 @@ export async function resendEmailVerification() {
   await sendEmailVerification(auth.currentUser);
 }
 
+//reset password
+export async function resetPassword(email: string) {
+  await sendPasswordResetEmail(auth, email);
+}
+
 export async function logout() {
   return signOut(auth);
 }
@@ -60,6 +66,8 @@ export const getFirebaseErrorMessage = (code?: string): string => {
       return "This account has been disabled";
     case "auth/popup-closed-by-user":
       return "Sign-in was cancelled";
+    case "auth/missing-email":
+      return "Please enter an email address";
     default:
       return "Something went wrong. Please try again";
   }

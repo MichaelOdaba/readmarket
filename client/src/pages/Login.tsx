@@ -58,8 +58,6 @@ const Login: React.FC = () => {
 
       const fetchedUser = await fetchUserDetails();
 
-      console.log(fetchedUser);
-
       dispatch(setUser(fetchedUser));
 
       setUserData({
@@ -72,7 +70,7 @@ const Login: React.FC = () => {
     } catch (error: any) {
       setislogin(false);
       const message = getFirebaseErrorMessage(error?.code);
-      toast.error(message);
+      toast.error(error.message || message);
       console.log(error);
     }
   };
@@ -179,6 +177,15 @@ const Login: React.FC = () => {
                 to={"/app/register"}
               >
                 Register
+              </Link>
+            </p>
+            {/* forgot password link */}
+            <p className="text-sm text-secondary">
+              <Link
+                to={"/app/dashboard/forgot-password"}
+                className="text-blue-500 hover:underline"
+              >
+                Forgot your password?
               </Link>
             </p>
           </form>

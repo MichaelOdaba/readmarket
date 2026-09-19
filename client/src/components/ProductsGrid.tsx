@@ -10,16 +10,16 @@ interface Product {
   name: string;
   description: string;
   price: number;
-  image: string[];
+  coverImageUrl: string;
   seller: {
     _id: string;
     firstName: string;
     lastName: string;
   };
-  collection: {
-    _id: string;
+  collectionId: {
+    id: string;
     name: string;
-  }[];
+  } | null;
   createdAt: string;
 }
 
@@ -49,6 +49,8 @@ const ProductsGrid: React.FC<ProductsGridProps> = ({ limit }) => {
         const response = await customAxios({
           ...summaryApi.getAllProducts,
         });
+        //log response.data to console
+        console.log("Products API Response:", response.data);
 
         if (response.data.success) {
           let productsData = response.data.data;
@@ -82,7 +84,7 @@ const ProductsGrid: React.FC<ProductsGridProps> = ({ limit }) => {
 
   if (error) {
     return (
-      <div className="flex items-center justify-center min-h-96 bg-red-50 rounded-lg">
+      <div className="flex items-center justify-center min-h-96 bg-red-50 rounded-lg px-6 py-4">
         <div className="text-center">
           <p className="text-red-600 font-semibold">{error}</p>
           <button
@@ -111,6 +113,11 @@ const ProductsGrid: React.FC<ProductsGridProps> = ({ limit }) => {
 
   return (
     <div>
+      <div>
+        <h5 className="text-xl md:text-2xl font-bold text-primary mb-2">
+          Popular Products
+        </h5>
+      </div>
       {/* Grid Container */}
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
         {products.map((product) => (
@@ -130,7 +137,7 @@ const ProductCard: React.FC<{ product: Product }> = ({ product }) => {
   const [isHovered, setIsHovered] = useState(false);
 
   const handleCardClick = () => {
-    navigate(`/product/${product._id}`);
+    navigate(`/app/product/${product._id}`);
   };
 
   const handleAddToCart = (e: React.MouseEvent) => {
@@ -147,10 +154,10 @@ const ProductCard: React.FC<{ product: Product }> = ({ product }) => {
       className="bg-surface rounded-lg shadow-sm hover:shadow-xl transition-all duration-300 cursor-pointer overflow-hidden group"
     >
       {/* Image Container */}
-      <div className="relative w-full overflow-hidden bg-neutral-100 h-48 md:h-56">
-        {product.image && product.image.length > 0 && (
+      <div className="relative w-full overflow-hidden bg-neutral-100 h-30 md:h-35 p-2 md:p-4 flex flex-col gap-2 md:gap-3">
+        {product.coverImageUrl && (
           <img
-            src={product.image[0]}
+            src={product.coverImageUrl}
             alt={product.name}
             className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
           />
@@ -174,31 +181,22 @@ const ProductCard: React.FC<{ product: Product }> = ({ product }) => {
             </button>
           </div>
         )}
-
-        {/* Badge - Number of Images */}
-        {product.image && product.image.length > 1 && (
-          <div className="absolute top-2 right-2 bg-primary text-white px-2 py-1 rounded text-xs font-bold">
-            +{product.image.length - 1}
-          </div>
-        )}
       </div>
 
       {/* Content Container */}
       <div className="p-4 flex flex-col gap-3">
         {/* Product Name */}
         <div>
-          <p className="text-sm font-semibold text-secondary mb-1">
-            {product.collection && product.collection.length > 0
-              ? product.collection[0].name
-              : "Uncategorized"}
+          <p className="text-xs md:text-sm font-semibold text-secondary mb-1">
+            {product.collectionId ? product.collectionId.name : "Uncategorized"}
           </p>
-          <h3 className="font-bold text-primary line-clamp-2 group-hover:text-secondary transition">
+          <h3 className="text-sm md:text-base font-bold text-primary line-clamp-2 group-hover:text-secondary transition">
             {product.name}
           </h3>
         </div>
 
         {/* Description */}
-        <p className="text-sm text-secondary line-clamp-2">
+        <p className="hidden md:block text-sm text-secondary line-clamp-2">
           {product.description}
         </p>
 
@@ -219,7 +217,10 @@ const ProductCard: React.FC<{ product: Product }> = ({ product }) => {
           <div>
             <p className="text-xs text-secondary">Starting at</p>
             <p className="text-lg font-bold text-primary">
-              ₦{Number(product.price).toFixed(2)}
+              {/* if price is 0 set to "FREE" */}
+              {product.price === 0
+                ? "FREE"
+                : `₦${Number(product.price).toFixed(2)}`}
             </p>
           </div>
           <button

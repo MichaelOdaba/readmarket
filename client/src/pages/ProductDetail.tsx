@@ -5,8 +5,6 @@ import {
   ShoppingCart,
   ArrowLeft,
   Loader,
-  ChevronLeft,
-  ChevronRight,
   User,
   Edit,
 } from "lucide-react";
@@ -21,13 +19,14 @@ interface Product {
   description: string;
   more_details: string;
   price: number;
-  image: string[];
+  coverImageUrl: string;
   fileUrl: string;
   seller: {
     _id: string;
     firstName: string;
     lastName: string;
     email: string;
+    avatar?: string;
   };
   collection: {
     _id: string;
@@ -43,10 +42,8 @@ const ProductDetail = () => {
   const [product, setProduct] = useState<Product | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isDownloading, setIsDownloading] = useState(false);
   const user = useSelector((state: any) => state?.user);
-  console.log(user);
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -62,6 +59,7 @@ const ProductDetail = () => {
 
         if (response.data.success) {
           setProduct(response.data.data);
+          console.log("Product data:", response.data.data);
           setError(null);
         } else {
           setError("Product not found");
@@ -89,7 +87,7 @@ const ProductDetail = () => {
 
       // Call the server download endpoint
       const response = await customAxios(
-        summaryApi.endpoints.downloadProduct(product._id)
+        summaryApi.endpoints.downloadProduct(product._id),
       );
 
       if (response.data.success && response.data.fileUrl) {
@@ -118,20 +116,6 @@ const ProductDetail = () => {
   const handleAddToCart = () => {
     toast.success("Added to cart!");
     // TODO: Implement add to cart functionality
-  };
-
-  const nextImage = () => {
-    if (product?.image) {
-      setCurrentImageIndex((prev) => (prev + 1) % product.image.length);
-    }
-  };
-
-  const prevImage = () => {
-    if (product?.image) {
-      setCurrentImageIndex(
-        (prev) => (prev - 1 + product.image.length) % product.image.length
-      );
-    }
   };
 
   if (isLoading) {
@@ -181,62 +165,18 @@ const ProductDetail = () => {
           <div className="flex flex-col gap-4">
             {/* Main Image */}
             <div className="relative w-full bg-neutral-100 rounded-lg overflow-hidden">
-              {product.image && product.image.length > 0 ? (
-                <>
-                  <img
-                    src={product.image[currentImageIndex]}
-                    alt={product.name}
-                    className="w-full h-96 md:h-[500px] object-cover"
-                  />
-                  {product.image.length > 1 && (
-                    <>
-                      <button
-                        onClick={prevImage}
-                        className="absolute left-4 top-1/2 -translate-y-1/2 bg-black/50 text-white p-2 rounded-full hover:bg-black/70 transition"
-                      >
-                        <ChevronLeft size={24} />
-                      </button>
-                      <button
-                        onClick={nextImage}
-                        className="absolute right-4 top-1/2 -translate-y-1/2 bg-black/50 text-white p-2 rounded-full hover:bg-black/70 transition"
-                      >
-                        <ChevronRight size={24} />
-                      </button>
-                      <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-black/70 text-white px-3 py-1 rounded-full text-sm">
-                        {currentImageIndex + 1} / {product.image.length}
-                      </div>
-                    </>
-                  )}
-                </>
+              {product.coverImageUrl ? (
+                <img
+                  src={product.coverImageUrl}
+                  alt={product.name}
+                  className="w-full h-96 md:h-[500px] object-cover"
+                />
               ) : (
                 <div className="w-full h-96 md:h-[500px] flex items-center justify-center text-secondary">
                   No image available
                 </div>
               )}
             </div>
-
-            {/* Thumbnail Gallery */}
-            {product.image && product.image.length > 1 && (
-              <div className="flex gap-2 overflow-x-auto pb-2">
-                {product.image.map((img, idx) => (
-                  <button
-                    key={idx}
-                    onClick={() => setCurrentImageIndex(idx)}
-                    className={`flex-shrink-0 w-20 h-20 rounded-lg overflow-hidden border-2 transition ${
-                      idx === currentImageIndex
-                        ? "border-primary"
-                        : "border-neutral-200 hover:border-primary"
-                    }`}
-                  >
-                    <img
-                      src={img}
-                      alt={`${product.name} ${idx + 1}`}
-                      className="w-full h-full object-cover"
-                    />
-                  </button>
-                ))}
-              </div>
-            )}
           </div>
 
           {/* Details Section */}
@@ -330,18 +270,29 @@ const ProductDetail = () => {
                 Edit Product
               </button>
             )}
-            {/* Seller Info */}
-            <div className="bg-surface-raised rounded-lg p-4 border border-neutral-200">
+            {/* Seller Info  */}
+            <div className="bg-surface-raised rounded-lg p-4 border border-neutral-200 flex flex-col gap-3">
               <p className="text-xs text-secondary mb-3">Sold by</p>
-              <div className="flex items-center gap-3">
-                <div className="w-12 h-12 bg-neutral-300 rounded-full flex items-center justify-center">
-                  <User size={24} className="text-neutral-600" />
+              <div className="flex flex-col md:flex-row items-center md:justify-between gap-3">
+                <div className="w-18 h-18 bg-neutral-300 rounded-full flex items-center justify-center">
+                  {/* if seller has an avatar */}
+                  {product.seller.avatar ? (
+                    <img
+                      src={product.seller.avatar}
+                      alt={`${product.seller.firstName} ${product.seller.lastName}`}
+                      className="w-full h-full object-cover rounded-full"
+                    />
+                  ) : (
+                    <User size={24} className="text-neutral-600" />
+                  )}
                 </div>
                 <div>
                   <p className="font-semibold text-primary">
                     {product.seller.firstName} {product.seller.lastName}
                   </p>
-                  <p className="text-sm text-secondary break-all">
+                </div>
+                <div>
+                  <p className="font-semibold text-primary">
                     {product.seller.email}
                   </p>
                 </div>
@@ -353,9 +304,6 @@ const ProductDetail = () => {
         {/* Product Details Grid */}
         <div className="mt-12 grid grid-cols-2 md:grid-cols-4 gap-4">
           <div className="bg-surface rounded-lg p-4 border border-neutral-200 text-center">
-            <p className="text-2xl font-bold text-primary">
-              {product.image?.length || 0}
-            </p>
             <p className="text-sm text-secondary">Preview Images</p>
           </div>
           <div className="bg-surface rounded-lg p-4 border border-neutral-200 text-center">

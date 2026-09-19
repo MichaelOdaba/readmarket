@@ -2,6 +2,7 @@ export const baseURL: string =
   import.meta.env.VITE_API_BASE_URL || "http://localhost:8009/";
 
 const summaryApi = {
+  //user apis
   register: {
     url: "/api/user/register",
     method: "post",
@@ -26,6 +27,11 @@ const summaryApi = {
     url: "/api/user/create-admin",
     method: "post",
   },
+  forgotPassword: {
+    url: "/api/user/forgot-password",
+    method: "post",
+  },
+  // Notification APIs
   getNotifications: {
     url: "/api/notification/get-notifications",
     method: "get",
@@ -67,11 +73,11 @@ const summaryApi = {
 
   // Product APIs
   getAllProducts: {
-    url: "/api/product/get-products",
+    url: "/api/product/get-all-products",
     method: "get",
   },
   getProductById: (id: string) => ({
-    url: `/api/product/${id}`,
+    url: `/api/product/get-product/${id}`,
     method: "get",
   }),
   uploadProduct: {
