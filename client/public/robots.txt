@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+Disallow: /login
+Disallow: /register
+Disallow: /profile
+Disallow: /forgot-password
+
+Sitemap: https://readmarket.netlify.app/sitemap.xml
